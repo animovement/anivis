@@ -1,0 +1,50 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# anivis
+
+<!-- badges: start -->
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17357778.svg)](https://doi.org/10.5281/zenodo.17357778)
+[![R-CMD-check](https://github.com/animovement/anivis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/animovement/anivis/actions/workflows/R-CMD-check.yaml)
+[![anivis status
+badge](https://animovement.r-universe.dev/badges/anivis)](https://animovement.r-universe.dev)
+[![codecov](https://codecov.io/gh/animovement/anivis/graph/badge.svg?token=Pf5n3yzLzK)](https://codecov.io/gh/animovement/anivis)
+<!-- badges: end -->
+
+*An R package for visualizing movement data and diagnostics*
+
+The primary aim of the *anivis* package is to provide plotting methods
+for movement trajectories, diagnostic summaries, and calculated metrics.
+
+## Installation
+
+You can install the development version of *anivis* with:
+
+``` r
+install.packages('anivis', repos = c('https://animovement.r-universe.dev', 'https://cloud.r-project.org'))
+```
+
+Once you have installed the package, you can load it with:
+
+``` r
+library("anivis")
+```
+
+## Status
+
+> **Warning**
+>
+> 🏗️ The package is currently in early development and the interface is
+> subject to change. Feel free to play around and provide feedback.
+
+## Citation
+
+If you enjoy the package, please make sure to cite it. If you find a
+bug, feel free to open an issue.
+
+To cite *anivis* in publications use:
+
+``` r
+citation("anivis")
+```

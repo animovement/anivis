@@ -1,0 +1,32 @@
+url: http://animovement.dev/anivis/
+home:
+  title: "anivis – An R package for visualizing movement data and diagnostics"
+
+authors:
+  - name: "Mikkel Roald‑Arbøl"
+    href: "https://roald-arboel.com"
+
+template:
+  bootstrap: 5
+  light-switch: true
+
+navbar:
+  structure:
+    left:
+      - intro
+      - reference
+      - news
+    right:
+      - search
+      - github
+      - lightswitch
+
+reference:
+- title: "Plotting functions"
+  contents:
+  - plot.plot_check_confidence
+
+- title: "Themes"
+  contents:
+  - theme_animovement
+

@@ -1,0 +1,27 @@
+# --------------------------------------------
+# CITATION file created with {cffr} R package
+# See also: https://docs.ropensci.org/cffr/
+# --------------------------------------------
+
+cff-version: 1.2.0
+message: 'To cite package "anivis" in publications use:'
+type: software
+license: MIT
+title: 'anivis: An R package for visualizing movement data and diagnostics.'
+version: 0.1.0
+date-released: 2025-10-21
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.17357778
+abstract: An R package for visualizing movement data and diagnostics.
+authors:
+- family-names: Roald-Arbøl
+  given-names: Mikkel
+  email: animovement.84w1m@passmail.com
+  orcid: https://orcid.org/0000-0002-9998-0058
+url: http://www.roald-arboel.com/anivis/
+contact:
+- family-names: Roald-Arbøl
+  given-names: Mikkel
+  email: animovement.84w1m@passmail.com
+  orcid: https://orcid.org/0000-0002-9998-0058
