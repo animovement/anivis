@@ -20,7 +20,8 @@ Imports:
     rlang,
     ggplot2,
     patchwork,
-    marquee
+    marquee,
+    aniframe
 Suggests: 
     ragg,
     knitr,
