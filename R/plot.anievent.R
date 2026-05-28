@@ -76,7 +76,12 @@ plot_events.anievent <- function(data, ..., mode = c("light", "dark")) {
   state_df <- if (any(is_state)) data[is_state, , drop = FALSE] else NULL
   point_df <- if (any(!is_state)) data[!is_state, , drop = FALSE] else NULL
 
-  p <- events_base_plot(state = state_df, point = point_df, meta = meta, mode = mode)
+  p <- events_base_plot(
+    state = state_df,
+    point = point_df,
+    meta = meta,
+    mode = mode
+  )
 
   facet_layer <- events_facets(multi_channel, multi_what_cols)
   if (!is.null(facet_layer)) {
@@ -111,8 +116,8 @@ events_base_plot <- function(
   mode
 ) {
   unit <- if (!is.null(meta)) meta$unit_time else NULL
-  has_unit <- !is.null(unit) && !as.character(unit) %in% c("unknown", "frame")
-  x_lab <- if (has_unit) paste0("time (", unit, ")") else "time"
+  state <- to_hms_columns(state, c("start", "stop"), unit)
+  point <- to_hms_columns(point, "start", unit)
 
   p <- ggplot2::ggplot()
 
@@ -138,9 +143,46 @@ events_base_plot <- function(
   p +
     scale_fill_animovement() +
     scale_colour_animovement() +
-    ggplot2::labs(x = x_lab, y = NULL) +
+    ggplot2::scale_x_time() +
+    ggplot2::labs(x = "time", y = NULL) +
     ggplot2::guides(fill = "none", colour = "none") +
-    theme_animovement(mode = mode)
+    theme_animovement(mode = mode) +
+    ggplot2::theme(
+      panel.border = ggplot2::element_blank(),
+      panel.grid.major.y = ggplot2::element_blank(),
+      panel.grid.minor.y = ggplot2::element_blank()
+    )
+}
+
+# Internal: convert the given numeric time columns to hms, scaling from
+# the aniframe's unit_time to seconds. `unit_time` values "frame" and
+# "unknown" are treated as seconds, so scale_x_time() still works but the
+# tick labels are best-effort.
+to_hms_columns <- function(data, cols, unit) {
+  if (is.null(data)) {
+    return(data)
+  }
+  factor <- seconds_per_unit(unit)
+  for (col in cols) {
+    if (col %in% names(data)) {
+      data[[col]] <- hms::as_hms(as.numeric(data[[col]]) * factor)
+    }
+  }
+  data
+}
+
+# Internal: number of seconds in one tick of the given aniframe time unit.
+seconds_per_unit <- function(unit) {
+  switch(
+    as.character(unit %||% "s"),
+    h = 3600,
+    m = 60,
+    s = 1,
+    ms = 1e-3,
+    us = 1e-6,
+    ns = 1e-9,
+    1
+  )
 }
 
 # Internal: pick a facet layer based on which axes vary.

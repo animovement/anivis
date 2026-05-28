@@ -133,18 +133,63 @@ test_that("plot_events.anievent uses facet_grid when both channel and what vary"
 })
 
 
-# --- axis labels and time unit ----------------------------------------------
+# --- axis labels, time scale and theme overrides ----------------------------
 
-test_that("plot_events labels the x axis with unit_time when set", {
+test_that("plot_events labels the x axis 'time' regardless of unit", {
+  p_default <- plot_events(make_anievent_state_only())
+  expect_equal(p_default$labels$x, "time")
+
   data <- make_anievent_state_only() |>
     aniframe::set_unit_time("s")
-  p <- plot_events(data)
-  expect_match(p$labels$x, "s")
+  p_seconds <- plot_events(data)
+  expect_equal(p_seconds$labels$x, "time")
 })
 
-test_that("plot_events leaves the time label unit-free for frame / unknown", {
+test_that("plot_events applies scale_x_time (hms transformation)", {
   p <- plot_events(make_anievent_state_only())
-  expect_equal(p$labels$x, "time")
+  x_scale <- p$scales$get_scales("x")
+  expect_equal(x_scale$trans$name, "hms")
+})
+
+test_that("plot_events drops the panel border and y-axis gridlines", {
+  p <- plot_events(make_anievent_state_only())
+  expect_s3_class(p$theme$panel.border, "element_blank")
+  expect_s3_class(p$theme$panel.grid.major.y, "element_blank")
+  expect_s3_class(p$theme$panel.grid.minor.y, "element_blank")
+})
+
+
+# --- unit-time hms conversion -----------------------------------------------
+
+test_that("seconds_per_unit returns the expected factor for known units", {
+  expect_equal(seconds_per_unit("s"), 1)
+  expect_equal(seconds_per_unit("m"), 60)
+  expect_equal(seconds_per_unit("h"), 3600)
+  expect_equal(seconds_per_unit("ms"), 1e-3)
+  expect_equal(seconds_per_unit("us"), 1e-6)
+  expect_equal(seconds_per_unit("ns"), 1e-9)
+})
+
+test_that("seconds_per_unit falls back to 1 for frame / unknown / NULL", {
+  expect_equal(seconds_per_unit("frame"), 1)
+  expect_equal(seconds_per_unit("unknown"), 1)
+  expect_equal(seconds_per_unit(NULL), 1)
+})
+
+test_that("to_hms_columns converts start/stop to hms scaled by unit", {
+  df <- data.frame(label = "a", start = 1, stop = 2)
+  out_s <- to_hms_columns(df, c("start", "stop"), "s")
+  expect_s3_class(out_s$start, "hms")
+  expect_equal(as.numeric(out_s$start), 1)
+  expect_equal(as.numeric(out_s$stop), 2)
+
+  out_m <- to_hms_columns(df, c("start", "stop"), "m")
+  expect_equal(as.numeric(out_m$start), 60)
+  expect_equal(as.numeric(out_m$stop), 120)
+})
+
+test_that("to_hms_columns is a no-op on NULL data", {
+  expect_null(to_hms_columns(NULL, c("start", "stop"), "s"))
 })
 
 
