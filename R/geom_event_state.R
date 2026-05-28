@@ -1,9 +1,9 @@
-#' Draw an ethogram from an anievent
+#' Draw state events as horizontal bars
 #'
-#' A ggplot2 layer that renders state bouts of an [aniframe::anievent()] as
-#' rectangles spanning each bout's `start` -> `stop` on the x axis, with one
-#' row per `label` on the y axis. Point events (`type == "point"`) are
-#' filtered out of the layer's data before drawing.
+#' A ggplot2 layer that renders state (durative) events as rectangles
+#' spanning each event's `start` -> `stop` on the x axis, with one row
+#' per `label` on the y axis. When the input has a `type` column (e.g.
+#' an [aniframe::anievent()]), rows with `type != "state"` are dropped.
 #'
 #' The default mapping is only `aes(xmin = start, xmax = stop)` — every
 #' other aesthetic is up to the caller. Common patterns:
@@ -36,7 +36,7 @@
 #'
 #' @return A ggplot2 layer.
 #' @export
-geom_ethogram <- function(
+geom_event_state <- function(
   mapping = NULL,
   data = NULL,
   ...,
@@ -45,10 +45,10 @@ geom_ethogram <- function(
   show.legend = NA,
   inherit.aes = TRUE
 ) {
-  rlang::check_installed("ggplot2", reason = "for `geom_ethogram()`.")
+  rlang::check_installed("ggplot2", reason = "for `geom_event_state()`.")
 
-  GeomEthogram <- ggplot2::ggproto(
-    "GeomEthogram",
+  GeomEventState <- ggplot2::ggproto(
+    "GeomEventState",
     ggplot2::GeomRect,
     required_aes = c("xmin", "xmax"),
     optional_aes = "y",
@@ -97,7 +97,7 @@ geom_ethogram <- function(
   }
 
   ggplot2::layer(
-    geom = GeomEthogram,
+    geom = GeomEventState,
     stat = "identity",
     data = data_arg,
     mapping = mapping,

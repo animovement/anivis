@@ -18,7 +18,8 @@
 A patchwork object.
 }
 \description{
-Creates a visualization of state bouts stored in an \code{\link[aniframe:anievent]{aniframe::anievent()}}
-using \code{\link[=geom_ethogram]{geom_ethogram()}}. Returns a patchwork object that can be combined
+Creates a visualization of state and point events from an
+\code{\link[aniframe:anievent]{aniframe::anievent()}} using \code{\link[=geom_event_state]{geom_event_state()}} and
+\code{\link[=geom_event_point]{geom_event_point()}}. Returns a patchwork object that can be combined
 with additional plots.
 }
