@@ -7,16 +7,43 @@
 \usage{
 plot_trajectory(data, ...)
 
-\method{plot_trajectory}{default}(data, ..., mode = c("light", "dark"))
+\method{plot_trajectory}{default}(data, ..., mode = c("light", "dark"), palette = "Dark 3")
 }
 \arguments{
 \item{data}{An aniframe object.}
 
 \item{...}{Additional arguments (currently unused).}
+
+\item{mode}{Either \code{"light"} (default) or \code{"dark"}; passed to
+\code{\link[=theme_animovement]{theme_animovement()}}.}
+
+\item{palette}{Name of a qualitative palette accepted by
+\code{\link[grDevices:hcl.colors]{grDevices::hcl.colors()}}; controls the hue family across grouping
+levels.}
 }
 \value{
 A ggplot object.
 }
 \description{
-Creates a ggplot of the x-y trajectory from an aniframe.
+Creates a ggplot of the x-y trajectory from an aniframe. One path is drawn
+per trajectory group, where a group is the combination of every
+\code{variables_what} column and every non-time \code{variables_when} column in the
+aniframe's metadata.
+}
+\details{
+Colours adapt to the dataset shape:
+\itemize{
+\item \strong{single} trajectory (no grouping): the line is coloured continuously
+by \code{time} using the animovement viridis scale.
+\item \strong{what-only} or \strong{when-only} grouping (one varying axis): each line
+gets its own hue from a qualitative palette and shades from light to
+that hue along \code{time}, so direction reads from both the start/end
+markers and the within-line gradient.
+\item \strong{matrix} grouping (both axes vary): each line is solid, coloured by
+the hue × shade matrix from \code{\link[=animovement_palette]{animovement_palette()}} — hue per \code{what},
+shade per \code{when}.
+}
+
+Every trajectory is annotated with a filled circle at its first point and
+a filled triangle at its last point.
 }
