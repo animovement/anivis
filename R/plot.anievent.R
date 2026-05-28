@@ -116,8 +116,25 @@ events_base_plot <- function(
   mode
 ) {
   unit <- if (!is.null(meta)) meta$unit_time else NULL
-  state <- to_hms_columns(state, c("start", "stop"), unit)
-  point <- to_hms_columns(point, "start", unit)
+  sampling_rate <- if (!is.null(meta)) meta$sampling_rate else NA_real_
+  factor <- seconds_per_unit(unit, sampling_rate)
+  use_time_scale <- !is.na(factor)
+
+  if (use_time_scale) {
+    state <- to_hms_columns(state, c("start", "stop"), factor)
+    point <- to_hms_columns(point, "start", factor)
+  }
+
+  x_lab <- if (!use_time_scale && identical(as.character(unit), "frame")) {
+    "time (frames)"
+  } else {
+    "time"
+  }
+  x_scale <- if (use_time_scale) {
+    ggplot2::scale_x_time()
+  } else {
+    ggplot2::scale_x_continuous()
+  }
 
   p <- ggplot2::ggplot()
 
@@ -143,8 +160,8 @@ events_base_plot <- function(
   p +
     scale_fill_animovement() +
     scale_colour_animovement() +
-    ggplot2::scale_x_time() +
-    ggplot2::labs(x = "time", y = NULL) +
+    x_scale +
+    ggplot2::labs(x = x_lab, y = NULL) +
     ggplot2::guides(fill = "none", colour = "none") +
     theme_animovement(mode = mode) +
     ggplot2::theme(
@@ -154,15 +171,13 @@ events_base_plot <- function(
     )
 }
 
-# Internal: convert the given numeric time columns to hms, scaling from
-# the aniframe's unit_time to seconds. `unit_time` values "frame" and
-# "unknown" are treated as seconds, so scale_x_time() still works but the
-# tick labels are best-effort.
-to_hms_columns <- function(data, cols, unit) {
+# Internal: convert the given numeric time columns to hms by multiplying
+# by `factor` (seconds per tick). Caller is responsible for ensuring
+# `factor` is non-NA — `events_base_plot` only converts in that case.
+to_hms_columns <- function(data, cols, factor) {
   if (is.null(data)) {
     return(data)
   }
-  factor <- seconds_per_unit(unit)
   for (col in cols) {
     if (col %in% names(data)) {
       data[[col]] <- hms::as_hms(as.numeric(data[[col]]) * factor)
@@ -171,17 +186,27 @@ to_hms_columns <- function(data, cols, unit) {
   data
 }
 
-# Internal: number of seconds in one tick of the given aniframe time unit.
-seconds_per_unit <- function(unit) {
+# Internal: seconds per tick of the given aniframe `unit_time`. Returns
+# `NA_real_` when the conversion is undefined: "frame" without a
+# `sampling_rate`, or "unknown". Callers fall back to a continuous x
+# scale in that case.
+seconds_per_unit <- function(unit, sampling_rate = NA_real_) {
+  unit_chr <- as.character(unit %||% "s")
+  if (unit_chr == "frame") {
+    if (!is.na(sampling_rate) && sampling_rate > 0) {
+      return(1 / sampling_rate)
+    }
+    return(NA_real_)
+  }
   switch(
-    as.character(unit %||% "s"),
+    unit_chr,
     h = 3600,
     m = 60,
     s = 1,
     ms = 1e-3,
     us = 1e-6,
     ns = 1e-9,
-    1
+    NA_real_
   )
 }
 

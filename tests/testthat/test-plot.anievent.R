@@ -135,18 +135,17 @@ test_that("plot_events.anievent uses facet_grid when both channel and what vary"
 
 # --- axis labels, time scale and theme overrides ----------------------------
 
-test_that("plot_events labels the x axis 'time' regardless of unit", {
-  p_default <- plot_events(make_anievent_state_only())
-  expect_equal(p_default$labels$x, "time")
-
+test_that("plot_events labels the x axis 'time' for a time-aware unit", {
   data <- make_anievent_state_only() |>
     aniframe::set_unit_time("s")
-  p_seconds <- plot_events(data)
-  expect_equal(p_seconds$labels$x, "time")
+  p <- plot_events(data)
+  expect_equal(p$labels$x, "time")
 })
 
-test_that("plot_events applies scale_x_time (hms transformation)", {
-  p <- plot_events(make_anievent_state_only())
+test_that("plot_events applies scale_x_time when the unit is convertible", {
+  data <- make_anievent_state_only() |>
+    aniframe::set_unit_time("s")
+  p <- plot_events(data)
   x_scale <- p$scales$get_scales("x")
   expect_equal(x_scale$trans$name, "hms")
 })
@@ -161,7 +160,7 @@ test_that("plot_events drops the panel border and y-axis gridlines", {
 
 # --- unit-time hms conversion -----------------------------------------------
 
-test_that("seconds_per_unit returns the expected factor for known units", {
+test_that("seconds_per_unit returns the expected factor for known time units", {
   expect_equal(seconds_per_unit("s"), 1)
   expect_equal(seconds_per_unit("m"), 60)
   expect_equal(seconds_per_unit("h"), 3600)
@@ -170,26 +169,79 @@ test_that("seconds_per_unit returns the expected factor for known units", {
   expect_equal(seconds_per_unit("ns"), 1e-9)
 })
 
-test_that("seconds_per_unit falls back to 1 for frame / unknown / NULL", {
-  expect_equal(seconds_per_unit("frame"), 1)
-  expect_equal(seconds_per_unit("unknown"), 1)
+test_that("seconds_per_unit treats NULL as seconds", {
   expect_equal(seconds_per_unit(NULL), 1)
 })
 
-test_that("to_hms_columns converts start/stop to hms scaled by unit", {
+test_that("seconds_per_unit returns NA for 'unknown' regardless of sampling_rate", {
+  expect_true(is.na(seconds_per_unit("unknown")))
+  expect_true(is.na(seconds_per_unit("unknown", sampling_rate = 30)))
+})
+
+test_that("seconds_per_unit returns NA for 'frame' without a sampling_rate", {
+  expect_true(is.na(seconds_per_unit("frame")))
+  expect_true(is.na(seconds_per_unit("frame", sampling_rate = NA_real_)))
+  expect_true(is.na(seconds_per_unit("frame", sampling_rate = 0)))
+})
+
+test_that("seconds_per_unit converts frames to seconds via sampling_rate", {
+  expect_equal(seconds_per_unit("frame", sampling_rate = 30), 1 / 30)
+  expect_equal(seconds_per_unit("frame", sampling_rate = 60), 1 / 60)
+})
+
+test_that("to_hms_columns scales numeric columns by `factor`", {
   df <- data.frame(label = "a", start = 1, stop = 2)
-  out_s <- to_hms_columns(df, c("start", "stop"), "s")
+  out_s <- to_hms_columns(df, c("start", "stop"), 1)
   expect_s3_class(out_s$start, "hms")
   expect_equal(as.numeric(out_s$start), 1)
   expect_equal(as.numeric(out_s$stop), 2)
 
-  out_m <- to_hms_columns(df, c("start", "stop"), "m")
-  expect_equal(as.numeric(out_m$start), 60)
-  expect_equal(as.numeric(out_m$stop), 120)
+  out_min <- to_hms_columns(df, c("start", "stop"), 60)
+  expect_equal(as.numeric(out_min$start), 60)
+  expect_equal(as.numeric(out_min$stop), 120)
 })
 
 test_that("to_hms_columns is a no-op on NULL data", {
-  expect_null(to_hms_columns(NULL, c("start", "stop"), "s"))
+  expect_null(to_hms_columns(NULL, c("start", "stop"), 1))
+})
+
+
+# --- frame-unit fallback in plot_events -------------------------------------
+
+test_that("plot_events on frame data without sampling_rate uses continuous scale", {
+  ae <- make_anievent_state_only() |>
+    aniframe::set_unit_time("frame")
+  p <- plot_events(ae)
+  x_scale <- p$scales$get_scales("x")
+  expect_false(identical(x_scale$trans$name, "hms"))
+  expect_equal(p$labels$x, "time (frames)")
+})
+
+test_that("plot_events on frame data WITH sampling_rate uses scale_x_time", {
+  ae <- make_anievent_state_only() |>
+    aniframe::set_unit_time("frame") |>
+    aniframe::set_metadata(sampling_rate = 30)
+  p <- plot_events(ae)
+  x_scale <- p$scales$get_scales("x")
+  expect_equal(x_scale$trans$name, "hms")
+  expect_equal(p$labels$x, "time")
+
+  # And the state layer's xmin was scaled to seconds: first bout starts
+  # at frame 3, which at 30 fps is 0.1 seconds (i.e. 3/30).
+  layer_data <- p$layers[[1]]$layer_data(p$data)
+  if (is.null(layer_data) || !nrow(layer_data)) {
+    layer_data <- p$layers[[1]]$data
+  }
+  expect_true(any(abs(as.numeric(layer_data$start) - 3 / 30) < 1e-9))
+})
+
+test_that("plot_events on 'unknown' unit falls back to a continuous scale", {
+  ae <- make_anievent_state_only() |>
+    aniframe::set_unit_time("unknown")
+  p <- plot_events(ae)
+  x_scale <- p$scales$get_scales("x")
+  expect_false(identical(x_scale$trans$name, "hms"))
+  expect_equal(p$labels$x, "time")
 })
 
 
