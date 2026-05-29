@@ -135,11 +135,20 @@ test_that("plot_events.anievent uses facet_grid when both channel and what vary"
 
 # --- axis labels, time scale and theme overrides ----------------------------
 
-test_that("plot_events labels the x axis 'time' for a time-aware unit", {
-  data <- make_anievent_state_only() |>
+test_that("plot_events includes the unit in the x-axis label when set", {
+  data_s <- make_anievent_state_only() |>
     aniframe::set_unit_time("s")
-  p <- plot_events(data)
-  expect_equal(p$labels$x, "time")
+  expect_equal(plot_events(data_s)$labels$x, "time (s)")
+
+  data_m <- make_anievent_state_only() |>
+    aniframe::set_unit_time("m")
+  expect_equal(plot_events(data_m)$labels$x, "time (m)")
+})
+
+test_that("plot_events leaves the x-axis label unit-free for 'unknown'", {
+  data <- make_anievent_state_only() |>
+    aniframe::set_unit_time("unknown")
+  expect_equal(plot_events(data)$labels$x, "time")
 })
 
 test_that("plot_events applies scale_x_time when the unit is convertible", {
@@ -214,7 +223,7 @@ test_that("plot_events on frame data without sampling_rate uses continuous scale
   p <- plot_events(ae)
   x_scale <- p$scales$get_scales("x")
   expect_false(identical(x_scale$trans$name, "hms"))
-  expect_equal(p$labels$x, "time (frames)")
+  expect_equal(p$labels$x, "time (frame)")
 })
 
 test_that("plot_events on frame data WITH sampling_rate uses scale_x_time", {
@@ -224,7 +233,7 @@ test_that("plot_events on frame data WITH sampling_rate uses scale_x_time", {
   p <- plot_events(ae)
   x_scale <- p$scales$get_scales("x")
   expect_equal(x_scale$trans$name, "hms")
-  expect_equal(p$labels$x, "time")
+  expect_equal(p$labels$x, "time (frame)")
 
   # And the state layer's xmin was scaled to seconds: first bout starts
   # at frame 3, which at 30 fps is 0.1 seconds (i.e. 3/30).

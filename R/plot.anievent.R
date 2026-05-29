@@ -125,8 +125,9 @@ events_base_plot <- function(
     point <- to_hms_columns(point, "start", factor)
   }
 
-  x_lab <- if (!use_time_scale && identical(as.character(unit), "frame")) {
-    "time (frames)"
+  unit_chr <- if (!is.null(unit)) as.character(unit) else NA_character_
+  x_lab <- if (!is.na(unit_chr) && unit_chr != "unknown") {
+    paste0("time (", unit_chr, ")")
   } else {
     "time"
   }
