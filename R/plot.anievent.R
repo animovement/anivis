@@ -133,6 +133,9 @@ events_base_plot <- function(
     point <- to_hms_columns(point, "start", factor)
   }
 
+  state <- reorder_label_if_numeric(state)
+  point <- reorder_label_if_numeric(point)
+
   x_lab <- if (use_hms) {
     NULL
   } else if (identical(unit_chr, "frame")) {
@@ -180,6 +183,33 @@ events_base_plot <- function(
       panel.grid.major.y = ggplot2::element_blank(),
       panel.grid.minor.y = ggplot2::element_blank()
     )
+}
+
+# Internal: if every `label` parses as a number, reorder the factor
+# levels numerically so the y axis shows "2" between "1" and "10"
+# rather than in lexical order ("1", "10", "2", ...). Leaves labels
+# alone when even one value is non-numeric, and passes NULL through.
+reorder_label_if_numeric <- function(data) {
+  if (is.null(data) || !("label" %in% names(data))) {
+    return(data)
+  }
+  lvls <- if (is.factor(data$label)) {
+    levels(data$label)
+  } else {
+    unique(as.character(data$label))
+  }
+  if (!length(lvls)) {
+    return(data)
+  }
+  numeric_vals <- suppressWarnings(as.numeric(lvls))
+  if (any(is.na(numeric_vals))) {
+    return(data)
+  }
+  data$label <- factor(
+    as.character(data$label),
+    levels = lvls[order(numeric_vals)]
+  )
+  data
 }
 
 # Internal: multiply raw numeric time columns by `factor` (seconds per

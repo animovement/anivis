@@ -217,6 +217,66 @@ test_that("to_hms_columns is a no-op on NULL data", {
 })
 
 
+# --- numeric-label reordering -----------------------------------------------
+
+test_that("reorder_label_if_numeric sorts numeric-string labels numerically", {
+  df <- data.frame(label = factor(c("1", "10", "2", "20")), start = 1:4)
+  out <- reorder_label_if_numeric(df)
+  expect_equal(levels(out$label), c("1", "2", "10", "20"))
+})
+
+test_that("reorder_label_if_numeric handles decimals and negatives", {
+  df <- data.frame(label = factor(c("-1", "0.5", "10", "2")), start = 1:4)
+  out <- reorder_label_if_numeric(df)
+  expect_equal(levels(out$label), c("-1", "0.5", "2", "10"))
+})
+
+test_that("reorder_label_if_numeric leaves non-numeric labels alone", {
+  df <- data.frame(label = factor(c("apple", "banana", "1")), start = 1:3)
+  out <- reorder_label_if_numeric(df)
+  expect_equal(levels(out$label), levels(df$label))
+})
+
+test_that("reorder_label_if_numeric passes NULL and label-less data through", {
+  expect_null(reorder_label_if_numeric(NULL))
+  df <- data.frame(start = 1, stop = 2)
+  expect_identical(reorder_label_if_numeric(df), df)
+})
+
+test_that("reorder_label_if_numeric passes through empty label data", {
+  df <- data.frame(
+    label = factor(character(), levels = character()),
+    start = numeric()
+  )
+  out <- reorder_label_if_numeric(df)
+  expect_identical(out, df)
+})
+
+test_that("plot_events sorts numeric-string labels numerically on the y axis", {
+  ae <- aniframe::anievent(
+    channel = rep("ch", 11),
+    label = as.character(c(1:9, 10, 20)),
+    start = rep(0, 11),
+    stop = rep(1, 11)
+  )
+  p <- plot_events(ae)
+  layer_data <- p$layers[[1]]$data
+  expect_equal(levels(layer_data$label), as.character(c(1:9, 10, 20)))
+})
+
+test_that("plot_events leaves non-numeric labels in their existing order", {
+  ae <- aniframe::anievent(
+    channel = rep("ch", 3),
+    label = c("alpha", "beta", "gamma"),
+    start = c(0, 1, 2),
+    stop = c(1, 2, 3)
+  )
+  p <- plot_events(ae)
+  layer_data <- p$layers[[1]]$data
+  expect_setequal(levels(layer_data$label), c("alpha", "beta", "gamma"))
+})
+
+
 # --- plot_events.default ----------------------------------------------------
 
 test_that("plot_events.default accepts a state-only data frame", {
