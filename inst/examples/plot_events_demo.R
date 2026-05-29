@@ -114,11 +114,28 @@ p6 <- plot_events(state_df, point = point_df) +
 print(p6)
 
 
+# 7. Numeric labels (e.g. neuron / channel IDs) — sorted numerically on
+#    the y axis instead of lexically (1, 10, 11, ... 2, 20, ...).
+set.seed(7)
+n_ids <- 20
+events_per_id <- 6
+times <- runif(n_ids * events_per_id, 0, 60)
+ae7 <- anievent(
+  channel = rep("spikes", n_ids * events_per_id),
+  label = rep(as.character(seq_len(n_ids)), each = events_per_id),
+  start = times,
+  stop = times
+)
+p7 <- plot_events(ae7) + ggtitle("7. Numeric labels (sorted numerically)")
+print(p7)
+
+
 # Combined PNG
 combined <- (p1 | p2 | p3) /
-  (p4 | p5 | p6) +
+  (p4 | p5 | p6) /
+  p7 +
   plot_annotation(title = "anivis::plot_events demo")
 
 out <- file.path(tempdir(), "anivis_plot_events_demo.png")
-ggsave(out, combined, width = 16, height = 8, dpi = 150)
+ggsave(out, combined, width = 16, height = 12, dpi = 150)
 message("Saved combined demo to: ", out)
