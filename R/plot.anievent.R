@@ -107,7 +107,9 @@ plot_events.default <- function(
   events_base_plot(state = data, point = point, mode = mode)
 }
 
-# Internal: shared ggplot construction for both methods.
+# Internal: shared ggplot construction for both methods. Event start /
+# stop values are drawn at face value — no unit conversion or hms
+# transformation — and the x-axis is labelled with `unit_time` when set.
 events_base_plot <- function(
   data = NULL,
   state = data,
@@ -116,25 +118,11 @@ events_base_plot <- function(
   mode
 ) {
   unit <- if (!is.null(meta)) meta$unit_time else NULL
-  sampling_rate <- if (!is.null(meta)) meta$sampling_rate else NA_real_
-  factor <- seconds_per_unit(unit, sampling_rate)
-  use_time_scale <- !is.na(factor)
-
-  if (use_time_scale) {
-    state <- to_hms_columns(state, c("start", "stop"), factor)
-    point <- to_hms_columns(point, "start", factor)
-  }
-
   unit_chr <- if (!is.null(unit)) as.character(unit) else NA_character_
   x_lab <- if (!is.na(unit_chr) && unit_chr != "unknown") {
     paste0("time (", unit_chr, ")")
   } else {
     "time"
-  }
-  x_scale <- if (use_time_scale) {
-    ggplot2::scale_x_time()
-  } else {
-    ggplot2::scale_x_continuous()
   }
 
   p <- ggplot2::ggplot()
@@ -161,7 +149,6 @@ events_base_plot <- function(
   p +
     scale_fill_animovement() +
     scale_colour_animovement() +
-    x_scale +
     ggplot2::labs(x = x_lab, y = NULL) +
     ggplot2::guides(fill = "none", colour = "none") +
     theme_animovement(mode = mode) +
@@ -170,45 +157,6 @@ events_base_plot <- function(
       panel.grid.major.y = ggplot2::element_blank(),
       panel.grid.minor.y = ggplot2::element_blank()
     )
-}
-
-# Internal: convert the given numeric time columns to hms by multiplying
-# by `factor` (seconds per tick). Caller is responsible for ensuring
-# `factor` is non-NA — `events_base_plot` only converts in that case.
-to_hms_columns <- function(data, cols, factor) {
-  if (is.null(data)) {
-    return(data)
-  }
-  for (col in cols) {
-    if (col %in% names(data)) {
-      data[[col]] <- hms::as_hms(as.numeric(data[[col]]) * factor)
-    }
-  }
-  data
-}
-
-# Internal: seconds per tick of the given aniframe `unit_time`. Returns
-# `NA_real_` when the conversion is undefined: "frame" without a
-# `sampling_rate`, or "unknown". Callers fall back to a continuous x
-# scale in that case.
-seconds_per_unit <- function(unit, sampling_rate = NA_real_) {
-  unit_chr <- as.character(unit %||% "s")
-  if (unit_chr == "frame") {
-    if (!is.na(sampling_rate) && sampling_rate > 0) {
-      return(1 / sampling_rate)
-    }
-    return(NA_real_)
-  }
-  switch(
-    unit_chr,
-    h = 3600,
-    m = 60,
-    s = 1,
-    ms = 1e-3,
-    us = 1e-6,
-    ns = 1e-9,
-    NA_real_
-  )
 }
 
 # Internal: pick a facet layer based on which axes vary.

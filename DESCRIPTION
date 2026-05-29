@@ -21,7 +21,6 @@ Imports:
     ggplot2,
     patchwork,
     marquee,
-    hms,
     aniframe (>= 0.6.0)
 Suggests: 
     ragg,
