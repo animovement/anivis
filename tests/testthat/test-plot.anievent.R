@@ -133,38 +133,45 @@ test_that("plot_events.anievent uses facet_grid when both channel and what vary"
 })
 
 
-# --- axis labels and theme overrides ----------------------------------------
+# --- axis labels, scale dispatch and theme overrides ------------------------
 
-test_that("plot_events includes the unit in the x-axis label when set", {
-  data_s <- make_anievent_state_only() |>
-    aniframe::set_unit_time("s")
-  expect_equal(plot_events(data_s)$labels$x, "time (s)")
-
-  data_m <- make_anievent_state_only() |>
-    aniframe::set_unit_time("m")
-  expect_equal(plot_events(data_m)$labels$x, "time (m)")
-
-  data_frame <- make_anievent_state_only() |>
-    aniframe::set_unit_time("frame")
-  expect_equal(plot_events(data_frame)$labels$x, "time (frame)")
+test_that("plot_events drops the x label and applies scale_x_time for true time units", {
+  for (unit in c("s", "m", "h", "ms", "us", "ns")) {
+    data <- make_anievent_state_only() |>
+      aniframe::set_unit_time(unit)
+    p <- plot_events(data)
+    expect_null(p$labels$x, info = paste("unit =", unit))
+    expect_equal(
+      p$scales$get_scales("x")$trans$name,
+      "hms",
+      info = paste("unit =", unit)
+    )
+  }
 })
 
-test_that("plot_events leaves the x-axis label unit-free for 'unknown'", {
+test_that("plot_events labels frame data 'time (frames)' and keeps raw values", {
   data <- make_anievent_state_only() |>
-    aniframe::set_unit_time("unknown")
-  expect_equal(plot_events(data)$labels$x, "time")
-})
+    aniframe::set_unit_time("frame")
+  p <- plot_events(data)
+  expect_equal(p$labels$x, "time (frames)")
+  expect_false(identical(p$scales$get_scales("x")$trans$name, "hms"))
 
-test_that("plot_events does not transform start/stop values", {
-  ae <- make_anievent_state_only() |>
-    aniframe::set_unit_time("frame") |>
-    aniframe::set_metadata(sampling_rate = 30)
-  p <- plot_events(ae)
-  # The state layer carries through the raw integer-like frame counts;
-  # they are NOT scaled by sampling_rate or converted to hms.
   layer_data <- p$layers[[1]]$data
   expect_setequal(as.numeric(layer_data$start), c(3, 14, 22, 30))
   expect_false(inherits(layer_data$start, "hms"))
+})
+
+test_that("plot_events labels unknown / NULL data 'time' and keeps raw values", {
+  data <- make_anievent_state_only() |>
+    aniframe::set_unit_time("unknown")
+  p <- plot_events(data)
+  expect_equal(p$labels$x, "time")
+  expect_false(identical(p$scales$get_scales("x")$trans$name, "hms"))
+
+  # plot_events.default with no metadata at all
+  state_df <- data.frame(label = "a", start = 0, stop = 5)
+  p_default <- plot_events(state_df)
+  expect_equal(p_default$labels$x, "time")
 })
 
 test_that("plot_events drops the panel border and y-axis gridlines", {
@@ -172,6 +179,41 @@ test_that("plot_events drops the panel border and y-axis gridlines", {
   expect_s3_class(p$theme$panel.border, "element_blank")
   expect_s3_class(p$theme$panel.grid.major.y, "element_blank")
   expect_s3_class(p$theme$panel.grid.minor.y, "element_blank")
+})
+
+
+# --- unit conversion helpers ------------------------------------------------
+
+test_that("seconds_per_unit returns the seconds-per-tick for true time units", {
+  expect_equal(seconds_per_unit("s"), 1)
+  expect_equal(seconds_per_unit("m"), 60)
+  expect_equal(seconds_per_unit("h"), 3600)
+  expect_equal(seconds_per_unit("ms"), 1e-3)
+  expect_equal(seconds_per_unit("us"), 1e-6)
+  expect_equal(seconds_per_unit("ns"), 1e-9)
+})
+
+test_that("seconds_per_unit returns NA for non-time units", {
+  expect_true(is.na(seconds_per_unit("frame")))
+  expect_true(is.na(seconds_per_unit("unknown")))
+  expect_true(is.na(seconds_per_unit(NA)))
+  expect_true(is.na(seconds_per_unit(NA_character_)))
+})
+
+test_that("to_hms_columns scales the chosen columns and wraps them as hms", {
+  df <- data.frame(label = "a", start = 1, stop = 2)
+  out_s <- to_hms_columns(df, c("start", "stop"), 1)
+  expect_s3_class(out_s$start, "hms")
+  expect_equal(as.numeric(out_s$start), 1)
+  expect_equal(as.numeric(out_s$stop), 2)
+
+  out_min <- to_hms_columns(df, c("start", "stop"), 60)
+  expect_equal(as.numeric(out_min$start), 60)
+  expect_equal(as.numeric(out_min$stop), 120)
+})
+
+test_that("to_hms_columns is a no-op on NULL data", {
+  expect_null(to_hms_columns(NULL, c("start", "stop"), 1))
 })
 
 

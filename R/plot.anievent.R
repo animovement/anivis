@@ -107,9 +107,15 @@ plot_events.default <- function(
   events_base_plot(state = data, point = point, mode = mode)
 }
 
-# Internal: shared ggplot construction for both methods. Event start /
-# stop values are drawn at face value — no unit conversion or hms
-# transformation — and the x-axis is labelled with `unit_time` when set.
+# Internal: shared ggplot construction for both methods.
+#
+# X-axis dispatch:
+#   - true time units (s, m, h, ms, us, ns): values are converted to hms
+#     so scale_x_time() renders HH:MM:SS ticks. No axis label, since the
+#     format is self-explanatory.
+#   - "frame": values are kept raw; the axis is labelled "time (frames)".
+#   - "unknown" / NULL / anything else: values are kept raw; the axis is
+#     labelled "time".
 events_base_plot <- function(
   data = NULL,
   state = data,
@@ -119,8 +125,18 @@ events_base_plot <- function(
 ) {
   unit <- if (!is.null(meta)) meta$unit_time else NULL
   unit_chr <- if (!is.null(unit)) as.character(unit) else NA_character_
-  x_lab <- if (!is.na(unit_chr) && unit_chr != "unknown") {
-    paste0("time (", unit_chr, ")")
+  factor <- seconds_per_unit(unit_chr)
+  use_hms <- !is.na(factor)
+
+  if (use_hms) {
+    state <- to_hms_columns(state, c("start", "stop"), factor)
+    point <- to_hms_columns(point, "start", factor)
+  }
+
+  x_lab <- if (use_hms) {
+    NULL
+  } else if (identical(unit_chr, "frame")) {
+    "time (frames)"
   } else {
     "time"
   }
@@ -146,9 +162,16 @@ events_base_plot <- function(
       )
   }
 
+  x_scale <- if (use_hms) {
+    ggplot2::scale_x_time()
+  } else {
+    ggplot2::scale_x_continuous()
+  }
+
   p +
     scale_fill_animovement() +
     scale_colour_animovement() +
+    x_scale +
     ggplot2::labs(x = x_lab, y = NULL) +
     ggplot2::guides(fill = "none", colour = "none") +
     theme_animovement(mode = mode) +
@@ -157,6 +180,40 @@ events_base_plot <- function(
       panel.grid.major.y = ggplot2::element_blank(),
       panel.grid.minor.y = ggplot2::element_blank()
     )
+}
+
+# Internal: multiply raw numeric time columns by `factor` (seconds per
+# native tick) and wrap them as hms so scale_x_time() can format them.
+# `data` may be NULL, in which case it passes through unchanged.
+to_hms_columns <- function(data, cols, factor) {
+  if (is.null(data)) {
+    return(data)
+  }
+  for (col in cols) {
+    if (col %in% names(data)) {
+      data[[col]] <- hms::as_hms(as.numeric(data[[col]]) * factor)
+    }
+  }
+  data
+}
+
+# Internal: seconds per native tick of a true time unit. Returns NA_real_
+# for any unit (including "frame", "unknown", and NA) that should not be
+# rendered as HH:MM:SS.
+seconds_per_unit <- function(unit) {
+  if (is.na(unit %||% NA_character_)) {
+    return(NA_real_)
+  }
+  switch(
+    as.character(unit),
+    h = 3600,
+    m = 60,
+    s = 1,
+    ms = 1e-3,
+    us = 1e-6,
+    ns = 1e-9,
+    NA_real_
+  )
 }
 
 # Internal: pick a facet layer based on which axes vary.
