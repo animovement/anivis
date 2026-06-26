@@ -35,7 +35,7 @@ order bars by \code{"occurrence"} or \code{"total"}, keep the top \code{limit} p
 and whether to include the total-NAs series.}
 
 \item{n_intervals}{For \code{as_plot_data.check_na_timing()}: number of time
-intervals to bin each group into (default Sturges' rule).}
+intervals to bin into (default Sturges' rule on the largest group).}
 }
 \value{
 A data frame classed for the corresponding plot method (for example
@@ -77,11 +77,12 @@ frame classed \code{anivis_check_na_gapsize}.
 
 \code{as_plot_data.check_na_timing()} reconstructs, from the compact gap table, the
 missing / present frame counts per time interval — one row per
-(group, interval, status). Each group's frames are binned into \code{n_intervals}
-equal index intervals (Sturges' rule by default) and each gap's overlap with
-each interval is counted, so no per-frame data is needed. \code{value} is the share
-(\code{measure = "percent"}) or count (\code{"count"}) and \code{width} the interval's span
-in time units. Returns a frame classed \code{anivis_check_na_timing}.
+(group, interval, status). A single interval width (in frames) is chosen for
+all groups (Sturges' rule by default) so bars line up across panels, and each
+gap's overlap with each interval is counted, so no per-frame data is needed.
+\code{value} is the share (\code{measure = "percent"}) or count (\code{"count"}), \code{width} the
+interval's span in time units, and the frame interval size rides along as an
+attribute. Returns a frame classed \code{anivis_check_na_timing}.
 }
 \seealso{
 \code{\link[=plot.check_na_timing]{plot.check_na_timing()}}

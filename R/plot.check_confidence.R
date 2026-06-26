@@ -44,7 +44,7 @@ plot.check_confidence <- function(x, ..., mode = c("light", "dark")) {
       y = "confidence",
       title = "Tracking confidence"
     ) +
-    theme_animovement(mode = mode)
+    theme_imputets(mode = mode)
 
   if (isTRUE(attr(plot_df, "facet"))) {
     p <- p + ggplot2::facet_wrap(ggplot2::vars(.data$group), scales = "free_y")

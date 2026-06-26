@@ -59,20 +59,20 @@ plot.check_na_gapsize <- function(
     ggplot2::scale_y_discrete(labels = function(k) sub("___.*$", "", k)) +
     ggplot2::scale_fill_manual(
       values = c(occurrence = "indianred", total = "steelblue"),
-      labels = c(occurrence = "number occurrence", total = "resulting NAs"),
+      labels = c(
+        occurrence = "Number occurrence gapsize",
+        total = "Resulting NAs for gapsize"
+      ),
       name = NULL
     ) +
     ggplot2::labs(
-      x = "number occurrence",
+      x = "Number occurrence",
       y = NULL,
       title = "Occurrence of gap sizes",
       subtitle = "Gap sizes (NAs in a row) ordered by most common"
     ) +
-    theme_animovement(mode = mode) +
-    ggplot2::theme(
-      legend.position = "bottom",
-      panel.grid.major.y = ggplot2::element_blank()
-    )
+    theme_imputets(mode = mode) +
+    ggplot2::theme(panel.grid.major.y = ggplot2::element_blank())
 
   if (length(group_levels) > 1L) {
     p <- p +

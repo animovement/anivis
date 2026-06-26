@@ -10,18 +10,19 @@
 #'
 #' The interval counts are reconstructed from the compact gap table in the check
 #' object (no per-frame data needed). Missing uses the imputeTS indianred,
-#' present the imputeTS steelblue. The plot is built from an intermediate frame
-#' of class `anivis_check_na_timing` produced by [as_plot_data()] — the staging
-#' step that mirrors `data_plot()` in \pkg{see}.
+#' present the imputeTS steelblue, with the two named in the coloured subtitle
+#' (so no legend is needed). Styling is [theme_imputets()]. The plot is built
+#' from an intermediate frame of class `anivis_check_na_timing` produced by
+#' [as_plot_data()] — the staging step that mirrors `data_plot()` in \pkg{see}.
 #'
 #' @param x A `check_na_timing` object (from the anicheck package).
 #' @param ... Additional arguments (currently unused).
 #' @param measure Either `"percent"` (default, share of each interval) or
 #'   `"count"` (number of frames).
-#' @param n_intervals Number of intervals to bin each group into. Default
-#'   (`NULL`) uses Sturges' rule on the group's frame count.
+#' @param n_intervals Number of intervals to bin into. Default (`NULL`) uses
+#'   Sturges' rule on the largest group's frame count.
 #' @param mode Either `"light"` (default) or `"dark"`; passed to
-#'   [theme_animovement()].
+#'   [theme_imputets()].
 #'
 #' @return A ggplot object.
 #'
@@ -39,21 +40,13 @@ plot.check_na_timing <- function(
   mode <- match.arg(mode)
   plot_df <- as_plot_data(x, measure = measure, n_intervals = n_intervals)
   group_levels <- attr(plot_df, "group_levels")
+  interval_size <- attr(plot_df, "interval_size")
 
-  unit_chr <- attr(x, "unit_time") %||% NA_character_
-  factor <- seconds_per_unit(unit_chr)
-  x_labels <- if (!is.na(factor)) {
-    function(b) format(hms::as_hms(round(b * factor)))
-  } else {
-    ggplot2::waiver()
-  }
-  x_lab <- if (!is.na(factor)) {
-    NULL
-  } else if (identical(unit_chr, "frame")) {
-    "time (frames)"
-  } else {
-    "time"
-  }
+  cols <- imputets_colours()
+  fills <- c(
+    present = ggplot2::alpha(cols$nona, 0.45),
+    missing = ggplot2::alpha(cols$na, 0.95)
+  )
 
   y_scale <- if (measure == "percent") {
     ggplot2::scale_y_continuous(
@@ -63,34 +56,29 @@ plot.check_na_timing <- function(
   } else {
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, 0.05)))
   }
-  y_lab <- if (measure == "percent") "share of frames" else "frames"
-
-  # imputeTS colours: present a faint steelblue, missing a strong indianred.
-  fills <- c(
-    present = ggplot2::alpha("steelblue", 0.5),
-    missing = ggplot2::alpha("indianred2", 0.9)
-  )
+  y_lab <- if (measure == "percent") "Percent" else "Count"
 
   p <- ggplot2::ggplot(
     plot_df,
     ggplot2::aes(x = .data$x, y = .data$value, fill = .data$status)
   ) +
-    ggplot2::geom_col(ggplot2::aes(width = .data$width), position = "stack") +
-    ggplot2::scale_fill_manual(
-      values = fills,
-      labels = c(present = "non-NA", missing = "NA"),
-      name = NULL
+    # White borders separate adjacent interval bars (the imputeTS look).
+    ggplot2::geom_col(
+      ggplot2::aes(width = .data$width),
+      position = "stack",
+      colour = "white",
+      linewidth = 0.5
     ) +
-    ggplot2::scale_x_continuous(labels = x_labels) +
+    ggplot2::scale_fill_manual(values = fills, guide = "none") +
+    ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = 0.01)) +
     y_scale +
     ggplot2::labs(
-      x = x_lab,
+      x = paste0("Time Lapse (Interval Size: ", interval_size, ")"),
       y = y_lab,
-      title = "Missing values per interval",
-      subtitle = "Amount of NA and non-NA over successive intervals"
+      title = "Missing Values per Interval",
+      subtitle = "Amount of {.na NA} and {.nona non-NA} for successive intervals"
     ) +
-    theme_animovement(mode = mode) +
-    ggplot2::theme(panel.grid.major.x = ggplot2::element_blank())
+    theme_imputets(mode = mode)
 
   if (length(group_levels) > 1L) {
     p <- p + ggplot2::facet_wrap(ggplot2::vars(.data$group), ncol = 1)
@@ -102,16 +90,17 @@ plot.check_na_timing <- function(
 #' @export
 #'
 #' @param n_intervals For `as_plot_data.check_na_timing()`: number of time
-#'   intervals to bin each group into (default Sturges' rule).
+#'   intervals to bin into (default Sturges' rule on the largest group).
 #'
 #' @details
 #' `as_plot_data.check_na_timing()` reconstructs, from the compact gap table, the
 #' missing / present frame counts per time interval — one row per
-#' (group, interval, status). Each group's frames are binned into `n_intervals`
-#' equal index intervals (Sturges' rule by default) and each gap's overlap with
-#' each interval is counted, so no per-frame data is needed. `value` is the share
-#' (`measure = "percent"`) or count (`"count"`) and `width` the interval's span
-#' in time units. Returns a frame classed `anivis_check_na_timing`.
+#' (group, interval, status). A single interval width (in frames) is chosen for
+#' all groups (Sturges' rule by default) so bars line up across panels, and each
+#' gap's overlap with each interval is counted, so no per-frame data is needed.
+#' `value` is the share (`measure = "percent"`) or count (`"count"`), `width` the
+#' interval's span in time units, and the frame interval size rides along as an
+#' attribute. Returns a frame classed `anivis_check_na_timing`.
 as_plot_data.check_na_timing <- function(
   x,
   ...,
@@ -141,8 +130,17 @@ as_plot_data.check_na_timing <- function(
   group_levels <- unique(label(groups))
   gaps_group <- if (nrow(x)) label(x) else character(0)
 
+  # One interval width (in frames) for every group, so bars align across panels.
+  max_frames <- max(groups$n_frames)
+  ni <- if (!is.null(n_intervals)) {
+    n_intervals
+  } else {
+    max(1L, ceiling(log2(max(max_frames, 2)) + 1))
+  }
+  interval_size <- max(1L, floor(max_frames / ni))
+
   per_group <- lapply(seq_len(nrow(groups)), function(i) {
-    g <- group_levels[match(label(groups)[i], group_levels)]
+    g <- label(groups)[i]
     n_frames <- groups$n_frames[i]
     t_min <- groups$time_min[i]
 
@@ -150,13 +148,7 @@ as_plot_data.check_na_timing <- function(
     a <- round((x$start[sel] - t_min) / step) + 1 # gap start index
     b <- a + x$length[sel] - 1 # gap stop index
 
-    ni <- if (!is.null(n_intervals)) {
-      n_intervals
-    } else {
-      max(1L, ceiling(log2(max(n_frames, 2)) + 1))
-    }
-    bw <- max(1L, floor(n_frames / ni))
-    breaks <- unique(c(seq(0, n_frames, by = bw), n_frames))
+    breaks <- unique(c(seq(0, n_frames, by = interval_size), n_frames))
 
     do.call(rbind, lapply(seq_len(length(breaks) - 1L), function(k) {
       lo <- breaks[k]
@@ -204,6 +196,7 @@ as_plot_data.check_na_timing <- function(
 
   attr(long, "group_levels") <- group_levels
   attr(long, "measure") <- measure
+  attr(long, "interval_size") <- interval_size
   class(long) <- c("anivis_check_na_timing", "data.frame")
   long
 }

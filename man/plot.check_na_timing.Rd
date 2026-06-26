@@ -20,11 +20,11 @@
 \item{measure}{Either \code{"percent"} (default, share of each interval) or
 \code{"count"} (number of frames).}
 
-\item{n_intervals}{Number of intervals to bin each group into. Default
-(\code{NULL}) uses Sturges' rule on the group's frame count.}
+\item{n_intervals}{Number of intervals to bin into. Default (\code{NULL}) uses
+Sturges' rule on the largest group's frame count.}
 
 \item{mode}{Either \code{"light"} (default) or \code{"dark"}; passed to
-\code{\link[=theme_animovement]{theme_animovement()}}.}
+\code{\link[=theme_imputets]{theme_imputets()}}.}
 }
 \value{
 A ggplot object.
@@ -41,9 +41,10 @@ dropouts. With more than one group, each gets its own stacked panel.
 \details{
 The interval counts are reconstructed from the compact gap table in the check
 object (no per-frame data needed). Missing uses the imputeTS indianred,
-present the imputeTS steelblue. The plot is built from an intermediate frame
-of class \code{anivis_check_na_timing} produced by \code{\link[=as_plot_data]{as_plot_data()}} — the staging
-step that mirrors \code{data_plot()} in \pkg{see}.
+present the imputeTS steelblue, with the two named in the coloured subtitle
+(so no legend is needed). Styling is \code{\link[=theme_imputets]{theme_imputets()}}. The plot is built
+from an intermediate frame of class \code{anivis_check_na_timing} produced by
+\code{\link[=as_plot_data]{as_plot_data()}} — the staging step that mirrors \code{data_plot()} in \pkg{see}.
 }
 \seealso{
 \code{\link[=as_plot_data]{as_plot_data()}}
