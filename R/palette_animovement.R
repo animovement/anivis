@@ -68,6 +68,13 @@ lighten_colour <- function(col, amount = 0.5) {
   grDevices::rgb(mixed[1, ], mixed[2, ], mixed[3, ])
 }
 
+# Internal: blend a colour toward black by `amount` in [0, 1].
+darken_colour <- function(col, amount = 0.5) {
+  rgb_mat <- grDevices::col2rgb(col) / 255
+  mixed <- rgb_mat * (1 - amount)
+  grDevices::rgb(mixed[1, ], mixed[2, ], mixed[3, ])
+}
+
 #' Per-group colour palette for an aniframe
 #'
 #' Builds a named character vector mapping trajectory group keys to colours.
@@ -126,9 +133,15 @@ matrix_palette <- function(keys, palette) {
   pal <- character(0)
   for (w in keys$what_levels) {
     base_col <- base_hues[[w]]
-    light <- lighten_colour(base_col, amount = 0.7)
+    # Spread the `when` shades across a visible band of the same hue — a darker
+    # to a moderately lighter version — instead of fading toward white, so even
+    # the lightest shade stays easy to see (important for thin time-series
+    # lines, where a near-white shade would disappear).
     shade_cols <- stats::setNames(
-      grDevices::colorRampPalette(c(light, base_col))(length(keys$when_levels)),
+      grDevices::colorRampPalette(c(
+        darken_colour(base_col, amount = 0.3),
+        lighten_colour(base_col, amount = 0.4)
+      ))(length(keys$when_levels)),
       keys$when_levels
     )
     for (wn in keys$when_levels) {

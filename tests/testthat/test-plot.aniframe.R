@@ -82,17 +82,10 @@ test_that("plot_trajectory honours unit_space in axis labels", {
 
 test_that("plot_trajectory uses filled circle (21) and filled triangle (24) markers", {
   p <- plot_trajectory(make_aniframe_multi_keypoint())
-  shapes <- vapply(
-    p$layers,
-    function(l) {
-      if (is.null(l$aes_params$shape)) {
-        NA_real_
-      } else {
-        as.numeric(l$aes_params$shape)
-      }
-    },
-    numeric(1)
-  )
+  built <- ggplot2::ggplot_build(p)
+  shapes <- unlist(lapply(built$data, function(d) {
+    if ("shape" %in% names(d)) unique(d$shape) else NULL
+  }))
   expect_true(21 %in% shapes)
   expect_true(24 %in% shapes)
 })
@@ -178,7 +171,7 @@ test_that("plot_trajectory maps line colour to time in single mode", {
   expect_equal(rlang::as_label(path_layer$mapping$colour), "time")
 })
 
-test_that("plot_trajectory uses identity colour in what / when / matrix modes", {
+test_that("plot_trajectory maps line colour to group in what / when / matrix", {
   for (af in list(
     make_aniframe_multi_keypoint(),
     make_aniframe_multi_trial(),
@@ -186,36 +179,24 @@ test_that("plot_trajectory uses identity colour in what / when / matrix modes", 
   )) {
     p <- plot_trajectory(af)
     path_layer <- p$layers[[1]]
-    expect_equal(rlang::as_label(path_layer$mapping$colour), ".row_colour")
+    expect_equal(rlang::as_label(path_layer$mapping$colour), ".group")
   }
 })
 
-
-# --- row_colours behaviour ---------------------------------------------------
-
-test_that("row_colours emits one solid colour per group in matrix mode", {
-  af <- make_aniframe_matrix()
-  pal <- palette_animovement(af)
-  keys <- aniframe_group_keys(af)
-  df <- as.data.frame(af)
-  df$.group <- factor(keys$group, levels = names(pal))
-
-  cols <- row_colours(df, pal, "matrix")
-  # Within each group, colour is identical (no time gradient).
-  per_group_unique <- tapply(cols, df$.group, function(x) length(unique(x)))
-  expect_true(all(per_group_unique == 1))
+test_that("plot_trajectory maps time to alpha (with a legend) in what / when", {
+  for (af in list(
+    make_aniframe_multi_keypoint(),
+    make_aniframe_multi_trial()
+  )) {
+    p <- plot_trajectory(af)
+    expect_equal(rlang::as_label(p$layers[[1]]$mapping$alpha), "time")
+    expect_equal(p$scales$get_scales("alpha")$name, "time")
+  }
 })
 
-test_that("row_colours emits a within-group gradient in what / when modes", {
-  af <- make_aniframe_multi_keypoint()
-  pal <- palette_animovement(af)
-  keys <- aniframe_group_keys(af)
-  df <- as.data.frame(af)
-  df$.group <- factor(keys$group, levels = names(pal))
-
-  cols <- row_colours(df, pal, "what")
-  per_group_unique <- tapply(cols, df$.group, function(x) length(unique(x)))
-  expect_true(all(per_group_unique > 1))
+test_that("plot_trajectory keeps matrix lines solid (no alpha mapping)", {
+  p <- plot_trajectory(make_aniframe_matrix())
+  expect_null(p$layers[[1]]$mapping$alpha)
 })
 
 
@@ -276,20 +257,18 @@ test_that("trajectory_endpoints skips groups whose x/y are all NA", {
   suppressWarnings({
     p <- plot_trajectory(data)
   })
-  endpoints_layer <- p$layers[[2]]
-  expect_equal(nrow(endpoints_layer$data), 1)
+  geoms <- vapply(p$layers, function(l) class(l$geom)[[1]], character(1))
+  markers <- p$layers[[which(geoms == "GeomPoint")[[1]]]]
+  # Only the valid group is marked: start + end = 2 rows.
+  expect_equal(nrow(markers$data), 2)
 })
 
-test_that("row_colours handles a group whose time is a single value", {
+test_that("plot_trajectory handles a group whose time is a single value", {
   af <- make_aniframe_multi_keypoint()
-  pal <- palette_animovement(af)
-  keys <- aniframe_group_keys(af)
   df <- as.data.frame(af)
-  df$.group <- factor(keys$group, levels = names(pal))
-  # Force the first group's time column to a constant.
-  df$time[df$.group == levels(df$.group)[1]] <- 1
+  # Force the first keypoint's time column to a constant.
+  df$time[df$keypoint == unique(df$keypoint)[1]] <- 1
+  af <- aniframe::as_aniframe(df)
 
-  cols <- row_colours(df, pal, "what")
-  expect_length(cols, nrow(df))
-  expect_false(any(is.na(cols)))
+  expect_s3_class(plot_trajectory(af), "ggplot")
 })

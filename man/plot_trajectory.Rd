@@ -34,16 +34,17 @@ aniframe's metadata.
 Colours adapt to the dataset shape:
 \itemize{
 \item \strong{single} trajectory (no grouping): the line is coloured continuously
-by \code{time} using the Material gradient scale (\code{\link[=scale_colour_material_c]{scale_colour_material_c()}}).
+by \code{time} using the Material gradient scale (\code{\link[=scale_colour_material_c]{scale_colour_material_c()}}),
+shown as a \code{time} colour bar.
 \item \strong{what-only} or \strong{when-only} grouping (one varying axis): each line
-gets its own hue from a qualitative palette and shades from light to
-that hue along \code{time}, so direction reads from both the start/end
-markers and the within-line gradient.
+gets its own hue from a qualitative palette, with \code{time} mapped to alpha
+so the line fades in from start to end — shown in a \code{time} legend.
 \item \strong{matrix} grouping (both axes vary): each line is solid, coloured by
 the hue × shade matrix from \code{\link[=palette_animovement]{palette_animovement()}} — hue per \code{what},
-shade per \code{when}.
+shade per \code{when}; time reads from the start/end markers.
 }
 
 Every trajectory is annotated with a filled circle at its first point and
-a filled triangle at its last point.
+a filled triangle at its last point, identified in a start/end legend. Gaps
+from missing data are bridged with a dashed line so the path stays traceable.
 }
