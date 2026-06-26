@@ -11,6 +11,9 @@
 #' @param guides How to treat legends: `"collect"` to pool identical legends
 #'   into one, `"keep"` to leave them in place. Passed to
 #'   [patchwork::wrap_plots()].
+#' @param axes,axis_titles How to treat duplicated axes / axis titles:
+#'   `"collect"`, `"collect_x"`, `"collect_y"` to share them across aligned
+#'   panels, or `"keep"` (default). Passed to [patchwork::wrap_plots()].
 #' @param tags Sub-figure tags. `TRUE` labels panels `A`, `B`, `C`, ...; a
 #'   character vector such as `c("1", "2")` or `"i"` chooses another sequence;
 #'   `FALSE` (default) adds none.
@@ -33,6 +36,8 @@ plots <- function(
   n_rows = NULL,
   n_columns = NULL,
   guides = NULL,
+  axes = NULL,
+  axis_titles = NULL,
   tags = FALSE,
   tag_prefix = NULL,
   tag_suffix = NULL,
@@ -53,7 +58,9 @@ plots <- function(
     ...,
     nrow = n_rows,
     ncol = n_columns,
-    guides = guides
+    guides = guides,
+    axes = axes %||% "keep",
+    axis_titles = axis_titles %||% "keep"
   ) +
     patchwork::plot_annotation(
       tag_levels = tags,

@@ -9,6 +9,8 @@ plots(
   n_rows = NULL,
   n_columns = NULL,
   guides = NULL,
+  axes = NULL,
+  axis_titles = NULL,
   tags = FALSE,
   tag_prefix = NULL,
   tag_suffix = NULL,
@@ -28,6 +30,10 @@ patchwork chooses a roughly square grid.}
 \item{guides}{How to treat legends: \code{"collect"} to pool identical legends
 into one, \code{"keep"} to leave them in place. Passed to
 \code{\link[patchwork:wrap_plots]{patchwork::wrap_plots()}}.}
+
+\item{axes, axis_titles}{How to treat duplicated axes / axis titles:
+\code{"collect"}, \code{"collect_x"}, \code{"collect_y"} to share them across aligned
+panels, or \code{"keep"} (default). Passed to \code{\link[patchwork:wrap_plots]{patchwork::wrap_plots()}}.}
 
 \item{tags}{Sub-figure tags. \code{TRUE} labels panels \code{A}, \code{B}, \code{C}, ...; a
 character vector such as \code{c("1", "2")} or \code{"i"} chooses another sequence;

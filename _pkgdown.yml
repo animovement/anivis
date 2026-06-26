@@ -27,6 +27,7 @@ reference:
   - plot.plot_check_confidence
   - plot_events
   - plot_trajectory
+  - plot_timeseries
   - plots
 
 - title: "Geoms"
