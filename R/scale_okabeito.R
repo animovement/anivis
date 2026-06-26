@@ -169,7 +169,11 @@ scale_colour_okabeito <- function(
 ) {
   ggplot2::discrete_scale(
     aesthetics = aesthetics,
-    palette = palette_okabeito(palette = palette, reverse = reverse, order = order),
+    palette = palette_okabeito(
+      palette = palette,
+      reverse = reverse,
+      order = order
+    ),
     ...
   )
 }
@@ -189,7 +193,11 @@ scale_fill_okabeito <- function(
 ) {
   ggplot2::discrete_scale(
     aesthetics = aesthetics,
-    palette = palette_okabeito(palette = palette, reverse = reverse, order = order),
+    palette = palette_okabeito(
+      palette = palette,
+      reverse = reverse,
+      order = order
+    ),
     ...
   )
 }

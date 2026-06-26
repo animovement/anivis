@@ -145,17 +145,23 @@ check_timeseries_variables <- function(data, variable) {
     ))
   }
   if (!is.character(variable)) {
-    cli::cli_abort("{.arg variable} must be a character vector of column names.")
+    cli::cli_abort(
+      "{.arg variable} must be a character vector of column names."
+    )
   }
   unknown <- setdiff(variable, names(data))
   if (length(unknown)) {
-    cli::cli_abort("{.arg variable} names unknown column{?s}: {.val {unknown}}.")
+    cli::cli_abort(
+      "{.arg variable} names unknown column{?s}: {.val {unknown}}."
+    )
   }
-  non_numeric <- variable[!vapply(
-    variable,
-    function(v) is.numeric(data[[v]]),
-    logical(1)
-  )]
+  non_numeric <- variable[
+    !vapply(
+      variable,
+      function(v) is.numeric(data[[v]]),
+      logical(1)
+    )
+  ]
   if (length(non_numeric)) {
     cli::cli_abort(
       "{.arg variable} must be numeric; these are not: {.val {non_numeric}}."

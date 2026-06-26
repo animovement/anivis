@@ -74,10 +74,16 @@ matrix_df <- expand.grid(
   individual = c("a", "b")
 )
 matrix_df$x <- ave(
-  rnorm(nrow(matrix_df)), matrix_df$individual, matrix_df$trial, FUN = cumsum
+  rnorm(nrow(matrix_df)),
+  matrix_df$individual,
+  matrix_df$trial,
+  FUN = cumsum
 )
 matrix_df$y <- ave(
-  rnorm(nrow(matrix_df)), matrix_df$individual, matrix_df$trial, FUN = cumsum
+  rnorm(nrow(matrix_df)),
+  matrix_df$individual,
+  matrix_df$trial,
+  FUN = cumsum
 )
 matrix_df <- add_speed(matrix_df, c("individual", "trial"))
 matrix_af <- as_aniframe(matrix_df, variables_when = c("trial", "time"))
@@ -115,7 +121,12 @@ print(p6)
 # Combined PNG via anivis::plots()
 # -------------------------------------------------------------------------
 combined <- plots(
-  p1, p2, p3, p4, p5, p6,
+  p1,
+  p2,
+  p3,
+  p4,
+  p5,
+  p6,
   n_columns = 3,
   tags = TRUE,
   title = "anivis::plot_timeseries demo"

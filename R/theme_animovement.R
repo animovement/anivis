@@ -33,7 +33,10 @@ theme_animovement <- function(
 # mode-specific colours; `dark` recolours the linedraw lines / backgrounds for
 # the dark variant.
 theme_animovement_base <- function(base_size, base_family, cols, dark = FALSE) {
-  t <- ggplot2::theme_linedraw(base_size = base_size, base_family = base_family) +
+  t <- ggplot2::theme_linedraw(
+    base_size = base_size,
+    base_family = base_family
+  ) +
     ggplot2::theme(
       text = ggplot2::element_text(colour = cols$text, size = base_size),
 
@@ -68,7 +71,10 @@ theme_animovement_base <- function(base_size, base_family, cols, dark = FALSE) {
         colour = cols$strip_border,
         linewidth = 0.5
       ),
-      strip.text = ggplot2::element_text(colour = cols$strip_text, face = "bold")
+      strip.text = ggplot2::element_text(
+        colour = cols$strip_text,
+        face = "bold"
+      )
     )
 
   if (dark) {
@@ -89,7 +95,10 @@ theme_animovement_base <- function(base_size, base_family, cols, dark = FALSE) {
           colour = cols$grid,
           linewidth = 0.2
         ),
-        axis.ticks = ggplot2::element_line(colour = cols$border, linewidth = 0.4),
+        axis.ticks = ggplot2::element_line(
+          colour = cols$border,
+          linewidth = 0.4
+        ),
         legend.background = ggplot2::element_rect(fill = cols$bg, colour = NA)
       )
   }

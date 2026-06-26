@@ -45,16 +45,46 @@ material_colors <- function(...) {
 
 material_palettes <- list(
   full = material_colors(),
-  ice = material_colors("purple", "deep purple", "indigo", "blue", "light blue"),
+  ice = material_colors(
+    "purple",
+    "deep purple",
+    "indigo",
+    "blue",
+    "light blue"
+  ),
   gradient = material_colors("blue", "orange"),
   rainbow = material_colors(
-    "purple", "deep purple", "indigo", "blue", "light blue", "green",
-    "light green", "lime", "amber", "orange", "deep orange", "red", "pink"
+    "purple",
+    "deep purple",
+    "indigo",
+    "blue",
+    "light blue",
+    "green",
+    "light green",
+    "lime",
+    "amber",
+    "orange",
+    "deep orange",
+    "red",
+    "pink"
   ),
   contrast = material_colors("blue", "green", "amber", "purple", "red"),
-  light = material_colors("light blue", "pink", "yellow", "light green", "orange"),
+  light = material_colors(
+    "light blue",
+    "pink",
+    "yellow",
+    "light green",
+    "orange"
+  ),
   complement = material_colors(
-    "blue", "blue grey", "teal", "green", "light green", "yellow", "amber", "red"
+    "blue",
+    "blue grey",
+    "teal",
+    "green",
+    "light green",
+    "yellow",
+    "amber",
+    "red"
   )
 )
 
@@ -108,7 +138,11 @@ scale_colour_material <- function(
   if (discrete) {
     ggplot2::discrete_scale(aesthetics = aesthetics, palette = pal, ...)
   } else {
-    ggplot2::scale_colour_gradientn(colours = pal(256), aesthetics = aesthetics, ...)
+    ggplot2::scale_colour_gradientn(
+      colours = pal(256),
+      aesthetics = aesthetics,
+      ...
+    )
   }
 }
 
@@ -132,7 +166,11 @@ scale_fill_material <- function(
   if (discrete) {
     ggplot2::discrete_scale(aesthetics = aesthetics, palette = pal, ...)
   } else {
-    ggplot2::scale_fill_gradientn(colours = pal(256), aesthetics = aesthetics, ...)
+    ggplot2::scale_fill_gradientn(
+      colours = pal(256),
+      aesthetics = aesthetics,
+      ...
+    )
   }
 }
 

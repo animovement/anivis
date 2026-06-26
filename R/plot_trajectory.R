@@ -66,14 +66,20 @@ plot_trajectory.default <- function(
 
   # Time legend: format as HH:MM:SS for true time units (as plot_events does),
   # raw numbers otherwise. Three breaks keep the legend compact.
-  t_unit <- if (!is.null(meta$unit_time)) as.character(meta$unit_time) else NA_character_
+  t_unit <- if (!is.null(meta$unit_time)) {
+    as.character(meta$unit_time)
+  } else {
+    NA_character_
+  }
   t_factor <- seconds_per_unit(t_unit)
   time_labels <- if (!is.na(t_factor)) {
     function(b) format(hms::as_hms(round(b * t_factor)))
   } else {
     ggplot2::waiver()
   }
-  three_breaks <- function(limits) round(seq(limits[1], limits[2], length.out = 3))
+  three_breaks <- function(limits) {
+    round(seq(limits[1], limits[2], length.out = 3))
+  }
 
   # Dashed connectors across missing-data gaps, and start/end markers reshaped
   # so a single shape scale can label which symbol is which.
@@ -92,80 +98,107 @@ plot_trajectory.default <- function(
 
   if (keys$mode == "single") {
     # Time -> a continuous colour bar, titled "time" in the legend.
-    path_layers <- Filter(Negate(is.null), list(
-      ggplot2::geom_path(
-        ggplot2::aes(colour = .data$time, group = .data$.group),
-        na.rm = TRUE
-      ),
-      if (!is.null(bridges)) {
-        ggplot2::geom_segment(
-          data = bridges,
-          ggplot2::aes(
-            x = .data$x, y = .data$y, xend = .data$xend, yend = .data$yend,
-            colour = .data$time
-          ),
-          linetype = "dashed", linewidth = 0.4, inherit.aes = FALSE, na.rm = TRUE
+    path_layers <- Filter(
+      Negate(is.null),
+      list(
+        ggplot2::geom_path(
+          ggplot2::aes(colour = .data$time, group = .data$.group),
+          na.rm = TRUE
+        ),
+        if (!is.null(bridges)) {
+          ggplot2::geom_segment(
+            data = bridges,
+            ggplot2::aes(
+              x = .data$x,
+              y = .data$y,
+              xend = .data$xend,
+              yend = .data$yend,
+              colour = .data$time
+            ),
+            linetype = "dashed",
+            linewidth = 0.4,
+            inherit.aes = FALSE,
+            na.rm = TRUE
+          )
+        },
+        scale_colour_material_c(
+          name = "time",
+          labels = time_labels,
+          guide = ggplot2::guide_colourbar(order = 3)
         )
-      },
-      scale_colour_material_c(
-        name = "time",
-        labels = time_labels,
-        guide = ggplot2::guide_colourbar(order = 3)
       )
-    ))
+    )
   } else if (keys$mode == "matrix") {
     # Hue x shade per group; solid lines (time reads from the start/end markers).
-    path_layers <- Filter(Negate(is.null), list(
-      ggplot2::geom_path(
-        ggplot2::aes(colour = .data$.group, group = .data$.group),
-        na.rm = TRUE
-      ),
-      if (!is.null(bridges)) {
-        ggplot2::geom_segment(
-          data = bridges,
-          ggplot2::aes(
-            x = .data$x, y = .data$y, xend = .data$xend, yend = .data$yend,
-            colour = .data$.group
-          ),
-          linetype = "dashed", linewidth = 0.4, inherit.aes = FALSE, na.rm = TRUE
-        )
-      },
-      ggplot2::scale_colour_manual(values = pal, guide = "none")
-    ))
+    path_layers <- Filter(
+      Negate(is.null),
+      list(
+        ggplot2::geom_path(
+          ggplot2::aes(colour = .data$.group, group = .data$.group),
+          na.rm = TRUE
+        ),
+        if (!is.null(bridges)) {
+          ggplot2::geom_segment(
+            data = bridges,
+            ggplot2::aes(
+              x = .data$x,
+              y = .data$y,
+              xend = .data$xend,
+              yend = .data$yend,
+              colour = .data$.group
+            ),
+            linetype = "dashed",
+            linewidth = 0.4,
+            inherit.aes = FALSE,
+            na.rm = TRUE
+          )
+        },
+        ggplot2::scale_colour_manual(values = pal, guide = "none")
+      )
+    )
   } else {
     # what / when: one hue per group, with time mapped to alpha so the line
     # fades in from start to end and earns a real "time" legend.
-    path_layers <- Filter(Negate(is.null), list(
-      ggplot2::geom_path(
-        ggplot2::aes(
-          colour = .data$.group,
-          alpha = .data$time,
-          group = .data$.group
-        ),
-        na.rm = TRUE
-      ),
-      if (!is.null(bridges)) {
-        ggplot2::geom_segment(
-          data = bridges,
+    path_layers <- Filter(
+      Negate(is.null),
+      list(
+        ggplot2::geom_path(
           ggplot2::aes(
-            x = .data$x, y = .data$y, xend = .data$xend, yend = .data$yend,
-            colour = .data$.group
+            colour = .data$.group,
+            alpha = .data$time,
+            group = .data$.group
           ),
-          linetype = "dashed", linewidth = 0.4, inherit.aes = FALSE, na.rm = TRUE
-        )
-      },
-      ggplot2::scale_colour_manual(values = pal, guide = "none"),
-      ggplot2::scale_alpha(
-        range = c(0.45, 1),
-        name = "time",
-        breaks = three_breaks,
-        labels = time_labels,
-        guide = ggplot2::guide_legend(
-          order = 3,
-          override.aes = list(colour = "grey25")
+          na.rm = TRUE
+        ),
+        if (!is.null(bridges)) {
+          ggplot2::geom_segment(
+            data = bridges,
+            ggplot2::aes(
+              x = .data$x,
+              y = .data$y,
+              xend = .data$xend,
+              yend = .data$yend,
+              colour = .data$.group
+            ),
+            linetype = "dashed",
+            linewidth = 0.4,
+            inherit.aes = FALSE,
+            na.rm = TRUE
+          )
+        },
+        ggplot2::scale_colour_manual(values = pal, guide = "none"),
+        ggplot2::scale_alpha(
+          range = c(0.45, 1),
+          name = "time",
+          breaks = three_breaks,
+          labels = time_labels,
+          guide = ggplot2::guide_legend(
+            order = 3,
+            override.aes = list(colour = "grey25")
+          )
         )
       )
-    ))
+    )
   }
 
   base +
@@ -185,7 +218,10 @@ plot_trajectory.default <- function(
     ggplot2::scale_shape_manual(
       values = c(start = 21, end = 24),
       name = NULL,
-      guide = ggplot2::guide_legend(order = 2, override.aes = list(fill = "grey45"))
+      guide = ggplot2::guide_legend(
+        order = 2,
+        override.aes = list(fill = "grey45")
+      )
     ) +
     ggplot2::scale_fill_manual(
       values = pal,

@@ -169,25 +169,28 @@ as_plot_data.check_na_timing <- function(
 
     breaks <- unique(c(seq(0, n_frames, by = interval_size), n_frames))
 
-    do.call(rbind, lapply(seq_len(length(breaks) - 1L), function(k) {
-      lo <- breaks[k]
-      hi <- breaks[k + 1]
-      size <- hi - lo
-      missing <- if (length(a)) {
-        min(size, sum(pmax(0, pmin(b, hi) - pmax(a, lo + 1) + 1)))
-      } else {
-        0
-      }
-      centre_time <- t_min + ((lo + hi) / 2 - 0.5) * step
-      data.frame(
-        group = g,
-        x = centre_time,
-        width = size * step,
-        size = size,
-        present = size - missing,
-        missing = missing
-      )
-    }))
+    do.call(
+      rbind,
+      lapply(seq_len(length(breaks) - 1L), function(k) {
+        lo <- breaks[k]
+        hi <- breaks[k + 1]
+        size <- hi - lo
+        missing <- if (length(a)) {
+          min(size, sum(pmax(0, pmin(b, hi) - pmax(a, lo + 1) + 1)))
+        } else {
+          0
+        }
+        centre_time <- t_min + ((lo + hi) / 2 - 0.5) * step
+        data.frame(
+          group = g,
+          x = centre_time,
+          width = size * step,
+          size = size,
+          present = size - missing,
+          missing = missing
+        )
+      })
+    )
   })
   binned <- do.call(rbind, per_group)
 

@@ -27,7 +27,12 @@
 #' @seealso [as_plot_data()]
 #'
 #' @export
-plot.check_confidence <- function(x, ..., clip = 0.02, mode = c("light", "dark")) {
+plot.check_confidence <- function(
+  x,
+  ...,
+  clip = 0.02,
+  mode = c("light", "dark")
+) {
   mode <- match.arg(mode)
   plot_df <- as_plot_data(x, clip = clip)
   positions <- attr(plot_df, "positions")
@@ -120,13 +125,20 @@ as_plot_data.check_confidence <- function(x, ..., clip = 0.02) {
   facet_vars <- setdiff(varying, axis_var)
 
   y_cat <- function(tbl) {
-    if (is.na(axis_var)) rep("all", nrow(tbl)) else as.character(tbl[[axis_var]])
+    if (is.na(axis_var)) {
+      rep("all", nrow(tbl))
+    } else {
+      as.character(tbl[[axis_var]])
+    }
   }
   facet_group <- function(tbl) {
     if (length(facet_vars)) {
       do.call(
         paste,
-        c(lapply(facet_vars, function(col) as.character(tbl[[col]])), sep = " | ")
+        c(
+          lapply(facet_vars, function(col) as.character(tbl[[col]])),
+          sep = " | "
+        )
       )
     } else {
       rep("all", nrow(tbl))
@@ -141,38 +153,44 @@ as_plot_data.check_confidence <- function(x, ..., clip = 0.02) {
   # a misleading thin neck.
   gkey <- group_key(x, group_cols)
   parts <- split(x, factor(gkey, levels = unique(gkey)))
-  violins <- do.call(rbind, lapply(parts, function(d) {
-    d <- d[order(d$value), , drop = FALSE]
-    peak <- max(d$density)
-    cat <- y_cat(d)[1]
-    fg <- facet_group(d)[1]
-    centre <- positions[[cat]]
+  violins <- do.call(
+    rbind,
+    lapply(parts, function(d) {
+      d <- d[order(d$value), , drop = FALSE]
+      peak <- max(d$density)
+      cat <- y_cat(d)[1]
+      fg <- facet_group(d)[1]
+      centre <- positions[[cat]]
 
-    keep <- which(d$density >= clip * peak)
-    if (!length(keep)) {
-      return(NULL)
-    }
-    # Split the kept grid points into contiguous runs (the separate blobs).
-    gaps <- which(diff(keep) > 1L)
-    seg_start <- c(1L, gaps + 1L)
-    seg_end <- c(gaps, length(keep))
+      keep <- which(d$density >= clip * peak)
+      if (!length(keep)) {
+        return(NULL)
+      }
+      # Split the kept grid points into contiguous runs (the separate blobs).
+      gaps <- which(diff(keep) > 1L)
+      seg_start <- c(1L, gaps + 1L)
+      seg_end <- c(gaps, length(keep))
 
-    do.call(rbind, lapply(seq_along(seg_start), function(si) {
-      seg <- keep[seg_start[si]:seg_end[si]]
-      dd <- d[seg, , drop = FALSE]
-      half <- dd$density / peak * 0.4 # width-normalised half-width
-      # Horizontal violin: confidence on x, the keypoint position (+/- the
-      # density half-width) on y.
-      data.frame(
-        x = c(dd$value, rev(dd$value)),
-        y = c(centre + half, centre - rev(half)),
-        keypoint = cat,
-        group = fg,
-        poly = paste(cat, fg, si, sep = "\r"),
-        stringsAsFactors = FALSE
+      do.call(
+        rbind,
+        lapply(seq_along(seg_start), function(si) {
+          seg <- keep[seg_start[si]:seg_end[si]]
+          dd <- d[seg, , drop = FALSE]
+          half <- dd$density / peak * 0.4 # width-normalised half-width
+          # Horizontal violin: confidence on x, the keypoint position (+/- the
+          # density half-width) on y.
+          data.frame(
+            x = c(dd$value, rev(dd$value)),
+            y = c(centre + half, centre - rev(half)),
+            keypoint = cat,
+            group = fg,
+            poly = paste(cat, fg, si, sep = "\r"),
+            stringsAsFactors = FALSE
+          )
+        })
       )
-    }))
-  }))
+    })
+  )
 
   overlay <- groups
   overlay$y <- positions[y_cat(overlay)]

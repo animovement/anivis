@@ -75,7 +75,11 @@ plot.check_na_gapsize <- function(
 
   if (length(group_levels) > 1L) {
     p <- p +
-      ggplot2::facet_wrap(ggplot2::vars(.data$group), ncol = 1, scales = "free_y")
+      ggplot2::facet_wrap(
+        ggplot2::vars(.data$group),
+        ncol = 1,
+        scales = "free_y"
+      )
   }
   p
 }
@@ -160,7 +164,9 @@ as_plot_data.check_na_gapsize <- function(
     rows[[g]] <- block
   }
 
-  out <- if (length(rows)) do.call(rbind, rows) else {
+  out <- if (length(rows)) {
+    do.call(rbind, rows)
+  } else {
     data.frame(
       group = character(0),
       key = character(0),

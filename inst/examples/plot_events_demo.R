@@ -96,7 +96,8 @@ ae5 <- anievent(
   start = c(3, 14, 1, 7, 5, 12, 8, 20),
   stop = c(9, 19, 6, 12, 5, 12, 8, 20)
 )
-p5 <- plot_events(ae5, layout = "inline") + ggtitle("5. Multi-channel x individual (facet_grid)")
+p5 <- plot_events(ae5, layout = "inline") +
+  ggtitle("5. Multi-channel x individual (facet_grid)")
 print(p5)
 
 
@@ -144,22 +145,40 @@ ae8 <- anievent(
     "mouse 3"
   ),
   label = c(
-    "rest", "groom", "rest", "explore",
-    "rest", "explore", "rest", "groom",
-    "explore", "rest", "explore",
-    "startle", "startle", "startle"
+    "rest",
+    "groom",
+    "rest",
+    "explore",
+    "rest",
+    "explore",
+    "rest",
+    "groom",
+    "explore",
+    "rest",
+    "explore",
+    "startle",
+    "startle",
+    "startle"
   ),
   start = c(0, 8, 14, 22, 2, 10, 18, 26, 1, 9, 17, 12, 6, 20),
   stop = c(7, 13, 21, 30, 9, 17, 25, 32, 8, 16, 28, 12, 6, 20)
 )
-p8 <- plot_events(ae8, layout = "inline") + ggtitle("8. Ethogram (layout = 'inline')")
+p8 <- plot_events(ae8, layout = "inline") +
+  ggtitle("8. Ethogram (layout = 'inline')")
 print(p8)
 
 
 # Combined PNG — anivis::plots() wraps patchwork: a 3-column grid (the eight
 # panels fill row-wise) with A–H tags.
 combined <- plots(
-  p1, p2, p3, p4, p5, p6, p7, p8,
+  p1,
+  p2,
+  p3,
+  p4,
+  p5,
+  p6,
+  p7,
+  p8,
   n_columns = 3,
   tags = TRUE,
   title = "anivis::plot_events demo"
