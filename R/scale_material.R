@@ -96,6 +96,7 @@ material_palettes <- list(
 #' @param palette One of `"full"`, `"ice"`, `"gradient"`, `"rainbow"`,
 #'   `"contrast"`, `"light"` or `"complement"`.
 #' @param reverse Reverse the colour order.
+#' @param ... Additional arguments passed to the underlying palette retriever.
 #'
 #' @return A function that returns `n` hex colours.
 #' @export

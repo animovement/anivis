@@ -120,7 +120,8 @@ geom_event_point <- function(
   data_arg <- if (is.null(data)) {
     filter_point
   } else if (is.function(data)) {
-    function(d) filter_point(data(d))
+    data_fn <- data
+    function(d) filter_point(data_fn(d))
   } else {
     filter_point(data)
   }

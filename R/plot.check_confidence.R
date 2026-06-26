@@ -151,7 +151,16 @@ as_plot_data.check_confidence <- function(x, ..., clip = 0.02) {
   # facet): the density is cut where it drops below `clip` x its peak, so a
   # bimodal distribution splits into separate blobs rather than being bridged by
   # a misleading thin neck.
-  gkey <- group_key(x, group_cols)
+  # Split the density grid into per-group parts (group_key lives in the anicheck
+  # check sources, so build the key inline to keep anivis self-contained).
+  gkey <- if (length(group_cols)) {
+    do.call(
+      paste,
+      c(lapply(group_cols, function(col) as.character(x[[col]])), sep = "\t")
+    )
+  } else {
+    rep("all", nrow(x))
+  }
   parts <- split(x, factor(gkey, levels = unique(gkey)))
   violins <- do.call(
     rbind,

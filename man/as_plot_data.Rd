@@ -37,6 +37,9 @@ each keypoint's peak) below which the violin is cut. Default \code{0.02}.}
 order bars by \code{"occurrence"} or \code{"total"}, keep the top \code{limit} per group,
 and whether to include the total-NAs series.}
 
+\item{measure}{For \code{as_plot_data.check_na_timing()}: \code{"percent"} (default,
+share of each interval) or \code{"count"} (number of frames).}
+
 \item{n_intervals}{For \code{as_plot_data.check_na_timing()}: number of time
 intervals to bin into (default \code{NULL} uses Sturges' rule on the largest
 group).}

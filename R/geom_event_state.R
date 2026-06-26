@@ -91,7 +91,8 @@ geom_event_state <- function(
   data_arg <- if (is.null(data)) {
     filter_state
   } else if (is.function(data)) {
-    function(d) filter_state(data(d))
+    data_fn <- data
+    function(d) filter_state(data_fn(d))
   } else {
     filter_state(data)
   }

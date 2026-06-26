@@ -11,6 +11,8 @@ palette_material(palette = "contrast", reverse = FALSE, ...)
 \code{"contrast"}, \code{"light"} or \code{"complement"}.}
 
 \item{reverse}{Reverse the colour order.}
+
+\item{...}{Additional arguments passed to the underlying palette retriever.}
 }
 \value{
 A function that returns \code{n} hex colours.

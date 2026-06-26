@@ -107,6 +107,8 @@ plot.check_na_timing <- function(
 #' @rdname as_plot_data
 #' @export
 #'
+#' @param measure For `as_plot_data.check_na_timing()`: `"percent"` (default,
+#'   share of each interval) or `"count"` (number of frames).
 #' @param n_intervals For `as_plot_data.check_na_timing()`: number of time
 #'   intervals to bin into (default `NULL` uses Sturges' rule on the largest
 #'   group).

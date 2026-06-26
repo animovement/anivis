@@ -5,6 +5,8 @@
 #'
 #' @param x An aniframe object.
 #' @param ... Additional arguments passed to underlying plot functions.
+#' @param mode Either `"light"` (default) or `"dark"`; passed to
+#'   [plot_trajectory()].
 #'
 #' @return A patchwork object.
 #'

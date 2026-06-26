@@ -10,6 +10,9 @@
 \item{x}{An aniframe object.}
 
 \item{...}{Additional arguments passed to underlying plot functions.}
+
+\item{mode}{Either \code{"light"} (default) or \code{"dark"}; passed to
+\code{\link[=plot_trajectory]{plot_trajectory()}}.}
 }
 \value{
 A patchwork object.
