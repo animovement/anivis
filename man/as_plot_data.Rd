@@ -15,17 +15,27 @@ as_plot_data(x, ...)
 
 \method{as_plot_data}{check_confidence}(x, ...)
 
-\method{as_plot_data}{check_na_gapsize}(x, ..., measure = c("occurrence", "total"))
+\method{as_plot_data}{check_na_gapsize}(
+  x,
+  ...,
+  ranked_by = c("occurrence", "total"),
+  limit = 10,
+  include_total = TRUE
+)
 
-\method{as_plot_data}{check_na_timing}(x, ...)
+\method{as_plot_data}{check_na_timing}(x, ..., measure = c("percent", "count"), n_intervals = NULL)
 }
 \arguments{
 \item{x}{A check object.}
 
 \item{...}{Additional arguments passed to methods.}
 
-\item{measure}{For \code{as_plot_data.check_na_gapsize()}: which count to put on
-the y axis — \code{"occurrence"} (number of gaps) or \code{"total"} (missing frames).}
+\item{ranked_by, limit, include_total}{For \code{as_plot_data.check_na_gapsize()}:
+order bars by \code{"occurrence"} or \code{"total"}, keep the top \code{limit} per group,
+and whether to include the total-NAs series.}
+
+\item{n_intervals}{For \code{as_plot_data.check_na_timing()}: number of time
+intervals to bin each group into (default Sturges' rule).}
 }
 \value{
 A data frame classed for the corresponding plot method (for example
@@ -59,21 +69,19 @@ present; any other identity that varies (e.g. \code{individual}) collapses into 
 \code{group} factor for faceting (flagged by a \code{facet} attribute). Returns a frame
 classed \code{anivis_check_confidence}.
 
-\code{as_plot_data.check_na_gapsize()} turns the gap-size table from
-\code{check_na_gapsize()} into a tidy bar-chart frame: one row per (group, gap
-size) with the chosen \code{measure} as \code{value}, \code{gap_size} an ascending factor so
-every bar position lines up across panels, and the varying grouping columns
-collapsed into a single \code{group} factor. Returns a frame classed
-\code{anivis_check_na_gapsize}.
+\code{as_plot_data.check_na_gapsize()} reshapes the gap-size table into the long,
+ranked form the imputeTS-style bar chart needs: one row per (group, gap size,
+series), where \code{series} is \code{occurrence} (and \code{total} when \code{include_total}),
+\code{value} the count, and \code{key} a \code{reorder_within}-style factor (\code{"<n> NA-gap___ <group>"}) ordered by \code{ranked_by} so each facet sorts independently. Returns a
+frame classed \code{anivis_check_na_gapsize}.
 
-\code{as_plot_data.check_na_timing()} turns the gap table from \code{check_na_timing()}
-into the frame its strip plot is drawn from. Each gap becomes a tile centred
-on the gap with a width spanning it (plus one frame step, so single-frame gaps
-stay visible); the grouping columns that actually vary collapse into a single
-\code{group} factor, reversed so the first group reads at the top. The full set of
-groups (including gap-free ones) and the time range ride along as attributes
-so the plot can show every row across the whole timeline. Returns a frame
-classed \code{anivis_check_na_timing}.
+\code{as_plot_data.check_na_timing()} reconstructs, from the compact gap table, the
+missing / present frame counts per time interval — one row per
+(group, interval, status). Each group's frames are binned into \code{n_intervals}
+equal index intervals (Sturges' rule by default) and each gap's overlap with
+each interval is counted, so no per-frame data is needed. \code{value} is the share
+(\code{measure = "percent"}) or count (\code{"count"}) and \code{width} the interval's span
+in time units. Returns a frame classed \code{anivis_check_na_timing}.
 }
 \seealso{
 \code{\link[=plot.check_na_timing]{plot.check_na_timing()}}

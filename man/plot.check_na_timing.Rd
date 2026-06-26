@@ -2,14 +2,26 @@
 % Please edit documentation in R/plot.check_na_timing.R
 \name{plot.check_na_timing}
 \alias{plot.check_na_timing}
-\title{Plot the Timing of Missing Values}
+\title{Plot the Distribution of Missing Values Over Time}
 \usage{
-\method{plot}{check_na_timing}(x, ..., mode = c("light", "dark"))
+\method{plot}{check_na_timing}(
+  x,
+  ...,
+  measure = c("percent", "count"),
+  n_intervals = NULL,
+  mode = c("light", "dark")
+)
 }
 \arguments{
 \item{x}{A \code{check_na_timing} object (from the anicheck package).}
 
 \item{...}{Additional arguments (currently unused).}
+
+\item{measure}{Either \code{"percent"} (default, share of each interval) or
+\code{"count"} (number of frames).}
+
+\item{n_intervals}{Number of intervals to bin each group into. Default
+(\code{NULL}) uses Sturges' rule on the group's frame count.}
 
 \item{mode}{Either \code{"light"} (default) or \code{"dark"}; passed to
 \code{\link[=theme_animovement]{theme_animovement()}}.}
@@ -18,22 +30,20 @@
 A ggplot object.
 }
 \description{
-Renders a \code{check_na_timing()} result (from the anicheck package) as a
-missingness strip: \code{time} on the x
-axis, one row per trajectory group, and each missing run drawn as a coloured
-span. Empty stretches read as present data, so scanning left to right shows
-\emph{when} the gaps fall — a long block at the end looks very different from the
-same frames scattered throughout. Groups with no gaps still appear as an empty
-row, so a clean keypoint is visibly clean rather than absent.
+Renders a \code{check_na_timing()} result (from the anicheck package) as a stacked
+bar chart of missing (\code{NA}) versus present values across successive time
+intervals — an adaptation of \code{ggplot_na_distribution2()} from the imputeTS
+package (Moritz & Gatscha, GPL-3). Each bar is one interval of the recording;
+its split shows how much of that stretch was missing, so a run of tall
+\dQuote{NA} bars marks a blackout while an even sprinkle marks scattered
+dropouts. With more than one group, each gets its own stacked panel.
 }
 \details{
-Missing runs use the Okabe-Ito vermillion. The x axis is formatted as
-\code{HH:MM:SS} for true time units (as \code{\link[=plot_events]{plot_events()}} does) and as raw frame
-numbers otherwise.
-
-The plot is built from an intermediate, plot-ready data frame of class
-\code{anivis_check_na_timing} produced by \code{\link[=as_plot_data]{as_plot_data()}} — the staging step that
-mirrors \code{data_plot()} in \pkg{see}.
+The interval counts are reconstructed from the compact gap table in the check
+object (no per-frame data needed). Missing uses the imputeTS indianred,
+present the imputeTS steelblue. The plot is built from an intermediate frame
+of class \code{anivis_check_na_timing} produced by \code{\link[=as_plot_data]{as_plot_data()}} — the staging
+step that mirrors \code{data_plot()} in \pkg{see}.
 }
 \seealso{
 \code{\link[=as_plot_data]{as_plot_data()}}

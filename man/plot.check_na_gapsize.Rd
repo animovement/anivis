@@ -2,17 +2,30 @@
 % Please edit documentation in R/plot.check_na_gapsize.R
 \name{plot.check_na_gapsize}
 \alias{plot.check_na_gapsize}
-\title{Plot the Distribution of Missing-Value Gap Sizes}
+\title{Plot the Occurrence of Missing-Value Gap Sizes}
 \usage{
-\method{plot}{check_na_gapsize}(x, ..., measure = c("occurrence", "total"), mode = c("light", "dark"))
+\method{plot}{check_na_gapsize}(
+  x,
+  ...,
+  ranked_by = c("occurrence", "total"),
+  limit = 10,
+  include_total = TRUE,
+  mode = c("light", "dark")
+)
 }
 \arguments{
 \item{x}{A \code{check_na_gapsize} object (from the anicheck package).}
 
 \item{...}{Additional arguments (currently unused).}
 
-\item{measure}{Either \code{"occurrence"} (default, count of gaps of each size) or
-\code{"total"} (missing frames = size x count).}
+\item{ranked_by}{Order bars by \code{"occurrence"} (default, gap frequency) or
+\code{"total"} (resulting missing frames).}
+
+\item{limit}{Maximum number of gap sizes (bars) to show per group, keeping the
+top-ranked. Default \code{10}.}
+
+\item{include_total}{Whether to add the steelblue \dQuote{resulting NAs} bar
+alongside the occurrence bar. Default \code{TRUE}.}
 
 \item{mode}{Either \code{"light"} (default) or \code{"dark"}; passed to
 \code{\link[=theme_animovement]{theme_animovement()}}.}
@@ -21,17 +34,19 @@
 A ggplot object.
 }
 \description{
-Renders a \code{check_na_gapsize()} result (from the anicheck package) as a bar
-chart of gap size against frequency: each bar is a run length, its height the
-number of such gaps (\code{measure = "occurrence"}) or the total missing frames
-they account for (\code{measure = "total"}). A tall bar at size 1 means scattered
-single-frame dropouts; bars far out on the x axis mean long blackouts. With
-more than one group, each gets its own stacked panel.
+Renders a \code{check_na_gapsize()} result (from the anicheck package) as a
+horizontal bar chart of how often each gap size occurs — an adaptation of
+\code{ggplot_na_gapsize()} from the imputeTS package (Moritz & Gatscha, GPL-3).
+For every gap length it draws the number of such gaps (indianred) and,
+optionally, the total missing frames they account for (steelblue, the gap size
+times its count). Bars are ranked so the most common (or most costly) gaps sit
+on top; only the top \code{limit} are shown. With more than one group, each gets
+its own panel.
 }
 \details{
-Bars use the animovement single hue. The plot is built from an intermediate
-frame of class \code{anivis_check_na_gapsize} produced by \code{\link[=as_plot_data]{as_plot_data()}} — the
-staging step that mirrors \code{data_plot()} in \pkg{see}.
+The plot is built from an intermediate frame of class \code{anivis_check_na_gapsize}
+produced by \code{\link[=as_plot_data]{as_plot_data()}} — the staging step that mirrors \code{data_plot()} in
+\pkg{see}.
 }
 \seealso{
 \code{\link[=as_plot_data]{as_plot_data()}}

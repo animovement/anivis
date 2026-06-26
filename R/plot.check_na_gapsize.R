@@ -1,20 +1,26 @@
-#' Plot the Distribution of Missing-Value Gap Sizes
+#' Plot the Occurrence of Missing-Value Gap Sizes
 #'
-#' Renders a `check_na_gapsize()` result (from the anicheck package) as a bar
-#' chart of gap size against frequency: each bar is a run length, its height the
-#' number of such gaps (`measure = "occurrence"`) or the total missing frames
-#' they account for (`measure = "total"`). A tall bar at size 1 means scattered
-#' single-frame dropouts; bars far out on the x axis mean long blackouts. With
-#' more than one group, each gets its own stacked panel.
+#' Renders a `check_na_gapsize()` result (from the anicheck package) as a
+#' horizontal bar chart of how often each gap size occurs — an adaptation of
+#' `ggplot_na_gapsize()` from the imputeTS package (Moritz & Gatscha, GPL-3).
+#' For every gap length it draws the number of such gaps (indianred) and,
+#' optionally, the total missing frames they account for (steelblue, the gap size
+#' times its count). Bars are ranked so the most common (or most costly) gaps sit
+#' on top; only the top `limit` are shown. With more than one group, each gets
+#' its own panel.
 #'
-#' Bars use the animovement single hue. The plot is built from an intermediate
-#' frame of class `anivis_check_na_gapsize` produced by [as_plot_data()] — the
-#' staging step that mirrors `data_plot()` in \pkg{see}.
+#' The plot is built from an intermediate frame of class `anivis_check_na_gapsize`
+#' produced by [as_plot_data()] — the staging step that mirrors `data_plot()` in
+#' \pkg{see}.
 #'
 #' @param x A `check_na_gapsize` object (from the anicheck package).
 #' @param ... Additional arguments (currently unused).
-#' @param measure Either `"occurrence"` (default, count of gaps of each size) or
-#'   `"total"` (missing frames = size x count).
+#' @param ranked_by Order bars by `"occurrence"` (default, gap frequency) or
+#'   `"total"` (resulting missing frames).
+#' @param limit Maximum number of gap sizes (bars) to show per group, keeping the
+#'   top-ranked. Default `10`.
+#' @param include_total Whether to add the steelblue \dQuote{resulting NAs} bar
+#'   alongside the occurrence bar. Default `TRUE`.
 #' @param mode Either `"light"` (default) or `"dark"`; passed to
 #'   [theme_animovement()].
 #'
@@ -26,36 +32,51 @@
 plot.check_na_gapsize <- function(
   x,
   ...,
-  measure = c("occurrence", "total"),
+  ranked_by = c("occurrence", "total"),
+  limit = 10,
+  include_total = TRUE,
   mode = c("light", "dark")
 ) {
-  measure <- match.arg(measure)
+  ranked_by <- match.arg(ranked_by)
   mode <- match.arg(mode)
-  plot_df <- as_plot_data(x, measure = measure)
+  plot_df <- as_plot_data(
+    x,
+    ranked_by = ranked_by,
+    limit = limit,
+    include_total = include_total
+  )
   group_levels <- attr(plot_df, "group_levels")
-
-  y_lab <- if (measure == "occurrence") "number of gaps" else "missing frames"
 
   p <- ggplot2::ggplot(
     plot_df,
-    ggplot2::aes(x = .data$gap_size, y = .data$value)
+    ggplot2::aes(y = .data$key, x = .data$value, fill = .data$series)
   ) +
-    ggplot2::geom_col(fill = "#3A6FB0", width = 0.8) +
+    ggplot2::geom_col(
+      position = ggplot2::position_dodge2(reverse = TRUE),
+      width = 0.7,
+      colour = "black"
+    ) +
+    ggplot2::scale_y_discrete(labels = function(k) sub("___.*$", "", k)) +
+    ggplot2::scale_fill_manual(
+      values = c(occurrence = "indianred", total = "steelblue"),
+      labels = c(occurrence = "number occurrence", total = "resulting NAs"),
+      name = NULL
+    ) +
     ggplot2::labs(
-      x = "gap size (frames)",
-      y = y_lab,
-      title = "Missing-value gap sizes"
+      x = "number occurrence",
+      y = NULL,
+      title = "Occurrence of gap sizes",
+      subtitle = "Gap sizes (NAs in a row) ordered by most common"
     ) +
     theme_animovement(mode = mode) +
-    ggplot2::theme(panel.grid.major.x = ggplot2::element_blank())
+    ggplot2::theme(
+      legend.position = "bottom",
+      panel.grid.major.y = ggplot2::element_blank()
+    )
 
   if (length(group_levels) > 1L) {
     p <- p +
-      ggplot2::facet_wrap(
-        ggplot2::vars(.data$group),
-        ncol = 1,
-        scales = "free_y"
-      )
+      ggplot2::facet_wrap(ggplot2::vars(.data$group), ncol = 1, scales = "free_y")
   }
   p
 }
@@ -63,22 +84,25 @@ plot.check_na_gapsize <- function(
 #' @rdname as_plot_data
 #' @export
 #'
-#' @param measure For `as_plot_data.check_na_gapsize()`: which count to put on
-#'   the y axis — `"occurrence"` (number of gaps) or `"total"` (missing frames).
+#' @param ranked_by,limit,include_total For `as_plot_data.check_na_gapsize()`:
+#'   order bars by `"occurrence"` or `"total"`, keep the top `limit` per group,
+#'   and whether to include the total-NAs series.
 #'
 #' @details
-#' `as_plot_data.check_na_gapsize()` turns the gap-size table from
-#' `check_na_gapsize()` into a tidy bar-chart frame: one row per (group, gap
-#' size) with the chosen `measure` as `value`, `gap_size` an ascending factor so
-#' every bar position lines up across panels, and the varying grouping columns
-#' collapsed into a single `group` factor. Returns a frame classed
-#' `anivis_check_na_gapsize`.
+#' `as_plot_data.check_na_gapsize()` reshapes the gap-size table into the long,
+#' ranked form the imputeTS-style bar chart needs: one row per (group, gap size,
+#' series), where `series` is `occurrence` (and `total` when `include_total`),
+#' `value` the count, and `key` a `reorder_within`-style factor (`"<n> NA-gap___
+#' <group>"`) ordered by `ranked_by` so each facet sorts independently. Returns a
+#' frame classed `anivis_check_na_gapsize`.
 as_plot_data.check_na_gapsize <- function(
   x,
   ...,
-  measure = c("occurrence", "total")
+  ranked_by = c("occurrence", "total"),
+  limit = 10,
+  include_total = TRUE
 ) {
-  measure <- match.arg(measure)
+  ranked_by <- match.arg(ranked_by)
   group_cols <- attr(x, "group_cols")
   groups <- attr(x, "groups")
 
@@ -98,16 +122,59 @@ as_plot_data.check_na_gapsize <- function(
     }
   }
   group_levels <- unique(label(groups))
-  sizes <- sort(unique(x$gap_size))
+  xg <- if (nrow(x)) label(x) else character(0)
 
-  out <- data.frame(
-    group = factor(label(x), levels = group_levels),
-    gap_size = factor(as.character(x$gap_size), levels = as.character(sizes)),
-    value = if (measure == "occurrence") x$n_gaps else x$n_na,
-    stringsAsFactors = FALSE
-  )
+  levels_acc <- character(0)
+  rows <- list()
+  for (g in group_levels) {
+    d <- x[xg == g, , drop = FALSE]
+    if (!nrow(d)) {
+      next
+    }
+    metric <- if (ranked_by == "occurrence") d$n_gaps else d$n_na
+    d <- d[order(metric), , drop = FALSE] # ascending -> largest last (top)
+    if (nrow(d) > limit) {
+      d <- d[(nrow(d) - limit + 1L):nrow(d), , drop = FALSE]
+    }
+    key <- paste0(d$gap_size, " NA-gap___", g)
+    levels_acc <- c(levels_acc, key)
+
+    block <- data.frame(
+      group = g,
+      key = key,
+      series = "occurrence",
+      value = d$n_gaps,
+      stringsAsFactors = FALSE
+    )
+    if (include_total) {
+      block <- rbind(
+        block,
+        data.frame(
+          group = g,
+          key = key,
+          series = "total",
+          value = d$n_na,
+          stringsAsFactors = FALSE
+        )
+      )
+    }
+    rows[[g]] <- block
+  }
+
+  out <- if (length(rows)) do.call(rbind, rows) else {
+    data.frame(
+      group = character(0),
+      key = character(0),
+      series = character(0),
+      value = integer(0),
+      stringsAsFactors = FALSE
+    )
+  }
+  out$key <- factor(out$key, levels = levels_acc)
+  out$series <- factor(out$series, levels = c("occurrence", "total"))
+  out$group <- factor(out$group, levels = group_levels)
+
   attr(out, "group_levels") <- group_levels
-  attr(out, "measure") <- measure
   class(out) <- c("anivis_check_na_gapsize", "data.frame")
   out
 }
