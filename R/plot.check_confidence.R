@@ -75,7 +75,8 @@ plot.check_confidence <- function(x, ..., clip = 0.02, mode = c("light", "dark")
     )
 
   if (isTRUE(attr(plot_df, "facet"))) {
-    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data$group))
+    # Stack facets as rows (one per varying-group combination).
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data$group), ncol = 1)
   }
   p
 }
