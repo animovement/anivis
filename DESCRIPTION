@@ -22,6 +22,9 @@ Imports:
     patchwork,
     marquee,
     hms,
+    cli,
+    grDevices,
+    stats,
     aniframe (>= 0.6.0)
 Suggests: 
     ragg,

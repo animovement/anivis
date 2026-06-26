@@ -1,4 +1,4 @@
-# Tests for plot.aniframe, plot_trajectory and animovement_palette.
+# Tests for plot.aniframe, plot_trajectory and palette_animovement.
 
 make_aniframe_single <- function() {
   data.frame(
@@ -140,31 +140,31 @@ test_that("group keys drop the redundant axis in single-variable modes", {
 })
 
 
-# --- animovement_palette dispatch --------------------------------------------
+# --- palette_animovement dispatch --------------------------------------------
 
-test_that("animovement_palette returns one colour per group in matrix mode", {
-  pal <- animovement_palette(make_aniframe_matrix())
+test_that("palette_animovement returns one colour per group in matrix mode", {
+  pal <- palette_animovement(make_aniframe_matrix())
   expect_length(pal, 2 * 3)
   expect_true(all(grepl("^#", pal)))
   expect_true(all(grepl(" :: ", names(pal))))
 })
 
-test_that("animovement_palette uses qualitative hues across what (what mode)", {
-  pal <- animovement_palette(make_aniframe_multi_keypoint())
+test_that("palette_animovement uses qualitative hues across what (what mode)", {
+  pal <- palette_animovement(make_aniframe_multi_keypoint())
   expect_length(pal, 2)
   expect_equal(length(unique(pal)), 2)
   expect_setequal(names(pal), c("head", "tail"))
 })
 
-test_that("animovement_palette uses qualitative hues across when (when mode)", {
-  pal <- animovement_palette(make_aniframe_multi_trial())
+test_that("palette_animovement uses qualitative hues across when (when mode)", {
+  pal <- palette_animovement(make_aniframe_multi_trial())
   expect_length(pal, 3)
   expect_equal(length(unique(pal)), 3)
   expect_setequal(names(pal), c("1", "2", "3"))
 })
 
-test_that("animovement_palette returns a single hue for single-trajectory data", {
-  pal <- animovement_palette(make_aniframe_single())
+test_that("palette_animovement returns a single hue for single-trajectory data", {
+  pal <- palette_animovement(make_aniframe_single())
   expect_length(pal, 1)
   expect_equal(names(pal), "all")
 })
@@ -195,7 +195,7 @@ test_that("plot_trajectory uses identity colour in what / when / matrix modes", 
 
 test_that("row_colours emits one solid colour per group in matrix mode", {
   af <- make_aniframe_matrix()
-  pal <- animovement_palette(af)
+  pal <- palette_animovement(af)
   keys <- aniframe_group_keys(af)
   df <- as.data.frame(af)
   df$.group <- factor(keys$group, levels = names(pal))
@@ -208,7 +208,7 @@ test_that("row_colours emits one solid colour per group in matrix mode", {
 
 test_that("row_colours emits a within-group gradient in what / when modes", {
   af <- make_aniframe_multi_keypoint()
-  pal <- animovement_palette(af)
+  pal <- palette_animovement(af)
   keys <- aniframe_group_keys(af)
   df <- as.data.frame(af)
   df$.group <- factor(keys$group, levels = names(pal))
@@ -231,12 +231,27 @@ test_that("plot_trajectory builds one trajectory group per what x when combo", {
 # --- exported scale wrappers and themes --------------------------------------
 
 test_that("exported scale wrappers return ggplot2 scales", {
-  expect_s3_class(scale_colour_animovement(), "ScaleDiscrete")
-  expect_s3_class(scale_color_animovement(), "ScaleDiscrete")
-  expect_s3_class(scale_fill_animovement(), "ScaleDiscrete")
-  expect_s3_class(scale_colour_animovement_c(), "ScaleContinuous")
-  expect_s3_class(scale_color_animovement_c(), "ScaleContinuous")
-  expect_s3_class(scale_fill_animovement_c(), "ScaleContinuous")
+  # Okabe-Ito (categorical, colour-blind safe)
+  expect_s3_class(scale_colour_okabeito(), "ScaleDiscrete")
+  expect_s3_class(scale_color_okabeito(), "ScaleDiscrete")
+  expect_s3_class(scale_fill_okabeito(), "ScaleDiscrete")
+  expect_s3_class(scale_colour_oi(), "ScaleDiscrete")
+
+  # Material (discrete + continuous)
+  expect_s3_class(scale_colour_material_d(), "ScaleDiscrete")
+  expect_s3_class(scale_fill_material_d(), "ScaleDiscrete")
+  expect_s3_class(scale_colour_material_c(), "ScaleContinuous")
+  expect_s3_class(scale_fill_material_c(), "ScaleContinuous")
+})
+
+test_that("okabeito and material palettes generate colours", {
+  expect_length(palette_okabeito()(3), 3)
+  expect_true(all(grepl("^#", palette_okabeito()(3))))
+  expect_length(palette_material("gradient")(256), 256)
+  expect_setequal(
+    names(okabeito_colors("orange", "blue")),
+    c("orange", "blue")
+  )
 })
 
 test_that("theme_animovement returns a theme in both modes", {
@@ -267,7 +282,7 @@ test_that("trajectory_endpoints skips groups whose x/y are all NA", {
 
 test_that("row_colours handles a group whose time is a single value", {
   af <- make_aniframe_multi_keypoint()
-  pal <- animovement_palette(af)
+  pal <- palette_animovement(af)
   keys <- aniframe_group_keys(af)
   df <- as.data.frame(af)
   df$.group <- factor(keys$group, levels = names(pal))

@@ -23,21 +23,23 @@ plot.anievent <- function(x, ..., mode = c("light", "dark")) {
 #'
 #' Creates a ggplot that overlays state events (durative bouts, drawn as
 #' horizontal bars by [geom_event_state()]) and point events
-#' (instantaneous occurrences, drawn as vertical ticks by
+#' (instantaneous occurrences, drawn as dots by
 #' [geom_event_point()]) on a shared time axis. Each behaviour `label`
 #' becomes a row on the y axis.
 #'
 #' Two dispatches:
 #'
 #' * **`plot_events.anievent()`** — auto-detects which rows are states
-#'   and which are points by reading the `type` column. Facet dispatch
-#'   uses metadata (`variables_what`, `channel`):
+#'   and which are points by reading the `type` column. The `layout`
+#'   argument chooses how channels and labels are arranged:
 #'
-#'     - Multiple `channel`s → one facet row per channel, with free
-#'       y-scales.
-#'     - Any `variables_what` column with more than one level → one
-#'       facet column per identity. When both vary, a `facet_grid()` is
-#'       used; otherwise `facet_wrap()`.
+#'     - `"facet"` (default): each `label` is a y-axis row, and multiple
+#'       `channel`s become facet rows (with free y-scales). Any
+#'       `variables_what` column with more than one level adds a facet
+#'       column per identity — `facet_grid()` when both vary, otherwise
+#'       `facet_wrap()`.
+#'     - `"inline"` (ethogram): each `channel` is a single y-axis row and
+#'       `label` moves to a colour legend, so all channels share one panel.
 #'
 #' * **`plot_events.default()`** — for callers without an anievent. Pass
 #'   the state events as the first arg and the point events via `point`;
@@ -48,6 +50,12 @@ plot.anievent <- function(x, ..., mode = c("light", "dark")) {
 #' @param point For the default method only: an optional data frame of
 #'   point events. Ignored by `plot_events.anievent()`.
 #' @param ... Additional arguments (currently unused).
+#' @param layout For `plot_events.anievent()`: either `"facet"` (default,
+#'   one y row per label with channels faceted) or `"inline"` (an
+#'   ethogram — one y row per channel with labels in a colour legend).
+#' @param point_style How point events are drawn: `"point"` (default,
+#'   dots) or `"raster"` (vertical ticks, the classic spike-raster look).
+#'   Passed to [geom_event_point()].
 #' @param mode Either `"light"` (default) or `"dark"`; passed to
 #'   [theme_animovement()].
 #'
@@ -60,7 +68,15 @@ plot_events <- function(data, ...) {
 
 #' @rdname plot_events
 #' @export
-plot_events.anievent <- function(data, ..., mode = c("light", "dark")) {
+plot_events.anievent <- function(
+  data,
+  ...,
+  layout = c("facet", "inline"),
+  point_style = c("point", "raster"),
+  mode = c("light", "dark")
+) {
+  layout <- match.arg(layout)
+  point_style <- match.arg(point_style)
   mode <- match.arg(mode)
   meta <- aniframe::get_metadata(data)
 
@@ -76,14 +92,22 @@ plot_events.anievent <- function(data, ..., mode = c("light", "dark")) {
   state_df <- if (any(is_state)) data[is_state, , drop = FALSE] else NULL
   point_df <- if (any(!is_state)) data[!is_state, , drop = FALSE] else NULL
 
+  # "inline" (ethogram): one y row per channel, labels in a colour legend.
+  # "facet": one y row per label, channels split into facet rows.
+  row <- if (layout == "inline") "channel" else "label"
+
   p <- events_base_plot(
     state = state_df,
     point = point_df,
     meta = meta,
-    mode = mode
+    mode = mode,
+    row = row,
+    point_style = point_style
   )
 
-  facet_layer <- events_facets(multi_channel, multi_what_cols)
+  # In "inline" mode the channel is the y axis, so it is not also faceted.
+  facet_channel <- multi_channel && layout == "facet"
+  facet_layer <- events_facets(facet_channel, multi_what_cols)
   if (!is.null(facet_layer)) {
     p <- p + facet_layer
   }
@@ -96,15 +120,22 @@ plot_events.default <- function(
   data = NULL,
   point = NULL,
   ...,
+  point_style = c("point", "raster"),
   mode = c("light", "dark")
 ) {
+  point_style <- match.arg(point_style)
   mode <- match.arg(mode)
   if (is.null(data) && is.null(point)) {
     cli::cli_abort(
       "Either {.arg data} (state events) or {.arg point} must be supplied."
     )
   }
-  events_base_plot(state = data, point = point, mode = mode)
+  events_base_plot(
+    state = data,
+    point = point,
+    mode = mode,
+    point_style = point_style
+  )
 }
 
 # Internal: shared ggplot construction for both methods.
@@ -121,7 +152,9 @@ events_base_plot <- function(
   state = data,
   point = data,
   meta = NULL,
-  mode
+  mode,
+  row = "label",
+  point_style = "point"
 ) {
   unit <- if (!is.null(meta)) meta$unit_time else NULL
   unit_chr <- if (!is.null(unit)) as.character(unit) else NA_character_
@@ -151,9 +184,8 @@ events_base_plot <- function(
       geom_event_state(
         data = state,
         mapping = ggplot2::aes(
-          y = .data$label,
-          fill = .data$label,
-          colour = .data$label
+          y = .data[[row]],
+          fill = .data$label
         )
       )
   }
@@ -161,7 +193,8 @@ events_base_plot <- function(
     p <- p +
       geom_event_point(
         data = point,
-        mapping = ggplot2::aes(y = .data$label, colour = .data$label)
+        mapping = ggplot2::aes(y = .data[[row]], colour = .data$label),
+        style = point_style
       )
   }
 
@@ -171,15 +204,56 @@ events_base_plot <- function(
     ggplot2::scale_x_continuous()
   }
 
+  # Colour by label with the colour-blind-safe Okabe-Ito palette, but skipping
+  # its pale amber (index 4) and black (index 9) so thin point-event dots stay
+  # legible. Beyond those 7 hues, fall back to an interpolated Material
+  # "rainbow". State and point events share one global colour map so every
+  # label is a distinct hue regardless of which scale draws it.
+  okabeito_order <- c(1, 2, 3, 5, 6, 7, 8)
+  state_labels <- if (!is.null(state)) {
+    sort(unique(as.character(state$label)))
+  } else {
+    character()
+  }
+  point_labels <- if (!is.null(point)) {
+    sort(unique(as.character(point$label)))
+  } else {
+    character()
+  }
+  all_labels <- union(state_labels, point_labels)
+  n_labels <- length(all_labels)
+  pal_fun <- if (n_labels > length(okabeito_order)) {
+    palette_material("rainbow")
+  } else {
+    palette_okabeito(order = okabeito_order)
+  }
+  colour_map <- stats::setNames(pal_fun(n_labels), all_labels)
+
+  # State events ride the fill aesthetic, point events the colour aesthetic, so
+  # ggplot renders them as two separate legend categories. The legends only
+  # appear when channels are the y rows (row != "label"); otherwise each label
+  # is its own row and the legends are redundant.
+  show_legend <- !identical(row, "label")
+  fill_scale <- ggplot2::scale_fill_manual(
+    values = colour_map,
+    na.value = "grey70",
+    name = "state events",
+    guide = if (show_legend) ggplot2::guide_legend(order = 1) else "none"
+  )
+  colour_scale <- ggplot2::scale_colour_manual(
+    values = colour_map,
+    na.value = "grey40",
+    name = "point events",
+    guide = if (show_legend) ggplot2::guide_legend(order = 2) else "none"
+  )
+
   p +
-    scale_fill_animovement() +
-    scale_colour_animovement() +
+    fill_scale +
+    colour_scale +
     x_scale +
     ggplot2::labs(x = x_lab, y = NULL) +
-    ggplot2::guides(fill = "none", colour = "none") +
     theme_animovement(mode = mode) +
     ggplot2::theme(
-      panel.border = ggplot2::element_blank(),
       panel.grid.major.y = ggplot2::element_blank(),
       panel.grid.minor.y = ggplot2::element_blank()
     )

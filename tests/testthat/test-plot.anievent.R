@@ -132,6 +132,16 @@ test_that("plot_events.anievent uses facet_grid when both channel and what vary"
   expect_s3_class(p$facet, "FacetGrid")
 })
 
+test_that("plot_events.anievent layout = 'inline' rows by channel, no channel facet", {
+  p <- plot_events(make_anievent_multi_channel(), layout = "inline")
+  # Channel is on the y axis, not faceted.
+  expect_s3_class(p$facet, "FacetNull")
+  expect_equal(rlang::as_label(p$layers[[1]]$mapping$y), "channel")
+  # State events (fill) and point events (colour) form two separate legends.
+  expect_equal(p$scales$get_scales("fill")$name, "state events")
+  expect_equal(p$scales$get_scales("colour")$name, "point events")
+})
+
 
 # --- axis labels, scale dispatch and theme overrides ------------------------
 
@@ -174,9 +184,8 @@ test_that("plot_events labels unknown / NULL data 'time' and keeps raw values", 
   expect_equal(p_default$labels$x, "time")
 })
 
-test_that("plot_events drops the panel border and y-axis gridlines", {
+test_that("plot_events drops the y-axis gridlines", {
   p <- plot_events(make_anievent_state_only())
-  expect_s3_class(p$theme$panel.border, "element_blank")
   expect_s3_class(p$theme$panel.grid.major.y, "element_blank")
   expect_s3_class(p$theme$panel.grid.minor.y, "element_blank")
 })
@@ -352,4 +361,21 @@ test_that("geom_event_point accepts a function as the data argument", {
   p <- ggplot2::ggplot(make_anievent_point_only()) +
     geom_event_point(data = drop_first)
   expect_s3_class(p, "ggplot")
+})
+
+test_that("geom_event_point style switches between point and raster geoms", {
+  p_pt <- ggplot2::ggplot(make_anievent_point_only()) +
+    geom_event_point(style = "point")
+  p_ras <- ggplot2::ggplot(make_anievent_point_only()) +
+    geom_event_point(style = "raster")
+  expect_s3_class(p_pt$layers[[1]]$geom, "GeomPoint")
+  expect_s3_class(p_ras$layers[[1]]$geom, "GeomSegment")
+})
+
+test_that("plot_events point_style = 'raster' draws point events as segments", {
+  p <- plot_events(make_anievent_mixed(), point_style = "raster")
+  geoms <- vapply(p$layers, function(l) class(l$geom)[[1]], character(1))
+  expect_true("GeomEventPoint" %in% geoms)
+  point_layer <- p$layers[[which(geoms == "GeomEventPoint")[[1]]]]
+  expect_s3_class(point_layer$geom, "GeomSegment")
 })

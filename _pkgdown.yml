@@ -25,6 +25,27 @@ reference:
 - title: "Plotting functions"
   contents:
   - plot.plot_check_confidence
+  - plot_events
+  - plot_trajectory
+  - plots
+
+- title: "Geoms"
+  contents:
+  - geom_event_state
+  - geom_event_point
+
+- title: "Scales"
+  contents:
+  - scale_okabeito
+  - scale_material
+
+- title: "Colour palettes"
+  contents:
+  - okabeito_colors
+  - palette_okabeito
+  - material_colors
+  - palette_material
+  - palette_animovement
 
 - title: "Themes"
   contents:

@@ -27,7 +27,8 @@ ae2 <- anievent(
   start = c(2, 8, 17, 28, 4, 12, 22, 33),
   stop = c(2, 8, 17, 28, 4, 12, 22, 33)
 )
-p2 <- plot_events(ae2) + ggtitle("2. Point events (raster ticks)")
+p2 <- plot_events(ae2, point_style = "raster") +
+  ggtitle("2. Point events (raster ticks)")
 print(p2)
 
 
@@ -38,7 +39,7 @@ ae3 <- anievent(
   start = c(3, 14, 22, 30, 6, 17, 33),
   stop = c(9, 19, 28, 38, 6, 17, 33)
 )
-p3 <- plot_events(ae3) + ggtitle("3. Mixed (state bars + point ticks)")
+p3 <- plot_events(ae3) + ggtitle("3. Mixed (state bars + point dots)")
 print(p3)
 
 
@@ -95,7 +96,7 @@ ae5 <- anievent(
   start = c(3, 14, 1, 7, 5, 12, 8, 20),
   stop = c(9, 19, 6, 12, 5, 12, 8, 20)
 )
-p5 <- plot_events(ae5) + ggtitle("5. Multi-channel x individual (facet_grid)")
+p5 <- plot_events(ae5, layout = "inline") + ggtitle("5. Multi-channel x individual (facet_grid)")
 print(p5)
 
 
@@ -126,15 +127,43 @@ ae7 <- anievent(
   start = times,
   stop = times
 )
-p7 <- plot_events(ae7) + ggtitle("7. Numeric labels (sorted numerically)")
+p7 <- plot_events(ae7, point_style = "raster") +
+  ggtitle("7. Numeric labels, raster ticks (sorted numerically)")
 print(p7)
 
 
-# Combined PNG
-combined <- (p1 | p2 | p3) /
-  (p4 | p5 | p6) /
-  p7 +
-  plot_annotation(title = "anivis::plot_events demo")
+# 8. Ethogram layout: one y-axis row per channel, with the behaviour `label`
+#    moved into a colour legend (instead of channels becoming facets).
+ae8 <- anievent(
+  channel = c(
+    rep("mouse 1", 4),
+    rep("mouse 2", 4),
+    rep("mouse 3", 3),
+    "mouse 1",
+    "mouse 2",
+    "mouse 3"
+  ),
+  label = c(
+    "rest", "groom", "rest", "explore",
+    "rest", "explore", "rest", "groom",
+    "explore", "rest", "explore",
+    "startle", "startle", "startle"
+  ),
+  start = c(0, 8, 14, 22, 2, 10, 18, 26, 1, 9, 17, 12, 6, 20),
+  stop = c(7, 13, 21, 30, 9, 17, 25, 32, 8, 16, 28, 12, 6, 20)
+)
+p8 <- plot_events(ae8, layout = "inline") + ggtitle("8. Ethogram (layout = 'inline')")
+print(p8)
+
+
+# Combined PNG — anivis::plots() wraps patchwork: a 3-column grid (the eight
+# panels fill row-wise) with A–H tags.
+combined <- plots(
+  p1, p2, p3, p4, p5, p6, p7, p8,
+  n_columns = 3,
+  tags = TRUE,
+  title = "anivis::plot_events demo"
+)
 
 out <- file.path(tempdir(), "anivis_plot_events_demo.png")
 ggsave(out, combined, width = 16, height = 12, dpi = 150)

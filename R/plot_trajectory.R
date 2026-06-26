@@ -8,13 +8,13 @@
 #' Colours adapt to the dataset shape:
 #'
 #' * **single** trajectory (no grouping): the line is coloured continuously
-#'   by `time` using the animovement viridis scale.
+#'   by `time` using the Material gradient scale ([scale_colour_material_c()]).
 #' * **what-only** or **when-only** grouping (one varying axis): each line
 #'   gets its own hue from a qualitative palette and shades from light to
 #'   that hue along `time`, so direction reads from both the start/end
 #'   markers and the within-line gradient.
 #' * **matrix** grouping (both axes vary): each line is solid, coloured by
-#'   the hue × shade matrix from [animovement_palette()] — hue per `what`,
+#'   the hue × shade matrix from [palette_animovement()] — hue per `what`,
 #'   shade per `when`.
 #'
 #' Every trajectory is annotated with a filled circle at its first point and
@@ -50,7 +50,7 @@ plot_trajectory.default <- function(
 
   meta <- aniframe::get_metadata(data)
   keys <- aniframe_group_keys(data)
-  pal <- animovement_palette(data, palette = palette)
+  pal <- palette_animovement(data, palette = palette)
 
   plot_df <- as.data.frame(data)
   plot_df[[".group"]] <- factor(keys$group, levels = names(pal))
@@ -70,7 +70,7 @@ plot_trajectory.default <- function(
       ggplot2::geom_path(
         ggplot2::aes(colour = .data$time, group = .data$.group)
       ),
-      scale_colour_animovement_c()
+      scale_colour_material_c()
     )
   } else {
     plot_df[[".row_colour"]] <- row_colours(plot_df, pal, keys$mode)

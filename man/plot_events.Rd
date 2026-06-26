@@ -8,15 +8,35 @@
 \usage{
 plot_events(data, ...)
 
-\method{plot_events}{anievent}(data, ..., mode = c("light", "dark"))
+\method{plot_events}{anievent}(
+  data,
+  ...,
+  layout = c("facet", "inline"),
+  point_style = c("point", "raster"),
+  mode = c("light", "dark")
+)
 
-\method{plot_events}{default}(data = NULL, point = NULL, ..., mode = c("light", "dark"))
+\method{plot_events}{default}(
+  data = NULL,
+  point = NULL,
+  ...,
+  point_style = c("point", "raster"),
+  mode = c("light", "dark")
+)
 }
 \arguments{
 \item{data}{An anievent object, or a data frame of state events for
 the default method.}
 
 \item{...}{Additional arguments (currently unused).}
+
+\item{layout}{For \code{plot_events.anievent()}: either \code{"facet"} (default,
+one y row per label with channels faceted) or \code{"inline"} (an
+ethogram — one y row per channel with labels in a colour legend).}
+
+\item{point_style}{How point events are drawn: \code{"point"} (default,
+dots) or \code{"raster"} (vertical ticks, the classic spike-raster look).
+Passed to \code{\link[=geom_event_point]{geom_event_point()}}.}
 
 \item{mode}{Either \code{"light"} (default) or \code{"dark"}; passed to
 \code{\link[=theme_animovement]{theme_animovement()}}.}
@@ -30,7 +50,7 @@ A ggplot object.
 \description{
 Creates a ggplot that overlays state events (durative bouts, drawn as
 horizontal bars by \code{\link[=geom_event_state]{geom_event_state()}}) and point events
-(instantaneous occurrences, drawn as vertical ticks by
+(instantaneous occurrences, drawn as dots by
 \code{\link[=geom_event_point]{geom_event_point()}}) on a shared time axis. Each behaviour \code{label}
 becomes a row on the y axis.
 }
@@ -38,14 +58,16 @@ becomes a row on the y axis.
 Two dispatches:
 \itemize{
 \item \strong{\code{plot_events.anievent()}} — auto-detects which rows are states
-and which are points by reading the \code{type} column. Facet dispatch
-uses metadata (\code{variables_what}, \code{channel}):
+and which are points by reading the \code{type} column. The \code{layout}
+argument chooses how channels and labels are arranged:
 \itemize{
-\item Multiple \code{channel}s → one facet row per channel, with free
-y-scales.
-\item Any \code{variables_what} column with more than one level → one
-facet column per identity. When both vary, a \code{facet_grid()} is
-used; otherwise \code{facet_wrap()}.
+\item \code{"facet"} (default): each \code{label} is a y-axis row, and multiple
+\code{channel}s become facet rows (with free y-scales). Any
+\code{variables_what} column with more than one level adds a facet
+column per identity — \code{facet_grid()} when both vary, otherwise
+\code{facet_wrap()}.
+\item \code{"inline"} (ethogram): each \code{channel} is a single y-axis row and
+\code{label} moves to a colour legend, so all channels share one panel.
 }
 \item \strong{\code{plot_events.default()}} — for callers without an anievent. Pass
 the state events as the first arg and the point events via \code{point};

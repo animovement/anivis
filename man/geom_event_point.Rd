@@ -2,12 +2,14 @@
 % Please edit documentation in R/geom_event_point.R
 \name{geom_event_point}
 \alias{geom_event_point}
-\title{Draw point events as vertical ticks}
+\title{Draw point events as dots or raster ticks}
 \usage{
 geom_event_point(
   mapping = NULL,
   data = NULL,
   ...,
+  style = c("point", "raster"),
+  size = 1.8,
   height = 0.7,
   na.rm = FALSE,
   show.legend = NA,
@@ -22,8 +24,13 @@ you only need to supply the aesthetics you want to override.}
 from the parent \code{ggplot()} call. Either way, rows with
 \code{type != "point"} are dropped from this layer.}
 
-\item{height}{Vertical extent of each tick, in y-axis units (1 = the
-spacing between adjacent label rows). Default 0.7.}
+\item{style}{Either \code{"point"} (default, a dot per event) or \code{"raster"}
+(a vertical tick per event).}
+
+\item{size}{Dot size, for \code{style = "point"}. Default 1.8.}
+
+\item{height}{Tick height in y-axis units (1 = the spacing between
+adjacent rows), for \code{style = "raster"}. Default 0.7.}
 
 \item{na.rm, show.legend, inherit.aes, ...}{Passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
@@ -31,29 +38,34 @@ spacing between adjacent label rows). Default 0.7.}
 A ggplot2 layer.
 }
 \description{
-A ggplot2 layer that renders instantaneous events as short vertical
-segments at each event's \code{start} time, with one row per \code{label} on the
-y axis. When the input has a \code{type} column (e.g. an
-\code{\link[aniframe:anievent]{aniframe::anievent()}}), rows with \code{type != "point"} are dropped — the
-raster-plot half of the state/point pair complementing
-\code{\link[=geom_event_state]{geom_event_state()}}.
+A ggplot2 layer that renders instantaneous events at each event's
+\code{start} time, with one row per \code{label} (or \code{channel}, ...) on the y
+axis. Two styles are available via \code{style}:
 }
 \details{
+\itemize{
+\item \code{"point"} (default) — a dot at each event time.
+\item \code{"raster"} — a short vertical tick at each event time, the classic
+spike-raster look (more standard for e.g. neuron spike trains).
+}
+
+When the input has a \code{type} column (e.g. an \code{\link[aniframe:anievent]{aniframe::anievent()}}),
+rows with \code{type != "point"} are dropped — the point half of the
+state/point pair complementing \code{\link[=geom_event_state]{geom_event_state()}}.
+
 The default mapping is only \code{aes(x = start)} — every other aesthetic
 is up to the caller. Common patterns:
 \itemize{
-\item \code{aes(colour = label)} — colour each tick by behaviour.
+\item \code{aes(colour = label)} — colour each mark by behaviour.
 \item \code{aes(y = label)} (or \code{y = channel}, \code{y = subject}, ...) — spread
-ticks across rows. With no \code{y} mapping all ticks collapse onto a
+marks across rows. With no \code{y} mapping all marks collapse onto a
 single line.
 }
 
 Opinionated wrappers (themes, colour scales, sensible defaults) are
 intended to live one layer up; this geom is deliberately bare.
 
-This is a thin wrapper around \link[ggplot2:GeomSegment]{ggplot2::GeomSegment}: a subclass adds
-a \code{setup_data} step that derives \code{xend}, \code{y} and \code{yend} from \code{x} + \code{y}
-\itemize{
-\item \code{height}, drawing a vertical line at each event time.
-}
+This is a thin wrapper around \link[ggplot2:GeomPoint]{ggplot2::GeomPoint} (\code{"point"}) or
+\link[ggplot2:GeomSegment]{ggplot2::GeomSegment} (\code{"raster"}), with a \code{setup_data} step that
+supplies a default \code{y} when none is mapped.
 }

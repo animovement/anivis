@@ -34,13 +34,13 @@ aniframe's metadata.
 Colours adapt to the dataset shape:
 \itemize{
 \item \strong{single} trajectory (no grouping): the line is coloured continuously
-by \code{time} using the animovement viridis scale.
+by \code{time} using the Material gradient scale (\code{\link[=scale_colour_material_c]{scale_colour_material_c()}}).
 \item \strong{what-only} or \strong{when-only} grouping (one varying axis): each line
 gets its own hue from a qualitative palette and shades from light to
 that hue along \code{time}, so direction reads from both the start/end
 markers and the within-line gradient.
 \item \strong{matrix} grouping (both axes vary): each line is solid, coloured by
-the hue × shade matrix from \code{\link[=animovement_palette]{animovement_palette()}} — hue per \code{what},
+the hue × shade matrix from \code{\link[=palette_animovement]{palette_animovement()}} — hue per \code{what},
 shade per \code{when}.
 }
 

@@ -1,45 +1,7 @@
-#' Animovement Colour Scales
-#'
-#' Colour and fill scales using the viridis palette, suitable for both
-#' light and dark themes.
-#'
-#' @param ... Arguments passed to the underlying viridis scale.
-#' @param option Viridis palette option. Default is "viridis" (D).
-#'
-#' @name scale_animovement
-NULL
-
-#' @rdname scale_animovement
-#' @export
-scale_colour_animovement <- function(..., option = "viridis") {
-  ggplot2::scale_colour_viridis_d(..., option = option)
-}
-
-#' @rdname scale_animovement
-#' @export
-scale_color_animovement <- scale_colour_animovement
-
-#' @rdname scale_animovement
-#' @export
-scale_fill_animovement <- function(..., option = "viridis") {
-  ggplot2::scale_fill_viridis_d(..., option = option)
-}
-
-#' @rdname scale_animovement
-#' @export
-scale_colour_animovement_c <- function(..., option = "viridis") {
-  ggplot2::scale_colour_viridis_c(..., option = option)
-}
-
-#' @rdname scale_animovement
-#' @export
-scale_color_animovement_c <- scale_colour_animovement_c
-
-#' @rdname scale_animovement
-#' @export
-scale_fill_animovement_c <- function(..., option = "viridis") {
-  ggplot2::scale_fill_viridis_c(..., option = option)
-}
+# Metadata-driven per-group palette for aniframes. This is anivis' own palette
+# (not from see): it reads an aniframe's `variables_what` / `variables_when`
+# metadata and assigns one hue per `what` level and, where both axes vary, a
+# light-to-dark shade per `when` level. Used by plot_trajectory().
 
 # Internal: derive per-row group keys from an aniframe's metadata.
 # Returns a list with the per-row `group`, `what` / `when` keys, the unique
@@ -132,7 +94,7 @@ lighten_colour <- function(col, amount = 0.5) {
 #' @return A named character vector of hex colours.
 #'
 #' @export
-animovement_palette <- function(
+palette_animovement <- function(
   data,
   palette = "Dark 3",
   single_hue = "#3A6FB0"
@@ -175,6 +137,3 @@ matrix_palette <- function(keys, palette) {
   }
   pal
 }
-
-# Internal null-coalescing helper.
-`%||%` <- function(x, y) if (is.null(x)) y else x
