@@ -4,30 +4,37 @@
 \alias{plot.check_confidence}
 \title{Plot the Distribution of Tracking Confidence}
 \usage{
-\method{plot}{check_confidence}(x, ..., mode = c("light", "dark"))
+\method{plot}{check_confidence}(x, ..., clip = 0.02, mode = c("light", "dark"))
 }
 \arguments{
 \item{x}{A \code{check_confidence} object (from the anicheck package).}
 
 \item{...}{Additional arguments (currently unused).}
 
+\item{clip}{Cut each violin where its density falls below this fraction of its
+peak, so thin tails and the neck bridging a bimodal distribution are removed
+and the violin shows only where data actually is. Default \code{0.02}; set \code{0} to
+keep the full density.}
+
 \item{mode}{Either \code{"light"} (default) or \code{"dark"}; passed to
-\code{\link[=theme_animovement]{theme_animovement()}}.}
+\code{\link[=theme_imputets]{theme_imputets()}}.}
 }
 \value{
 A ggplot object.
 }
 \description{
 Renders a \code{check_confidence()} result (from the anicheck package) as a
-boxplot per keypoint of its tracking confidence. A box sitting high on the y
-axis is a reliably tracked keypoint; a low box or a long low whisker flags a
-keypoint the tracker was often unsure about. With several individuals, each
-gets its own panel.
+horizontal violin per keypoint of its tracking confidence (keypoints on the y
+axis, confidence on the x), with a point at the median and a line spanning the
+inter-quartile range. A violin sitting far to the right and tight is a reliably
+tracked keypoint; a left-shifted body or a long low tail flags one the tracker
+was often unsure about. With several individuals, each gets its own panel.
 }
 \details{
-The boxes are drawn straight from the five-number summary in the check object
-(\code{stat = "identity"}), so no raw values are needed. The plot is built from an
-intermediate frame of class \code{anivis_check_confidence} produced by
+The violins are drawn from the kernel-density grid stored in the check object
+(via \code{geom_polygon}), so no raw values are needed. Styling matches the other
+check plots (\code{\link[=theme_imputets]{theme_imputets()}}, horizontal-only gridlines). The plot is built
+from an intermediate frame of class \code{anivis_check_confidence} produced by
 \code{\link[=as_plot_data]{as_plot_data()}} — the staging step that mirrors \code{data_plot()} in \pkg{see}.
 }
 \seealso{

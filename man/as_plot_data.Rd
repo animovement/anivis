@@ -13,7 +13,7 @@ as_plot_data(x, ...)
 
 \method{as_plot_data}{default}(x, ...)
 
-\method{as_plot_data}{check_confidence}(x, ...)
+\method{as_plot_data}{check_confidence}(x, ..., clip = 0.02)
 
 \method{as_plot_data}{check_na_gapsize}(
   x,
@@ -29,6 +29,9 @@ as_plot_data(x, ...)
 \item{x}{A check object.}
 
 \item{...}{Additional arguments passed to methods.}
+
+\item{clip}{For \code{as_plot_data.check_confidence()}: density floor (fraction of
+each keypoint's peak) below which the violin is cut. Default \code{0.02}.}
 
 \item{ranked_by, limit, include_total}{For \code{as_plot_data.check_na_gapsize()}:
 order bars by \code{"occurrence"} or \code{"total"}, keep the top \code{limit} per group,
@@ -63,12 +66,16 @@ ways — an aniframe, which feeds both \code{\link[=plot_trajectory]{plot_trajec
 \code{\link[=plot_timeseries]{plot_timeseries()}} — deliberately do not have a single method, since there
 would be nothing for it to dispatch on to choose between those shapes.
 
-\code{as_plot_data.check_confidence()} maps the per-keypoint five-number summary
-from \code{check_confidence()} onto the boxplot aesthetics
-(\code{ymin}/\code{lower}/\code{middle}/\code{upper}/\code{ymax}). \code{keypoint} is the x-axis factor when
-present; any other identity that varies (e.g. \code{individual}) collapses into a
-\code{group} factor for faceting (flagged by a \code{facet} attribute). Returns a frame
-classed \code{anivis_check_confidence}.
+\code{as_plot_data.check_confidence()} turns the per-keypoint density grid into
+closed violin polygons: each keypoint sits at an integer y position, and its
+density is mirrored either side along the confidence (x) axis (width-normalised
+so every violin has the same maximum width). Grid points below \code{clip} x the
+peak are dropped, so thin tails
+and bimodal-bridging necks disappear and a split distribution becomes separate
+polygons. \code{keypoint} is the x-axis category; any other identity that varies
+(e.g. \code{individual}) collapses into a \code{group} factor for faceting. The x
+positions, a per-keypoint median / quartile \code{overlay}, and \code{facet} ride along
+as attributes. Returns a frame classed \code{anivis_check_confidence}.
 
 \code{as_plot_data.check_na_gapsize()} reshapes the gap-size table into the long,
 ranked form the imputeTS-style bar chart needs: one row per (group, gap size,
