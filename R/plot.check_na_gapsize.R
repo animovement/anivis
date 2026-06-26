@@ -71,8 +71,7 @@ plot.check_na_gapsize <- function(
       title = "Occurrence of gap sizes",
       subtitle = "Gap sizes (NAs in a row) ordered by most common"
     ) +
-    theme_imputets(mode = mode) +
-    ggplot2::theme(panel.grid.major.y = ggplot2::element_blank())
+    theme_imputets(mode = mode)
 
   if (length(group_levels) > 1L) {
     p <- p +

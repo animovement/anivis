@@ -42,6 +42,16 @@ plot.check_na_timing <- function(
   group_levels <- attr(plot_df, "group_levels")
   interval_size <- attr(plot_df, "interval_size")
 
+  # Format the x axis as HH:MM:SS for true time units (like plot_events), raw
+  # otherwise.
+  unit_chr <- attr(x, "unit_time") %||% NA_character_
+  factor <- seconds_per_unit(unit_chr)
+  x_labels <- if (!is.na(factor)) {
+    function(b) format(hms::as_hms(round(b * factor)))
+  } else {
+    ggplot2::waiver()
+  }
+
   cols <- imputets_colours()
   fills <- c(
     present = ggplot2::alpha(cols$nona, 0.45),
@@ -51,10 +61,10 @@ plot.check_na_timing <- function(
   y_scale <- if (measure == "percent") {
     ggplot2::scale_y_continuous(
       labels = function(v) paste0(round(v * 100), "%"),
-      expand = ggplot2::expansion(mult = c(0, 0.05))
+      expand = c(0, 0)
     )
   } else {
-    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, 0.05)))
+    ggplot2::scale_y_continuous(expand = c(0, 0))
   }
   y_lab <- if (measure == "percent") "Percent" else "Count"
 
@@ -70,7 +80,7 @@ plot.check_na_timing <- function(
       linewidth = 0.5
     ) +
     ggplot2::scale_fill_manual(values = fills, guide = "none") +
-    ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = 0.01)) +
+    ggplot2::scale_x_continuous(expand = c(0, 0), labels = x_labels) +
     y_scale +
     ggplot2::labs(
       x = paste0("Time Lapse (Interval Size: ", interval_size, ")"),
@@ -78,7 +88,15 @@ plot.check_na_timing <- function(
       title = "Missing Values per Interval",
       subtitle = "Amount of {.na NA} and {.nona non-NA} for successive intervals"
     ) +
-    theme_imputets(mode = mode)
+    theme_imputets(mode = mode) +
+    ggplot2::theme(
+      # No vertical gridlines; keep only the major horizontal ones.
+      panel.grid.major.x = ggplot2::element_blank(),
+      panel.grid.minor = ggplot2::element_blank(),
+      # Bars run edge to edge (no x expansion); widen the right margin so the
+      # final axis label is not clipped.
+      plot.margin = ggplot2::margin(10, 22, 10, 10)
+    )
 
   if (length(group_levels) > 1L) {
     p <- p + ggplot2::facet_wrap(ggplot2::vars(.data$group), ncol = 1)
@@ -90,7 +108,8 @@ plot.check_na_timing <- function(
 #' @export
 #'
 #' @param n_intervals For `as_plot_data.check_na_timing()`: number of time
-#'   intervals to bin into (default Sturges' rule on the largest group).
+#'   intervals to bin into (default `NULL` uses Sturges' rule on the largest
+#'   group).
 #'
 #' @details
 #' `as_plot_data.check_na_timing()` reconstructs, from the compact gap table, the

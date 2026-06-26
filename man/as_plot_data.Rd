@@ -35,7 +35,8 @@ order bars by \code{"occurrence"} or \code{"total"}, keep the top \code{limit} p
 and whether to include the total-NAs series.}
 
 \item{n_intervals}{For \code{as_plot_data.check_na_timing()}: number of time
-intervals to bin into (default Sturges' rule on the largest group).}
+intervals to bin into (default \code{NULL} uses Sturges' rule on the largest
+group).}
 }
 \value{
 A data frame classed for the corresponding plot method (for example
