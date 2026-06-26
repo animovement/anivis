@@ -108,12 +108,32 @@ print(p6)
 
 
 # -------------------------------------------------------------------------
+# 7. Missing-data gaps: bridged with a dashed line so the path stays traceable
+# -------------------------------------------------------------------------
+gappy <- data.frame(
+  time = 1:100,
+  x = cumsum(rnorm(100)),
+  y = cumsum(rnorm(100))
+)
+gappy$x[25:33] <- NA # a stretch of dropped frames
+gappy$y[25:33] <- NA
+gappy$x[60:64] <- NA # a second, shorter gap
+gappy$y[60:64] <- NA
+gappy_af <- as_aniframe(gappy)
+
+p7 <- plot_trajectory(gappy_af) +
+  ggtitle("7. Gaps bridged with a dashed line")
+print(p7)
+
+
+# -------------------------------------------------------------------------
 # Save a combined overview PNG to a temp file
 # -------------------------------------------------------------------------
 combined <- (p1 | p2 | p3) /
-  (p4 | p5 | p6) +
+  (p4 | p5 | p6) /
+  p7 +
   plot_annotation(title = "anivis::plot_trajectory demo")
 
 out <- file.path(tempdir(), "anivis_plot_trajectory_demo.png")
-ggsave(out, combined, width = 14, height = 8, dpi = 150)
+ggsave(out, combined, width = 14, height = 11, dpi = 150)
 message("Saved combined demo to: ", out)
