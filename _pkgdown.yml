@@ -2,51 +2,11 @@ url: http://animovement.dev/anivis/
 home:
   title: "anivis – An R package for visualizing movement data and diagnostics"
 
-authors:
-  - name: "Mikkel Roald‑Arbøl"
-    href: "https://roald-arboel.com"
-
+# Shared navbar (incl. the animovement dropdown + Zulip), theme, and author
+# details are inherited from animovementtemplate.
 template:
   bootstrap: 5
-  light-switch: true
-
-navbar:
-  structure:
-    left:
-      - reference
-      - news
-    right:
-      - search
-      - animovement
-      - github
-      - zulip
-      - lightswitch
-  components:
-    animovement:
-      icon: fab fa-r-project
-      text: animovement
-      aria-label: animovement
-      menu:
-        - text: anicheck
-          href: https://animovement.dev/anicheck/
-        - text: aniframe
-          href: https://animovement.dev/aniframe/
-        - text: animetric
-          href: https://animovement.dev/animetric/
-        - text: animovement
-          href: https://animovement.dev/animovement/
-        - text: aniprocess
-          href: https://animovement.dev/aniprocess/
-        - text: aniread
-          href: https://animovement.dev/aniread/
-        - text: anispace
-          href: https://animovement.dev/anispace/
-        - text: anivis
-          href: https://animovement.dev/anivis/
-    zulip:
-      icon: fa-comments
-      href: https://animovement.zulipchat.com
-      aria-label: Chat on Zulip
+  package: animovementtemplate
 
 reference:
 - title: "Plotting"
