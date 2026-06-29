@@ -2,8 +2,8 @@
 
 ## Authors
 
-- **Mikkel Roald-Arbøl**. Author, maintainer.
-  [](https://orcid.org/0000-0002-9998-0058)
+- **[Mikkel Roald-Arbøl](https://roald-arboel.com)**. Author,
+  maintainer. [](https://orcid.org/0000-0002-9998-0058)
 
 ## Citation
 
