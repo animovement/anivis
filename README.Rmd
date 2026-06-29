@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # anivis
 <!-- badges: start -->
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17357778.svg)](https://doi.org/10.5281/zenodo.17357778)
+[![DOI](https://zenodo.org/badge/1075730063.svg)](https://doi.org/10.5281/zenodo.21030691)
 [![R-CMD-check](https://github.com/animovement/anivis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/animovement/anivis/actions/workflows/R-CMD-check.yaml)
 [![anivis status
 badge](https://animovement.r-universe.dev/badges/anivis)](https://animovement.r-universe.dev)
