@@ -17,10 +17,32 @@ navbar:
       - news
     right:
       - search
+      - animovement
       - github
       - zulip
       - lightswitch
   components:
+    animovement:
+      icon: fab fa-r-project
+      text: animovement
+      aria-label: animovement
+      menu:
+        - text: anicheck
+          href: https://animovement.dev/anicheck/
+        - text: aniframe
+          href: https://animovement.dev/aniframe/
+        - text: animetric
+          href: https://animovement.dev/animetric/
+        - text: animovement
+          href: https://animovement.dev/animovement/
+        - text: aniprocess
+          href: https://animovement.dev/aniprocess/
+        - text: aniread
+          href: https://animovement.dev/aniread/
+        - text: anispace
+          href: https://animovement.dev/anispace/
+        - text: anivis
+          href: https://animovement.dev/anivis/
     zulip:
       icon: fa-comments
       href: https://animovement.zulipchat.com
