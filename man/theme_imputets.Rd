@@ -16,8 +16,8 @@ A ggplot2 theme object.
 }
 \description{
 A larger-font variant of \code{\link[=theme_animovement]{theme_animovement()}} tuned for the diagnostic check
-plots (\code{\link[=plot.check_na_timing]{plot.check_na_timing()}}, \code{\link[=plot.check_na_gapsize]{plot.check_na_gapsize()}},
-\code{\link[=plot.check_confidence]{plot.check_confidence()}}), styled after the imputeTS package figures they are
+plots (\code{\link[=plot.anivis_check_na_timing]{plot.anivis_check_na_timing()}}, \code{\link[=plot.anivis_check_na_gapsize]{plot.anivis_check_na_gapsize()}},
+\code{\link[=plot.anivis_check_confidence]{plot.anivis_check_confidence()}}), styled after the imputeTS package figures they are
 adapted from. Compared with \code{\link[=theme_animovement]{theme_animovement()}} it uses a larger base size,
 places the title directly above the panel (not over the axis), renders the
 subtitle as markdown via \pkg{marquee} — so words like NA / non-NA can be

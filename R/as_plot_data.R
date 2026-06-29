@@ -23,9 +23,9 @@
 #' @param ... Additional arguments passed to methods.
 #'
 #' @return A data frame classed for the corresponding plot method (for example
-#'   `anivis_check_na_timing`).
+#'   `anivis_check_na_timing_data`).
 #'
-#' @seealso [plot.check_na_timing()]
+#' @seealso [plot.anivis_check_na_timing()]
 #'
 #' @export
 as_plot_data <- function(x, ...) {

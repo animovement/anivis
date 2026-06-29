@@ -272,3 +272,68 @@ test_that("plot_trajectory handles a group whose time is a single value", {
 
   expect_s3_class(plot_trajectory(af), "ggplot")
 })
+
+
+# --- missing-data gap bridges across all colour modes ------------------------
+
+with_internal_gap <- function(df) {
+  # Blank a run of frames in the middle of each group so trajectory_gaps()
+  # emits a dashed connector segment.
+  df$x[df$time %in% c(4, 5)] <- NA
+  df$y[df$time %in% c(4, 5)] <- NA
+  df
+}
+
+test_that("plot_trajectory bridges gaps with a dashed segment (single mode)", {
+  af <- aniframe::as_aniframe(with_internal_gap(
+    data.frame(time = 1:10, x = as.numeric(1:10), y = as.numeric(1:10))
+  ))
+  p <- plot_trajectory(af)
+  geoms <- vapply(p$layers, function(l) class(l$geom)[[1]], character(1))
+  expect_true("GeomSegment" %in% geoms)
+})
+
+test_that("plot_trajectory bridges gaps in what mode (multi-keypoint)", {
+  df <- with_internal_gap(data.frame(
+    keypoint = rep(c("head", "tail"), each = 10),
+    time = rep(1:10, 2),
+    x = as.numeric(rep(1:10, 2)),
+    y = as.numeric(rep(1:10, 2))
+  ))
+  p <- plot_trajectory(aniframe::as_aniframe(df))
+  geoms <- vapply(p$layers, function(l) class(l$geom)[[1]], character(1))
+  expect_true("GeomSegment" %in% geoms)
+})
+
+test_that("plot_trajectory bridges gaps in matrix mode (what x when)", {
+  df <- with_internal_gap(data.frame(
+    keypoint = rep(c("head", "tail"), each = 30),
+    trial = rep(rep(c(1L, 2L, 3L), each = 10), 2),
+    time = rep(1:10, 6),
+    x = as.numeric(rep(1:10, 6)),
+    y = as.numeric(rep(1:10, 6))
+  ))
+  af <- aniframe::as_aniframe(df, variables_when = c("trial", "time"))
+  p <- plot_trajectory(af)
+  geoms <- vapply(p$layers, function(l) class(l$geom)[[1]], character(1))
+  expect_true("GeomSegment" %in% geoms)
+})
+
+
+# --- true-time-unit colour-bar / legend labels -------------------------------
+
+test_that("plot_trajectory formats the time legend as HH:MM:SS for time units", {
+  af <- make_aniframe_single() |> aniframe::set_unit_time("s")
+  p <- plot_trajectory(af)
+  lab_fun <- p$scales$get_scales("colour")$labels
+  expect_true(is.function(lab_fun))
+  expect_match(lab_fun(60), "00:01:00")
+})
+
+test_that("plot_trajectory formats the alpha time legend for time units (what)", {
+  af <- make_aniframe_multi_keypoint() |> aniframe::set_unit_time("s")
+  p <- plot_trajectory(af)
+  lab_fun <- p$scales$get_scales("alpha")$labels
+  expect_true(is.function(lab_fun))
+  expect_match(lab_fun(60), "00:01:00")
+})

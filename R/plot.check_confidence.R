@@ -10,7 +10,7 @@
 #' The violins are drawn from the kernel-density grid stored in the check object
 #' (via `geom_polygon`), so no raw values are needed. Styling matches the other
 #' check plots ([theme_imputets()], horizontal-only gridlines). The plot is built
-#' from an intermediate frame of class `anivis_check_confidence` produced by
+#' from an intermediate frame of class `anivis_check_confidence_data` produced by
 #' [as_plot_data()] — the staging step that mirrors `data_plot()` in \pkg{see}.
 #'
 #' @param x A `check_confidence` object (from the anicheck package).
@@ -27,7 +27,7 @@
 #' @seealso [as_plot_data()]
 #'
 #' @export
-plot.check_confidence <- function(
+plot.anivis_check_confidence <- function(
   x,
   ...,
   clip = 0.02,
@@ -102,7 +102,7 @@ plot.check_confidence <- function(
 #' polygons. `keypoint` is the x-axis category; any other identity that varies
 #' (e.g. `individual`) collapses into a `group` factor for faceting. The x
 #' positions, a per-keypoint median / quartile `overlay`, and `facet` ride along
-#' as attributes. Returns a frame classed `anivis_check_confidence`.
+#' as attributes. Returns a frame classed `anivis_check_confidence_data`.
 as_plot_data.check_confidence <- function(x, ..., clip = 0.02) {
   group_cols <- attr(x, "group_cols")
   groups <- attr(x, "groups")
@@ -210,6 +210,6 @@ as_plot_data.check_confidence <- function(x, ..., clip = 0.02) {
   attr(violins, "overlay") <- overlay
   attr(violins, "facet") <- length(facet_vars) > 0L
   attr(violins, "axis_var") <- axis_var
-  class(violins) <- c("anivis_check_confidence", "data.frame")
+  class(violins) <- c("anivis_check_confidence_data", "data.frame")
   violins
 }

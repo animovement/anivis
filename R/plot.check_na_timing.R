@@ -12,7 +12,7 @@
 #' object (no per-frame data needed). Missing uses the imputeTS indianred,
 #' present the imputeTS steelblue, with the two named in the coloured subtitle
 #' (so no legend is needed). Styling is [theme_imputets()]. The plot is built
-#' from an intermediate frame of class `anivis_check_na_timing` produced by
+#' from an intermediate frame of class `anivis_check_na_timing_data` produced by
 #' [as_plot_data()] — the staging step that mirrors `data_plot()` in \pkg{see}.
 #'
 #' @param x A `check_na_timing` object (from the anicheck package).
@@ -29,7 +29,7 @@
 #' @seealso [as_plot_data()]
 #'
 #' @export
-plot.check_na_timing <- function(
+plot.anivis_check_na_timing <- function(
   x,
   ...,
   measure = c("percent", "count"),
@@ -121,7 +121,7 @@ plot.check_na_timing <- function(
 #' gap's overlap with each interval is counted, so no per-frame data is needed.
 #' `value` is the share (`measure = "percent"`) or count (`"count"`), `width` the
 #' interval's span in time units, and the frame interval size rides along as an
-#' attribute. Returns a frame classed `anivis_check_na_timing`.
+#' attribute. Returns a frame classed `anivis_check_na_timing_data`.
 as_plot_data.check_na_timing <- function(
   x,
   ...,
@@ -221,6 +221,6 @@ as_plot_data.check_na_timing <- function(
   attr(long, "group_levels") <- group_levels
   attr(long, "measure") <- measure
   attr(long, "interval_size") <- interval_size
-  class(long) <- c("anivis_check_na_timing", "data.frame")
+  class(long) <- c("anivis_check_na_timing_data", "data.frame")
   long
 }

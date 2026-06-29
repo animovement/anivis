@@ -379,3 +379,51 @@ test_that("plot_events point_style = 'raster' draws point events as segments", {
   point_layer <- p$layers[[which(geoms == "GeomEventPoint")[[1]]]]
   expect_s3_class(point_layer$geom, "GeomSegment")
 })
+
+
+# --- geom setup_data (only runs when the plot is built) ----------------------
+
+test_that("geom_event_state setup_data derives ymin/ymax from y + height", {
+  p <- ggplot2::ggplot(make_anievent_state_only(), ggplot2::aes(y = label)) +
+    geom_event_state(height = 0.5)
+  built <- ggplot2::ggplot_build(p)
+  d <- built$data[[1]]
+  expect_true(all(c("ymin", "ymax") %in% names(d)))
+  # height = 0.5 -> each bar spans exactly 0.5 in y.
+  expect_equal(unique(round(d$ymax - d$ymin, 6)), 0.5)
+})
+
+test_that("geom_event_state supplies a default y when none is mapped", {
+  p <- ggplot2::ggplot(make_anievent_state_only()) + geom_event_state()
+  built <- ggplot2::ggplot_build(p)
+  d <- built$data[[1]]
+  # No y aesthetic -> all bars collapse onto the single default row (y = 1).
+  expect_equal(unique(d$ymin + (d$ymax - d$ymin) / 2), 1)
+})
+
+test_that("geom_event_point (point style) supplies a default y when unmapped", {
+  p <- ggplot2::ggplot(make_anievent_point_only()) + geom_event_point()
+  built <- ggplot2::ggplot_build(p)
+  d <- built$data[[1]]
+  expect_equal(unique(d$y), 1)
+})
+
+test_that("geom_event_point raster supplies a default y when none is mapped", {
+  p <- ggplot2::ggplot(make_anievent_point_only()) +
+    geom_event_point(style = "raster", height = 0.4)
+  built <- ggplot2::ggplot_build(p)
+  d <- built$data[[1]]
+  # No y aesthetic -> tick centred on the single default row (y = 1).
+  expect_equal(unique((d$y + d$yend) / 2), 1)
+})
+
+test_that("geom_event_point raster setup_data builds vertical tick segments", {
+  p <- ggplot2::ggplot(make_anievent_point_only(), ggplot2::aes(y = label)) +
+    geom_event_point(style = "raster", height = 0.6)
+  built <- ggplot2::ggplot_build(p)
+  d <- built$data[[1]]
+  expect_true(all(c("xend", "yend") %in% names(d)))
+  # A raster tick is vertical: x == xend, and spans `height` in y.
+  expect_equal(d$x, d$xend)
+  expect_equal(unique(round(d$yend - d$y, 6)), 0.6)
+})

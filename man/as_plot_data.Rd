@@ -46,7 +46,7 @@ group).}
 }
 \value{
 A data frame classed for the corresponding plot method (for example
-\code{anivis_check_na_timing}).
+\code{anivis_check_na_timing_data}).
 }
 \description{
 Coerces a check object — such as the result of \code{check_na_timing()} (from the
@@ -78,13 +78,13 @@ and bimodal-bridging necks disappear and a split distribution becomes separate
 polygons. \code{keypoint} is the x-axis category; any other identity that varies
 (e.g. \code{individual}) collapses into a \code{group} factor for faceting. The x
 positions, a per-keypoint median / quartile \code{overlay}, and \code{facet} ride along
-as attributes. Returns a frame classed \code{anivis_check_confidence}.
+as attributes. Returns a frame classed \code{anivis_check_confidence_data}.
 
 \code{as_plot_data.check_na_gapsize()} reshapes the gap-size table into the long,
 ranked form the imputeTS-style bar chart needs: one row per (group, gap size,
 series), where \code{series} is \code{occurrence} (and \code{total} when \code{include_total}),
 \code{value} the count, and \code{key} a \code{reorder_within}-style factor (\code{"<n> NA-gap___ <group>"}) ordered by \code{ranked_by} so each facet sorts independently. Returns a
-frame classed \code{anivis_check_na_gapsize}.
+frame classed \code{anivis_check_na_gapsize_data}.
 
 \code{as_plot_data.check_na_timing()} reconstructs, from the compact gap table, the
 missing / present frame counts per time interval — one row per
@@ -93,8 +93,8 @@ all groups (Sturges' rule by default) so bars line up across panels, and each
 gap's overlap with each interval is counted, so no per-frame data is needed.
 \code{value} is the share (\code{measure = "percent"}) or count (\code{"count"}), \code{width} the
 interval's span in time units, and the frame interval size rides along as an
-attribute. Returns a frame classed \code{anivis_check_na_timing}.
+attribute. Returns a frame classed \code{anivis_check_na_timing_data}.
 }
 \seealso{
-\code{\link[=plot.check_na_timing]{plot.check_na_timing()}}
+\code{\link[=plot.anivis_check_na_timing]{plot.anivis_check_na_timing()}}
 }

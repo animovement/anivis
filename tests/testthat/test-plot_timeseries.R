@@ -62,6 +62,13 @@ test_that("plot_timeseries rejects an unknown or non-numeric variable", {
   )
 })
 
+test_that("plot_timeseries requires variable to be a character vector", {
+  expect_error(
+    plot_timeseries(make_ts_single(), variable = 1),
+    "character vector"
+  )
+})
+
 test_that("plot_timeseries stacks several variables into a patchwork", {
   af <- make_ts_single()
   af$accel <- c(0, diff(af$speed))
@@ -86,4 +93,47 @@ test_that("plot_timeseries layout = 'facet' facet_wraps a single varying axis", 
 test_that("plot_timeseries layout = 'facet' uses facet_grid when both vary", {
   p <- plot_timeseries(make_ts_matrix(), variable = "speed", layout = "facet")
   expect_s3_class(p$facet, "FacetGrid")
+})
+
+test_that("plot_timeseries layout = 'facet' facet_wraps a varying when axis", {
+  # trial (a `when` condition) varies, the identity does not.
+  af <- with_speed(aniframe::as_aniframe(
+    data.frame(
+      trial = rep(c(1L, 2L, 3L), each = 10),
+      time = rep(1:10, 3),
+      x = rnorm(30),
+      y = rnorm(30)
+    ),
+    variables_when = c("trial", "time")
+  ))
+  p <- plot_timeseries(af, variable = "speed", layout = "facet")
+  expect_s3_class(p$facet, "FacetWrap")
+})
+
+test_that("plot_timeseries layout = 'facet' leaves single-group data unfaceted", {
+  p <- plot_timeseries(make_ts_single(), variable = "speed", layout = "facet")
+  expect_s3_class(p$facet, "FacetNull")
+})
+
+
+# --- x-axis time-unit handling -----------------------------------------------
+
+test_that("plot_timeseries drops the x label and uses scale_x_time for time units", {
+  af <- make_ts_single() |> aniframe::set_unit_time("s")
+  p <- plot_timeseries(af, variable = "speed")
+  expect_null(p$labels$x)
+  expect_equal(p$scales$get_scales("x")$trans$name, "hms")
+})
+
+test_that("plot_timeseries labels frame data 'time (frames)'", {
+  af <- make_ts_single() |> aniframe::set_unit_time("frame")
+  p <- plot_timeseries(af, variable = "speed")
+  expect_equal(p$labels$x, "time (frames)")
+  expect_false(identical(p$scales$get_scales("x")$trans$name, "hms"))
+})
+
+test_that("plot_timeseries labels unknown-unit data plain 'time'", {
+  af <- make_ts_single() |> aniframe::set_unit_time("unknown")
+  p <- plot_timeseries(af, variable = "speed")
+  expect_equal(p$labels$x, "time")
 })

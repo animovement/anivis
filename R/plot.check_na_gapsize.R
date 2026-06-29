@@ -9,8 +9,9 @@
 #' on top; only the top `limit` are shown. With more than one group, each gets
 #' its own panel.
 #'
-#' The plot is built from an intermediate frame of class `anivis_check_na_gapsize`
-#' produced by [as_plot_data()] — the staging step that mirrors `data_plot()` in
+#' The plot is built from an intermediate frame of class
+#' `anivis_check_na_gapsize_data` produced by [as_plot_data()] — the staging step
+#' that mirrors `data_plot()` in
 #' \pkg{see}.
 #'
 #' @param x A `check_na_gapsize` object (from the anicheck package).
@@ -29,7 +30,7 @@
 #' @seealso [as_plot_data()]
 #'
 #' @export
-plot.check_na_gapsize <- function(
+plot.anivis_check_na_gapsize <- function(
   x,
   ...,
   ranked_by = c("occurrence", "total"),
@@ -97,7 +98,7 @@ plot.check_na_gapsize <- function(
 #' series), where `series` is `occurrence` (and `total` when `include_total`),
 #' `value` the count, and `key` a `reorder_within`-style factor (`"<n> NA-gap___
 #' <group>"`) ordered by `ranked_by` so each facet sorts independently. Returns a
-#' frame classed `anivis_check_na_gapsize`.
+#' frame classed `anivis_check_na_gapsize_data`.
 as_plot_data.check_na_gapsize <- function(
   x,
   ...,
@@ -180,6 +181,6 @@ as_plot_data.check_na_gapsize <- function(
   out$group <- factor(out$group, levels = group_levels)
 
   attr(out, "group_levels") <- group_levels
-  class(out) <- c("anivis_check_na_gapsize", "data.frame")
+  class(out) <- c("anivis_check_na_gapsize_data", "data.frame")
   out
 }
