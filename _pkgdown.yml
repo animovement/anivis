@@ -13,7 +13,6 @@ template:
 navbar:
   structure:
     left:
-      - intro
       - reference
       - news
     right:
@@ -22,13 +21,21 @@ navbar:
       - lightswitch
 
 reference:
-- title: "Plotting functions"
+- title: "Plotting"
   contents:
-  - plot.plot_check_confidence
-  - plot_events
+  - plot.aniframe
+  - plot.anievent
   - plot_trajectory
   - plot_timeseries
+  - plot_events
   - plots
+
+- title: "Diagnostic check plots"
+  contents:
+  - plot.check_na_timing
+  - plot.check_na_gapsize
+  - plot.check_confidence
+  - as_plot_data
 
 - title: "Geoms"
   contents:
@@ -51,4 +58,4 @@ reference:
 - title: "Themes"
   contents:
   - theme_animovement
-
+  - theme_imputets
