@@ -18,7 +18,13 @@ navbar:
     right:
       - search
       - github
+      - zulip
       - lightswitch
+  components:
+    zulip:
+      icon: fa-comments
+      href: https://animovement.zulipchat.com
+      aria-label: Chat on Zulip
 
 reference:
 - title: "Plotting"
@@ -32,9 +38,9 @@ reference:
 
 - title: "Diagnostic check plots"
   contents:
-  - plot.check_na_timing
-  - plot.check_na_gapsize
-  - plot.check_confidence
+  - plot.anivis_check_na_timing
+  - plot.anivis_check_na_gapsize
+  - plot.anivis_check_confidence
   - as_plot_data
 
 - title: "Geoms"
