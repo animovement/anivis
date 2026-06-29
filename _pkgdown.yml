@@ -13,20 +13,55 @@ template:
 navbar:
   structure:
     left:
-      - intro
       - reference
       - news
     right:
       - search
       - github
+      - zulip
       - lightswitch
+  components:
+    zulip:
+      icon: fa-comments
+      href: https://animovement.zulipchat.com
+      aria-label: Chat on Zulip
 
 reference:
-- title: "Plotting functions"
+- title: "Plotting"
   contents:
-  - plot.plot_check_confidence
+  - plot.aniframe
+  - plot.anievent
+  - plot_trajectory
+  - plot_timeseries
+  - plot_events
+  - plots
+
+- title: "Diagnostic check plots"
+  contents:
+  - plot.anivis_check_na_timing
+  - plot.anivis_check_na_gapsize
+  - plot.anivis_check_confidence
+  - as_plot_data
+
+- title: "Geoms"
+  contents:
+  - geom_event_state
+  - geom_event_point
+
+- title: "Scales"
+  contents:
+  - scale_okabeito
+  - scale_material
+
+- title: "Colour palettes"
+  contents:
+  - okabeito_colors
+  - palette_okabeito
+  - material_colors
+  - palette_material
+  - palette_animovement
 
 - title: "Themes"
   contents:
   - theme_animovement
-
+  - theme_imputets

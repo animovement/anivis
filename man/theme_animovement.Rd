@@ -2,13 +2,31 @@
 % Please edit documentation in R/theme_animovement.R
 \name{theme_animovement}
 \alias{theme_animovement}
-\title{Animovement ggplot2 theme}
+\alias{theme_animovement_light}
+\alias{theme_animovement_dark}
+\title{Animovement ggplot2 Theme}
 \usage{
-theme_animovement()
+theme_animovement(mode = c("light", "dark"), base_size = 11, base_family = "")
+
+theme_animovement_light(base_size = 11, base_family = "")
+
+theme_animovement_dark(base_size = 11, base_family = "")
+}
+\arguments{
+\item{mode}{Either "light" (default) or "dark".}
+
+\item{base_size}{Base font size.}
+
+\item{base_family}{Base font family.}
 }
 \value{
 A ggplot2 theme object.
 }
 \description{
-A custom ggplot2 theme for animovement plots.
+The default animovement theme, with light and dark variants. It builds on
+\code{\link[ggplot2:theme_linedraw]{ggplot2::theme_linedraw()}} — fine black panel border, thin gridlines — but
+swaps linedraw's black facet strips for the usual light-grey strips with
+dark text, and adds the plain enlarged title, generous axis-title margins
+and title positioning of \code{see::theme_modern()}. Further themes with their
+own names may be added over time.
 }

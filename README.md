@@ -10,6 +10,8 @@
 [![anivis status
 badge](https://animovement.r-universe.dev/badges/anivis)](https://animovement.r-universe.dev)
 [![codecov](https://codecov.io/gh/animovement/anivis/graph/badge.svg?token=Pf5n3yzLzK)](https://codecov.io/gh/animovement/anivis)
+[![Chat on
+Zulip](https://img.shields.io/badge/chat-Zulip-6492FE?logo=zulip&logoColor=white)](https://animovement.zulipchat.com)
 <!-- badges: end -->
 
 *An R package for visualizing movement data and diagnostics*

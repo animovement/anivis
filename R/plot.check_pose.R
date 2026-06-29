@@ -1,91 +1,35 @@
-#' #' Analyze the distribution of distances from keypoints to the centroid
-#' #'
-#' #' This function generates visualizations of the distances from each keypoint to
-#' #' a calculated centroid in the data. By default, it produces histograms of the
-#' #' distance distributions, but it can also create confidence plots if specified.
-#' #'
-#' #' @param data A data frame containing at least the columns `keypoint`, `x`, and `y`.
-#' #' @param reference_keypoint The keypoint used as a reference to calculate the distance.
-#' #' @param type Character string specifying the type of plot to create. Options are:
-#' #'   - `"histogram"`: Histograms of the distance distributions (default)
-#' #'   - `"confidence"`: Plots showing confidence intervals for the distances
-#' #'
-#' #' @return A `patchwork` object combining plots for each keypoint, visualizing
-#' #' the distances to the centroid.
-#' #'
-#' #' @details
-#' #' The centroid is computed using the `add_centroid` function and distances are
-#' #' calculated with the `calculate_distance_to_centroid` function.
-#' #' The function automatically excludes the centroid itself from the visualizations.
-#' #' Histograms provide an overview of distance distributions, while confidence plots
-#' #' summarize variability with intervals.
-#' #'
-#' #' @examples
-#' #' \dontrun{
-#' #' # Create sample data
-#' #' data <- dplyr::tibble(
-#' #'   keypoint = rep(c("head", "arm", "leg", "torso"), each = 10),
-#' #'   x = rnorm(40, mean = 0, sd = 1),
-#' #'   y = rnorm(40, mean = 0, sd = 1)
-#' #' )
-#' #'
-#' #' # Plot histogram of distances
-#' #' check_pose(data, reference_keypoint = "head", type = "histogram")
-#' #'
-#' #' # Plot confidence intervals
-#' #' check_pose(data, reference_keypoint = "head", type = "confidence")
-#' #' }
-#' #'
-#' #' @export
-#' check_pose <- function(data, reference_keypoint, type = "histogram") {
-#'   # Parameters
-#'   keypoints <- unique(data$keypoint)
-#'   n_keypoints <- length(keypoints)
-#'   color_occurrence = "indianred"
-#'   color_total = "steelblue"
-#'   color_border = "black"
-#'   na_plots <- list()
-#'   d_ref <- data |>
-#'     dplyr::filter(.data$keypoint == reference_keypoint) |>
-#'     dplyr::mutate(keypoint = "reference_keypoint")
-#'   data <- dplyr::bind_rows(data, d_ref)
-#'
-#'   if (n_keypoints <= 1) {
-#'     cli::cli_abort(
-#'       "Can only check poses when the data contains more than 1 keypoint."
-#'     )
-#'   }
-#'
-#'   # Calculate distance to centroid
-#'   data <- data |>
-#'     calculate_distance_to_centroid(centroid_name = "reference_keypoint") |>
-#'     dplyr::filter(.data$keypoint != "reference_keypoint") |>
-#'     dplyr::mutate(keypoint = factor(.data$keypoint))
-#'
-#'   for (i in 1:length(keypoints)) {
-#'     if (type == "histogram") {
-#'       na_plots[[i]] <- data |>
-#'         dplyr::filter(.data$keypoint == keypoints[i]) |>
-#'         subplot_dist_to_centroid_hist(keypoint = keypoints[i])
-#'     } else if (type == "confidence") {
-#'       na_plots[[i]] <- data |>
-#'         dplyr::filter(.data$keypoint == keypoints[i]) |>
-#'         subplot_dist_to_centroid_confidence(keypoint = keypoints[i])
-#'     }
-#'   }
-#'
-#'   output_plot <- patchwork::wrap_plots(na_plots) +
-#'     patchwork::plot_annotation(
-#'       title = "Distance from keypoint to centroid",
-#'       subtitle = "Gap sizes (NAs in a row) ordered by most common",
-#'       theme = theme(
-#'         plot.subtitle = ggtext::element_markdown(lineheight = 1.1),
-#'         legend.position = "bottom"
-#'       )
-#'     ) +
-#'     patchwork::plot_layout(axes = "collect", axis_titles = "collect")
-#'   if (type == "histogram") {
-#'     output_plot <- output_plot + patchwork::plot_layout(guides = "collect")
-#'   }
-#'   return(output_plot)
-#' }
+# plot.check_pose() -- DEFERRED until aniframe provides a centroid helper.
+#
+# `check_pose` diagnoses keypoint spread: for every frame it needs the centroid
+# of the tracked keypoints and each keypoint's distance to it, then the
+# distribution of those distances per keypoint. The centroid maths must NOT be
+# hand-rolled -- it will come from an aniframe helper (e.g. add_centroid() /
+# calculate_distance_to_centroid()). Once that lands, this check is essentially
+# a re-skinned check_confidence (a per-keypoint distribution), so reuse that
+# machinery rather than starting from scratch:
+#
+# 1. anicheck_files/check_pose.R (compute half, bound for the anicheck package):
+#    - check_pose.aniframe(data): require a `keypoint` column with >= 2 keypoints;
+#      use the aniframe centroid helper to get each keypoint's per-frame distance
+#      to the centroid (do NOT compute the centroid manually here).
+#    - Reduce to a COMPACT object, exactly like check_confidence: a per-group
+#      kernel-density grid of the distances (cf. confidence_density()) plus a
+#      five-number summary attribute (distribution_summary()). Group by
+#      aniframe_group_cols(). Class c("check_pose","tbl_df","tbl","data.frame").
+#    - summary.check_pose() / print.check_pose() mirroring check_confidence.
+#    - Tests in anicheck_files/test-check_pose.R, mirroring test-check_confidence.
+#
+# 2. plot.check_pose() + as_plot_data.check_pose() (this file, anivis):
+#    structurally identical to plot.check_confidence() / as_plot_data.check_
+#    confidence(). Reuse them -- ideally factor the shared violin builder
+#    (density grid -> clipped horizontal mirrored polygons + median/IQR overlay,
+#    theme_imputets(), vertical-only gridlines, facets stacked as rows, the
+#    "single varying group on the axis, the rest facet" rule) into one internal
+#    helper called by both, instead of duplicating it. Differences for pose:
+#      - x label "distance to centroid (<unit_space>)", title "Keypoint Spread
+#        Around the Centroid";
+#      - distances are >= 0 and unbounded (not [0, 1] like confidence), so build
+#        the density over [0, max] rather than [min, max].
+#
+# See git history for the earlier hand-rolled-centroid draft that was reverted,
+# and the other check_*/plot.check_* pairs for the established split.
