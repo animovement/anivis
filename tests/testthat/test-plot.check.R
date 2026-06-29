@@ -10,7 +10,9 @@ af_na_single <- function(unit = NULL) {
     x = c(1:3, NA, NA, 6:10, NA, 12:18, NA, 20),
     y = rnorm(20)
   ))
-  if (!is.null(unit)) af <- aniframe::set_unit_time(af, unit)
+  if (!is.null(unit)) {
+    af <- aniframe::set_unit_time(af, unit)
+  }
   af
 }
 
@@ -21,7 +23,9 @@ af_na_multi <- function(unit = NULL) {
     x = c(c(1:3, NA, NA, 6:20), c(1:10, NA, NA, NA, 14:20)),
     y = rnorm(40)
   ))
-  if (!is.null(unit)) af <- aniframe::set_unit_time(af, unit)
+  if (!is.null(unit)) {
+    af <- aniframe::set_unit_time(af, unit)
+  }
   af
 }
 
@@ -178,7 +182,10 @@ test_that("plot.check_na_gapsize keeps at most `limit` gap sizes per group", {
 })
 
 test_that("plot.check_na_gapsize facets only with several groups", {
-  expect_s3_class(plot(make_check_na_gapsize(af_na_single()))$facet, "FacetNull")
+  expect_s3_class(
+    plot(make_check_na_gapsize(af_na_single()))$facet,
+    "FacetNull"
+  )
   expect_s3_class(plot(make_check_na_gapsize(af_na_multi()))$facet, "FacetWrap")
 })
 
@@ -207,21 +214,30 @@ test_that("plot.check_confidence returns a ggplot with a violin polygon", {
 test_that("plot.check_confidence puts keypoint on the axis, not a facet", {
   p <- plot(make_check_confidence(af_conf_single()))
   expect_s3_class(p$facet, "FacetNull")
-  expect_false(isTRUE(attr(as_plot_data(make_check_confidence(af_conf_single())), "facet")))
+  expect_false(isTRUE(attr(
+    as_plot_data(make_check_confidence(af_conf_single())),
+    "facet"
+  )))
 })
 
 test_that("plot.check_confidence facets the second varying identity", {
   pd <- as_plot_data(make_check_confidence(af_conf_facet()))
   expect_true(isTRUE(attr(pd, "facet")))
   expect_equal(attr(pd, "axis_var"), "keypoint")
-  expect_s3_class(plot(make_check_confidence(af_conf_facet()))$facet, "FacetWrap")
+  expect_s3_class(
+    plot(make_check_confidence(af_conf_facet()))$facet,
+    "FacetWrap"
+  )
 })
 
 test_that("plot.check_confidence clip = 0 keeps the full density", {
   full <- as_plot_data(make_check_confidence(af_conf_single()), clip = 0)
   clipped <- as_plot_data(make_check_confidence(af_conf_single()), clip = 0.02)
   expect_gte(nrow(full), nrow(clipped))
-  expect_s3_class(plot(make_check_confidence(af_conf_single()), clip = 0), "ggplot")
+  expect_s3_class(
+    plot(make_check_confidence(af_conf_single()), clip = 0),
+    "ggplot"
+  )
 })
 
 test_that("plot.check_confidence handles a degenerate single-value group", {
@@ -267,9 +283,18 @@ test_that("check_confidence object needs a confidence column", {
 # --- dark mode + theme_imputets ----------------------------------------------
 
 test_that("check plots build in dark mode", {
-  expect_s3_class(plot(make_check_na_timing(af_na_single()), mode = "dark"), "ggplot")
-  expect_s3_class(plot(make_check_na_gapsize(af_na_single()), mode = "dark"), "ggplot")
-  expect_s3_class(plot(make_check_confidence(af_conf_single()), mode = "dark"), "ggplot")
+  expect_s3_class(
+    plot(make_check_na_timing(af_na_single()), mode = "dark"),
+    "ggplot"
+  )
+  expect_s3_class(
+    plot(make_check_na_gapsize(af_na_single()), mode = "dark"),
+    "ggplot"
+  )
+  expect_s3_class(
+    plot(make_check_confidence(af_conf_single()), mode = "dark"),
+    "ggplot"
+  )
 })
 
 test_that("theme_imputets returns a theme in both modes", {
