@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/animovement/anivis/blob/v0.2.0/inst/CITATION)
+[`inst/CITATION`](https://github.com/animovement/anivis/blob/main/inst/CITATION)
 
 Roald-Arbøl M (2025). “anivis: An R package for visualizing movement
 data and diagnostics.”
