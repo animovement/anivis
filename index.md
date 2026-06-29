@@ -10,12 +10,14 @@ for movement trajectories, diagnostic summaries, and calculated metrics.
 You can install the development version of *anivis* with:
 
 ``` r
+
 install.packages('anivis', repos = c('https://animovement.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 Once you have installed the package, you can load it with:
 
 ``` r
+
 library("anivis")
 ```
 
@@ -34,5 +36,6 @@ bug, feel free to open an issue.
 To cite *anivis* in publications use:
 
 ``` r
+
 citation("anivis")
 ```
