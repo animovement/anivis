@@ -2,9 +2,9 @@
 
 Creates a ggplot that overlays state events (durative bouts, drawn as
 horizontal bars by
-[`geom_event_state()`](http://animovement.dev/anivis/reference/geom_event_state.md))
+[`geom_event_state()`](https://animovement.dev/anivis/reference/geom_event_state.md))
 and point events (instantaneous occurrences, drawn as dots by
-[`geom_event_point()`](http://animovement.dev/anivis/reference/geom_event_point.md))
+[`geom_event_point()`](https://animovement.dev/anivis/reference/geom_event_point.md))
 on a shared time axis. Each behaviour `label` becomes a row on the y
 axis.
 
@@ -53,12 +53,12 @@ plot_events(
 
   How point events are drawn: `"point"` (default, dots) or `"raster"`
   (vertical ticks, the classic spike-raster look). Passed to
-  [`geom_event_point()`](http://animovement.dev/anivis/reference/geom_event_point.md).
+  [`geom_event_point()`](https://animovement.dev/anivis/reference/geom_event_point.md).
 
 - mode:
 
   Either `"light"` (default) or `"dark"`; passed to
-  [`theme_animovement()`](http://animovement.dev/anivis/reference/theme_animovement.md).
+  [`theme_animovement()`](https://animovement.dev/anivis/reference/theme_animovement.md).
 
 - point:
 

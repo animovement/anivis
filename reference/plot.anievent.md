@@ -3,12 +3,12 @@
 Creates a visualization of state and point events from an
 [`aniframe::anievent()`](http://animovement.dev/aniframe/reference/anievent.md)
 using
-[`geom_event_state()`](http://animovement.dev/anivis/reference/geom_event_state.md)
+[`geom_event_state()`](https://animovement.dev/anivis/reference/geom_event_state.md)
 and
-[`geom_event_point()`](http://animovement.dev/anivis/reference/geom_event_point.md).
+[`geom_event_point()`](https://animovement.dev/anivis/reference/geom_event_point.md).
 Returns a patchwork object that can be combined with additional plots.
 The drawing itself is done by
-[`plot_events()`](http://animovement.dev/anivis/reference/plot_events.md).
+[`plot_events()`](https://animovement.dev/anivis/reference/plot_events.md).
 
 ## Usage
 
@@ -30,7 +30,7 @@ plot(x, ..., mode = c("light", "dark"))
 - mode:
 
   Either `"light"` (default) or `"dark"`; passed to
-  [`theme_animovement()`](http://animovement.dev/anivis/reference/theme_animovement.md).
+  [`theme_animovement()`](https://animovement.dev/anivis/reference/theme_animovement.md).
 
 ## Value
 
@@ -38,4 +38,4 @@ A patchwork object.
 
 ## See also
 
-[`plot_events()`](http://animovement.dev/anivis/reference/plot_events.md)
+[`plot_events()`](https://animovement.dev/anivis/reference/plot_events.md)

@@ -23,7 +23,7 @@ plot(x, ..., mode = c("light", "dark"))
 - mode:
 
   Either `"light"` (default) or `"dark"`; passed to
-  [`plot_trajectory()`](http://animovement.dev/anivis/reference/plot_trajectory.md).
+  [`plot_trajectory()`](https://animovement.dev/anivis/reference/plot_trajectory.md).
 
 ## Value
 

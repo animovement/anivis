@@ -46,7 +46,7 @@ plot_timeseries(
 - mode:
 
   Either `"light"` (default) or `"dark"`; passed to
-  [`theme_animovement()`](http://animovement.dev/anivis/reference/theme_animovement.md).
+  [`theme_animovement()`](https://animovement.dev/anivis/reference/theme_animovement.md).
 
 - palette:
 
@@ -63,12 +63,12 @@ several.
 
 Pass several names to `variable` to draw a panel per variable,
 **vertically stacked** with a shared x axis and a single shared legend
-(via [`plots()`](http://animovement.dev/anivis/reference/plots.md));
+(via [`plots()`](https://animovement.dev/anivis/reference/plots.md));
 stacking makes it easy to compare their shape over time. A single
 variable returns a plain ggplot.
 
 The `layout` argument chooses how groups are arranged, mirroring
-[`plot_events()`](http://animovement.dev/anivis/reference/plot_events.md):
+[`plot_events()`](https://animovement.dev/anivis/reference/plot_events.md):
 
 - `"inline"` (default): all groups share one panel as coloured lines,
   with a legend when there is more than one group.
@@ -78,9 +78,9 @@ The `layout` argument chooses how groups are arranged, mirroring
   with the panels stacked in rows so the shared x axis lines up.
 
 Colours come from
-[`palette_animovement()`](http://animovement.dev/anivis/reference/palette_animovement.md),
+[`palette_animovement()`](https://animovement.dev/anivis/reference/palette_animovement.md),
 matching
-[`plot_trajectory()`](http://animovement.dev/anivis/reference/plot_trajectory.md).
+[`plot_trajectory()`](https://animovement.dev/anivis/reference/plot_trajectory.md).
 The x axis uses the same time-unit handling as
-[`plot_events()`](http://animovement.dev/anivis/reference/plot_events.md)
+[`plot_events()`](https://animovement.dev/anivis/reference/plot_events.md)
 — `HH:MM:SS` for true time units, raw frames otherwise.

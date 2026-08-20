@@ -51,7 +51,7 @@ plot(
 - mode:
 
   Either `"light"` (default) or `"dark"`; passed to
-  [`theme_animovement()`](http://animovement.dev/anivis/reference/theme_animovement.md).
+  [`theme_animovement()`](https://animovement.dev/anivis/reference/theme_animovement.md).
 
 ## Value
 
@@ -61,9 +61,9 @@ A ggplot object.
 
 The plot is built from an intermediate frame of class
 `anivis_check_na_gapsize_data` produced by
-[`as_plot_data()`](http://animovement.dev/anivis/reference/as_plot_data.md)
+[`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)
 — the staging step that mirrors `data_plot()` in see.
 
 ## See also
 
-[`as_plot_data()`](http://animovement.dev/anivis/reference/as_plot_data.md)
+[`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)

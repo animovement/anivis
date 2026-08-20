@@ -80,9 +80,9 @@ to inspect them or to assemble a custom chart by hand.
 Methods exist for check objects with a single canonical plot (one object
 class maps to one figure). Object types that can be plotted several
 different ways — an aniframe, which feeds both
-[`plot_trajectory()`](http://animovement.dev/anivis/reference/plot_trajectory.md)
+[`plot_trajectory()`](https://animovement.dev/anivis/reference/plot_trajectory.md)
 and
-[`plot_timeseries()`](http://animovement.dev/anivis/reference/plot_timeseries.md)
+[`plot_timeseries()`](https://animovement.dev/anivis/reference/plot_timeseries.md)
 — deliberately do not have a single method, since there would be nothing
 for it to dispatch on to choose between those shapes.
 
@@ -118,4 +118,4 @@ frame interval size rides along as an attribute. Returns a frame classed
 
 ## See also
 
-[`plot.anivis_check_na_timing()`](http://animovement.dev/anivis/reference/plot.anivis_check_na_timing.md)
+[`plot.anivis_check_na_timing()`](https://animovement.dev/anivis/reference/plot.anivis_check_na_timing.md)

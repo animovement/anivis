@@ -45,7 +45,7 @@ plot(
 - mode:
 
   Either `"light"` (default) or `"dark"`; passed to
-  [`theme_imputets()`](http://animovement.dev/anivis/reference/theme_imputets.md).
+  [`theme_imputets()`](https://animovement.dev/anivis/reference/theme_imputets.md).
 
 ## Value
 
@@ -57,12 +57,12 @@ The interval counts are reconstructed from the compact gap table in the
 check object (no per-frame data needed). Missing uses the imputeTS
 indianred, present the imputeTS steelblue, with the two named in the
 coloured subtitle (so no legend is needed). Styling is
-[`theme_imputets()`](http://animovement.dev/anivis/reference/theme_imputets.md).
+[`theme_imputets()`](https://animovement.dev/anivis/reference/theme_imputets.md).
 The plot is built from an intermediate frame of class
 `anivis_check_na_timing_data` produced by
-[`as_plot_data()`](http://animovement.dev/anivis/reference/as_plot_data.md)
+[`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)
 — the staging step that mirrors `data_plot()` in see.
 
 ## See also
 
-[`as_plot_data()`](http://animovement.dev/anivis/reference/as_plot_data.md)
+[`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)

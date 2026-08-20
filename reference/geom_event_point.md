@@ -67,7 +67,7 @@ When the input has a `type` column (e.g. an
 [`aniframe::anievent()`](http://animovement.dev/aniframe/reference/anievent.md)),
 rows with `type != "point"` are dropped — the point half of the
 state/point pair complementing
-[`geom_event_state()`](http://animovement.dev/anivis/reference/geom_event_state.md).
+[`geom_event_state()`](https://animovement.dev/anivis/reference/geom_event_state.md).
 
 The default mapping is only `aes(x = start)` — every other aesthetic is
 up to the caller. Common patterns:

@@ -50,7 +50,7 @@ scale_fill_material_c(palette = NULL, ...)
 - palette:
 
   Palette name (see
-  [`palette_material()`](http://animovement.dev/anivis/reference/palette_material.md)).
+  [`palette_material()`](https://animovement.dev/anivis/reference/palette_material.md)).
   Defaults to `"contrast"` when discrete and `"gradient"` when
   continuous.
 

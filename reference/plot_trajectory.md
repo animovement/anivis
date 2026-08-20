@@ -27,7 +27,7 @@ plot_trajectory(data, ..., mode = c("light", "dark"), palette = "Dark 3")
 - mode:
 
   Either `"light"` (default) or `"dark"`; passed to
-  [`theme_animovement()`](http://animovement.dev/anivis/reference/theme_animovement.md).
+  [`theme_animovement()`](https://animovement.dev/anivis/reference/theme_animovement.md).
 
 - palette:
 
@@ -45,7 +45,7 @@ Colours adapt to the dataset shape:
 
 - **single** trajectory (no grouping): the line is coloured continuously
   by `time` using the Material gradient scale
-  ([`scale_colour_material_c()`](http://animovement.dev/anivis/reference/scale_material.md)),
+  ([`scale_colour_material_c()`](https://animovement.dev/anivis/reference/scale_material.md)),
   shown as a `time` colour bar.
 
 - **what-only** or **when-only** grouping (one varying axis): each line
@@ -55,7 +55,7 @@ Colours adapt to the dataset shape:
 
 - **matrix** grouping (both axes vary): each line is solid, coloured by
   the hue × shade matrix from
-  [`palette_animovement()`](http://animovement.dev/anivis/reference/palette_animovement.md)
+  [`palette_animovement()`](https://animovement.dev/anivis/reference/palette_animovement.md)
   — hue per `what`, shade per `when`; time reads from the start/end
   markers.
 

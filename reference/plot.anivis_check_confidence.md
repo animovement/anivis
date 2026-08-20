@@ -35,7 +35,7 @@ plot(x, ..., clip = 0.02, mode = c("light", "dark"))
 - mode:
 
   Either `"light"` (default) or `"dark"`; passed to
-  [`theme_imputets()`](http://animovement.dev/anivis/reference/theme_imputets.md).
+  [`theme_imputets()`](https://animovement.dev/anivis/reference/theme_imputets.md).
 
 ## Value
 
@@ -46,12 +46,12 @@ A ggplot object.
 The violins are drawn from the kernel-density grid stored in the check
 object (via `geom_polygon`), so no raw values are needed. Styling
 matches the other check plots
-([`theme_imputets()`](http://animovement.dev/anivis/reference/theme_imputets.md),
+([`theme_imputets()`](https://animovement.dev/anivis/reference/theme_imputets.md),
 horizontal-only gridlines). The plot is built from an intermediate frame
 of class `anivis_check_confidence_data` produced by
-[`as_plot_data()`](http://animovement.dev/anivis/reference/as_plot_data.md)
+[`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)
 — the staging step that mirrors `data_plot()` in see.
 
 ## See also
 
-[`as_plot_data()`](http://animovement.dev/anivis/reference/as_plot_data.md)
+[`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)
