@@ -1,14 +1,34 @@
-citHeader("To cite anivis in publications use:")
+citHeader(
+  paste(
+    "To cite anivis in publications, please cite the animovement toolbox as a",
+    "whole (the first entry below). If your work used only anivis, you may",
+    "cite the package directly instead (the second entry)."
+  )
+)
 
-bibentry(bibtype = "Misc",
-         key = "anivis",
-         doi = "10.5281/zenodo.17344598",
-         title = "anivis: An R package for visualizing movement data and diagnostics",
-         author = person(given = "Mikkel",
-                         family = "Roald-Arbøl",
-                         email = "aniframe.pkelz@passmail.com",
-                         comment = c(ORCID = "0000-0002-9998-0058")),
-         year = "2025",
-         url = "http://animovement.dev/anivis/",
-         abstract = "An R package for visualizing movement data and diagnostics.",
-         version = "0.1.0")
+bibentry(
+  bibtype  = "Misc",
+  key      = "animovement",
+  title    = "animovement: An R toolbox for analysing movement across space and time",
+  author   = person(
+    given = "Mikkel", family = "Roald-Arbøl",
+    comment = c(ORCID = "0000-0002-9998-0058")
+  ),
+  year     = "2026",
+  doi      = "10.5281/zenodo.13235277",
+  url      = "https://animovement.dev/animovement/"
+)
+
+bibentry(
+  bibtype  = "Misc",
+  key      = "anivis",
+  title    = "anivis: An R package for visualizing movement data and diagnostics",
+  author   = person(
+    given = "Mikkel", family = "Roald-Arbøl",
+    comment = c(ORCID = "0000-0002-9998-0058")
+  ),
+  year     = "2026",
+  doi      = "10.5281/zenodo.21030691",
+  version  = meta$Version,
+  url      = "https://animovement.dev/anivis/"
+)
