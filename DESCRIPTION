@@ -27,7 +27,6 @@ Imports:
     stats,
     aniframe (>= 0.6.0)
 Suggests: 
-    anicheck,
     ragg,
     knitr,
     testthat (>= 3.0.0)
@@ -36,4 +35,4 @@ Config/Needs/website: animovement/animovementtemplate
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.0.0

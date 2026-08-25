@@ -95,12 +95,6 @@ gap's overlap with each interval is counted, so no per-frame data is needed.
 interval's span in time units, and the frame interval size rides along as an
 attribute. Returns a frame classed \code{anivis_check_na_timing_data}.
 }
-\examples{
-\dontshow{if (requireNamespace("anicheck", quietly = TRUE)) withAutoprint(\{ # examplesIf}
-af <- aniframe::example_aniframe(n_obs = 20, n_individuals = 1, n_keypoints = 1)
-as_plot_data(anicheck::check_confidence(af))
-\dontshow{\}) # examplesIf}
-}
 \seealso{
 \code{\link[=plot.anivis_check_na_timing]{plot.anivis_check_na_timing()}}
 }

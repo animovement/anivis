@@ -27,10 +27,6 @@
 #'
 #' @seealso [plot.anivis_check_na_timing()]
 #'
-#' @examplesIf requireNamespace("anicheck", quietly = TRUE)
-#' af <- aniframe::example_aniframe(n_obs = 20, n_individuals = 1, n_keypoints = 1)
-#' as_plot_data(anicheck::check_confidence(af))
-#'
 #' @export
 as_plot_data <- function(x, ...) {
   UseMethod("as_plot_data")
