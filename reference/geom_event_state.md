@@ -3,7 +3,7 @@
 A ggplot2 layer that renders state (durative) events as rectangles
 spanning each event's `start` -\> `stop` on the x axis, with one row per
 `label` on the y axis. When the input has a `type` column (e.g. an
-[`aniframe::anievent()`](http://animovement.dev/aniframe/reference/anievent.md)),
+[`aniframe::anievent()`](https://animovement.dev/aniframe/reference/anievent.html)),
 rows with `type != "state"` are dropped.
 
 ## Usage

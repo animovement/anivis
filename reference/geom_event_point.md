@@ -64,7 +64,7 @@ A ggplot2 layer.
   spike-raster look (more standard for e.g. neuron spike trains).
 
 When the input has a `type` column (e.g. an
-[`aniframe::anievent()`](http://animovement.dev/aniframe/reference/anievent.md)),
+[`aniframe::anievent()`](https://animovement.dev/aniframe/reference/anievent.html)),
 rows with `type != "point"` are dropped — the point half of the
 state/point pair complementing
 [`geom_event_state()`](https://animovement.dev/anivis/reference/geom_event_state.md).

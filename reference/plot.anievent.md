@@ -1,7 +1,7 @@
 # Plot an anievent Object
 
 Creates a visualization of state and point events from an
-[`aniframe::anievent()`](http://animovement.dev/aniframe/reference/anievent.md)
+[`aniframe::anievent()`](https://animovement.dev/aniframe/reference/anievent.html)
 using
 [`geom_event_state()`](https://animovement.dev/anivis/reference/geom_event_state.md)
 and
