@@ -74,3 +74,10 @@ the state events as the first arg and the point events via \code{point};
 either may be \code{NULL}. No automatic faceting.
 }
 }
+\examples{
+af <- aniframe::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+af$behaviour <- rep(c("walk", "rest"), each = 3)
+ev <- aniframe::to_anievent(aniframe::set_variables_event(af, state = "behaviour"))
+plot_events(ev)
+
+}

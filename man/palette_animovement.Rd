@@ -37,3 +37,8 @@ lighter-to-darker shade of that hue per \code{when} level.
 Names of the returned vector match the group keys returned by the internal
 grouping logic — the redundant axis is dropped when only one side varies.
 }
+\examples{
+af <- aniframe::example_aniframe(n_obs = 10, n_individuals = 2, n_keypoints = 1)
+palette_animovement(af)
+
+}

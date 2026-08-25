@@ -34,6 +34,10 @@ material_colors_list <- c(
 #'   full palette is returned.
 #'
 #' @return A named character vector of hex colours.
+#' @examples
+#' material_colors()
+#' material_colors("red", "blue")
+#'
 #' @export
 material_colors <- function(...) {
   cols <- c(...)
@@ -99,6 +103,10 @@ material_palettes <- list(
 #' @param ... Additional arguments passed to the underlying palette retriever.
 #'
 #' @return A function that returns `n` hex colours.
+#' @examples
+#' pal <- palette_material()
+#' pal(3)
+#'
 #' @export
 palette_material <- function(palette = "contrast", reverse = FALSE, ...) {
   retrieve_palette(palette, material_palettes, reverse = reverse, ...)
@@ -120,6 +128,12 @@ palette_material <- function(palette = "contrast", reverse = FALSE, ...) {
 #' @param ... Passed to the underlying ggplot2 scale.
 #'
 #' @return A ggplot2 scale.
+#' @examples
+#' library(ggplot2)
+#' ggplot(mtcars, aes(mpg, wt, colour = factor(cyl))) +
+#'   geom_point() +
+#'   scale_colour_material()
+#'
 #' @name scale_material
 NULL
 

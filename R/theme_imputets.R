@@ -15,6 +15,12 @@
 #' @return A ggplot2 theme object.
 #'
 #' @seealso [theme_animovement()]
+#' @examples
+#' library(ggplot2)
+#' ggplot(mtcars, aes(mpg, wt)) +
+#'   geom_point() +
+#'   theme_imputets()
+#'
 #' @export
 theme_imputets <- function(mode = c("light", "dark"), base_size = 13) {
   mode <- match.arg(mode)

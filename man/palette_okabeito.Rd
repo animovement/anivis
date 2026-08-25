@@ -21,3 +21,8 @@ A function that returns \code{n} hex colours.
 Palette generator for the Okabe-Ito colours, for use with ggplot2 scales.
 Vendored from the see package.
 }
+\examples{
+pal <- palette_okabeito()
+pal(3)
+
+}

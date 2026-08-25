@@ -40,6 +40,14 @@
 #' @param na.rm,show.legend,inherit.aes,... Passed to [ggplot2::layer()].
 #'
 #' @return A ggplot2 layer.
+#' @examples
+#' library(ggplot2)
+#' af <- aniframe::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+#' af$behaviour <- rep(c("walk", "rest"), each = 3)
+#' ev <- aniframe::to_anievent(aniframe::set_variables_event(af, state = "behaviour"))
+#' ggplot(ev, aes(x = start, y = channel)) +
+#'   geom_event_point()
+#'
 #' @export
 geom_event_point <- function(
   mapping = NULL,

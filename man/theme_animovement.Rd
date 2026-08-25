@@ -30,3 +30,10 @@ dark text, and adds the plain enlarged title, generous axis-title margins
 and title positioning of \code{see::theme_modern()}. Further themes with their
 own names may be added over time.
 }
+\examples{
+library(ggplot2)
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point() +
+  theme_animovement()
+
+}
