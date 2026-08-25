@@ -27,3 +27,11 @@ palette_material(palette = "contrast", reverse = FALSE, ...)
 ## Value
 
 A function that returns `n` hex colours.
+
+## Examples
+
+``` r
+pal <- palette_material()
+pal(3)
+#> [1] "#2196F3" "#FFC107" "#F44336"
+```

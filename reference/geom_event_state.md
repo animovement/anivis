@@ -30,8 +30,10 @@ geom_event_state(
 - data:
 
   A data frame (typically an `anievent`). If `NULL`, inherits from the
-  parent `ggplot()` call. Either way, rows with `type != "state"` are
-  dropped from this layer.
+  parent
+  [`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html)
+  call. Either way, rows with `type != "state"` are dropped from this
+  layer.
 
 - height:
 
@@ -72,3 +74,15 @@ This is a thin wrapper around
 a subclass adds a `setup_data` step that derives `ymin` / `ymax` from
 `y` + `height`, so a discrete y scale keeps the label rows ranked
 correctly (including under per-panel `scales = "free_y"`).
+
+## Examples
+
+``` r
+library(ggplot2)
+af <- aniframe::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+af$behaviour <- rep(c("walk", "rest"), each = 3)
+ev <- aniframe::to_anievent(aniframe::set_variables_event(af, state = "behaviour"))
+ggplot(ev, aes(xmin = start, xmax = stop, y = channel, fill = label)) +
+  geom_event_state()
+
+```

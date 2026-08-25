@@ -87,7 +87,7 @@ you only need to supply the aesthetics you want to override.</p></dd>
 
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data frame (typically an <code>anievent</code>). If <code>NULL</code>, inherits
-from the parent <code>ggplot()</code> call. Either way, rows with
+from the parent <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code> call. Either way, rows with
 <code>type != "state"</code> are dropped from this layer.</p></dd>
 
 
@@ -123,6 +123,18 @@ a discrete y scale keeps the label rows ranked correctly (including
 under per-panel <code>scales = "free_y"</code>).</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">af</span> <span class="op">&lt;-</span> <span class="fu">aniframe</span><span class="fu">::</span><span class="fu"><a href="https://animovement.dev/aniframe/reference/example_aniframe.html" class="external-link">example_aniframe</a></span><span class="op">(</span>n_obs <span class="op">=</span> <span class="fl">6</span>, n_individuals <span class="op">=</span> <span class="fl">1</span>, n_keypoints <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">af</span><span class="op">$</span><span class="va">behaviour</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"walk"</span>, <span class="st">"rest"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ev</span> <span class="op">&lt;-</span> <span class="fu">aniframe</span><span class="fu">::</span><span class="fu"><a href="https://animovement.dev/aniframe/reference/to_anievent.html" class="external-link">to_anievent</a></span><span class="op">(</span><span class="fu">aniframe</span><span class="fu">::</span><span class="fu"><a href="https://animovement.dev/aniframe/reference/variables_event.html" class="external-link">set_variables_event</a></span><span class="op">(</span><span class="va">af</span>, state <span class="op">=</span> <span class="st">"behaviour"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ev</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="va">start</span>, xmax <span class="op">=</span> <span class="va">stop</span>, y <span class="op">=</span> <span class="va">channel</span>, fill <span class="op">=</span> <span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">geom_event_state</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="geom_event_state-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

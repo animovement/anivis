@@ -27,3 +27,11 @@ palette_okabeito(palette = "full", reverse = FALSE, order = 1:9)
 ## Value
 
 A function that returns `n` hex colours.
+
+## Examples
+
+``` r
+pal <- palette_okabeito()
+pal(3)
+#> [1] "#E69F00" "#56B4E9" "#009E73"
+```

@@ -30,8 +30,10 @@ geom_event_point(
 - data:
 
   A data frame (typically an `anievent`). If `NULL`, inherits from the
-  parent `ggplot()` call. Either way, rows with `type != "point"` are
-  dropped from this layer.
+  parent
+  [`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html)
+  call. Either way, rows with `type != "point"` are dropped from this
+  layer.
 
 - style:
 
@@ -87,3 +89,15 @@ This is a thin wrapper around
 [ggplot2::GeomSegment](https://ggplot2.tidyverse.org/reference/Geom.html)
 (`"raster"`), with a `setup_data` step that supplies a default `y` when
 none is mapped.
+
+## Examples
+
+``` r
+library(ggplot2)
+af <- aniframe::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+af$behaviour <- rep(c("walk", "rest"), each = 3)
+ev <- aniframe::to_anievent(aniframe::set_variables_event(af, state = "behaviour"))
+ggplot(ev, aes(x = start, y = channel)) +
+  geom_event_point()
+
+```

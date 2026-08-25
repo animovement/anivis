@@ -80,8 +80,10 @@ Two dispatches:
   - `"facet"` (default): each `label` is a y-axis row, and multiple
     `channel`s become facet rows (with free y-scales). Any
     `variables_what` column with more than one level adds a facet column
-    per identity — `facet_grid()` when both vary, otherwise
-    `facet_wrap()`.
+    per identity —
+    [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html)
+    when both vary, otherwise
+    [`facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html).
 
   - `"inline"` (ethogram): each `channel` is a single y-axis row and
     `label` moves to a colour legend, so all channels share one panel.
@@ -89,3 +91,13 @@ Two dispatches:
 - **`plot_events.default()`** — for callers without an anievent. Pass
   the state events as the first arg and the point events via `point`;
   either may be `NULL`. No automatic faceting.
+
+## Examples
+
+``` r
+af <- aniframe::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+af$behaviour <- rep(c("walk", "rest"), each = 3)
+ev <- aniframe::to_anievent(aniframe::set_variables_event(af, state = "behaviour"))
+plot_events(ev)
+
+```

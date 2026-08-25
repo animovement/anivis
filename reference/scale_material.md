@@ -73,3 +73,13 @@ scale_fill_material_c(palette = NULL, ...)
 ## Value
 
 A ggplot2 scale.
+
+## Examples
+
+``` r
+library(ggplot2)
+ggplot(mtcars, aes(mpg, wt, colour = factor(cyl))) +
+  geom_point() +
+  scale_colour_material()
+
+```

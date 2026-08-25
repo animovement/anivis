@@ -37,3 +37,13 @@ A ggplot2 theme object.
 ## See also
 
 [`theme_animovement()`](https://animovement.dev/anivis/reference/theme_animovement.md)
+
+## Examples
+
+``` r
+library(ggplot2)
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point() +
+  theme_imputets()
+
+```

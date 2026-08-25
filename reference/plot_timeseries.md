@@ -73,8 +73,10 @@ The `layout` argument chooses how groups are arranged, mirroring
 - `"inline"` (default): all groups share one panel as coloured lines,
   with a legend when there is more than one group.
 
-- `"facet"`: each group gets its own panel — `facet_grid()` when both an
-  identity and a (non-time) condition vary, otherwise `facet_wrap()`
+- `"facet"`: each group gets its own panel —
+  [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html)
+  when both an identity and a (non-time) condition vary, otherwise
+  [`facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html)
   with the panels stacked in rows so the shared x axis lines up.
 
 Colours come from
@@ -84,3 +86,11 @@ matching
 The x axis uses the same time-unit handling as
 [`plot_events()`](https://animovement.dev/anivis/reference/plot_events.md)
 — `HH:MM:SS` for true time units, raw frames otherwise.
+
+## Examples
+
+``` r
+af <- aniframe::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+plot_timeseries(af, variable = "x")
+
+```

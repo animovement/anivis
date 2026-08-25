@@ -46,3 +46,12 @@ A named character vector of hex colours.
 Names of the returned vector match the group keys returned by the
 internal grouping logic — the redundant axis is dropped when only one
 side varies.
+
+## Examples
+
+``` r
+af <- aniframe::example_aniframe(n_obs = 10, n_individuals = 2, n_keypoints = 1)
+palette_animovement(af)
+#> 1 | centroid 2 | centroid 
+#>    "#E16A86"    "#00AD9A" 
+```

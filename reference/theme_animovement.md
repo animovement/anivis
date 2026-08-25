@@ -36,3 +36,13 @@ theme_animovement_dark(base_size = 11, base_family = "")
 ## Value
 
 A ggplot2 theme object.
+
+## Examples
+
+``` r
+library(ggplot2)
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point() +
+  theme_animovement()
+
+```

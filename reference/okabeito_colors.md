@@ -35,3 +35,16 @@ oi_colors(..., original_names = FALSE, black_first = FALSE, amber = TRUE)
 ## Value
 
 A named character vector of hex colours.
+
+## Examples
+
+``` r
+okabeito_colors()
+#>     orange light blue      green      amber       blue        red     purple 
+#>  "#E69F00"  "#56B4E9"  "#009E73"  "#F5C710"  "#0072B2"  "#D55E00"  "#CC79A7" 
+#>       grey      black 
+#>  "#999999"  "#000000" 
+oi_colors("blue", "orange")
+#>      blue    orange 
+#> "#0072B2" "#E69F00" 
+```

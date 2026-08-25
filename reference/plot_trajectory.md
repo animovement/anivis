@@ -63,3 +63,11 @@ Every trajectory is annotated with a filled circle at its first point
 and a filled triangle at its last point, identified in a start/end
 legend. Gaps from missing data are bridged with a dashed line so the
 path stays traceable.
+
+## Examples
+
+``` r
+af <- aniframe::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+plot_trajectory(af)
+
+```
