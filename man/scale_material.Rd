@@ -71,3 +71,10 @@ see package. With \code{discrete = FALSE} the palette is interpolated into a
 smooth gradient — the default \code{"gradient"} palette runs blue to orange, the
 warm-to-cool ramp suited to continuous data.
 }
+\examples{
+library(ggplot2)
+ggplot(mtcars, aes(mpg, wt, colour = factor(cyl))) +
+  geom_point() +
+  scale_colour_material()
+
+}

@@ -24,6 +24,13 @@ subtitle as markdown via \pkg{marquee} — so words like NA / non-NA can be
 coloured inline with the \code{.na} / \code{.nona} classes — and puts the legend at the
 bottom.
 }
+\examples{
+library(ggplot2)
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point() +
+  theme_imputets()
+
+}
 \seealso{
 \code{\link[=theme_animovement]{theme_animovement()}}
 }

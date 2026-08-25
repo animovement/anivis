@@ -69,3 +69,12 @@ This is a thin wrapper around \link[ggplot2:GeomPoint]{ggplot2::GeomPoint} (\cod
 \link[ggplot2:GeomSegment]{ggplot2::GeomSegment} (\code{"raster"}), with a \code{setup_data} step that
 supplies a default \code{y} when none is mapped.
 }
+\examples{
+library(ggplot2)
+af <- aniframe::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+af$behaviour <- rep(c("walk", "rest"), each = 3)
+ev <- aniframe::to_anievent(aniframe::set_variables_event(af, state = "behaviour"))
+ggplot(ev, aes(x = start, y = channel)) +
+  geom_event_point()
+
+}

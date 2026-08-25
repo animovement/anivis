@@ -39,6 +39,10 @@
 #' @return A ggplot object for a single variable, or a stacked patchwork for
 #'   several.
 #'
+#' @examples
+#' af <- aniframe::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+#' plot_timeseries(af, variable = "x")
+#'
 #' @export
 plot_timeseries <- function(data, ...) {
   UseMethod("plot_timeseries")

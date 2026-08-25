@@ -12,6 +12,12 @@
 #' @param base_family Base font family.
 #'
 #' @return A ggplot2 theme object.
+#' @examples
+#' library(ggplot2)
+#' ggplot(mtcars, aes(mpg, wt)) +
+#'   geom_point() +
+#'   theme_animovement()
+#'
 #' @export
 theme_animovement <- function(
   mode = c("light", "dark"),

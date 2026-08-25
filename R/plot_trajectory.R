@@ -31,6 +31,10 @@
 #'
 #' @return A ggplot object.
 #'
+#' @examples
+#' af <- aniframe::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+#' plot_trajectory(af)
+#'
 #' @export
 plot_trajectory <- function(data, ...) {
   UseMethod("plot_trajectory")

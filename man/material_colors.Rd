@@ -17,3 +17,8 @@ A named character vector of hex colours.
 Extract one or more colours from the Material design palette. Vendored from
 the see package.
 }
+\examples{
+material_colors()
+material_colors("red", "blue")
+
+}

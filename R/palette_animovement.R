@@ -100,6 +100,10 @@ darken_colour <- function(col, amount = 0.5) {
 #'
 #' @return A named character vector of hex colours.
 #'
+#' @examples
+#' af <- aniframe::example_aniframe(n_obs = 10, n_individuals = 2, n_keypoints = 1)
+#' palette_animovement(af)
+#'
 #' @export
 palette_animovement <- function(
   data,

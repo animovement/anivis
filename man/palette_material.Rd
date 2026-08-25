@@ -21,3 +21,8 @@ A function that returns \code{n} hex colours.
 Palette generator for the Material design colours. Vendored from the see
 package.
 }
+\examples{
+pal <- palette_material()
+pal(3)
+
+}

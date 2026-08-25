@@ -28,3 +28,8 @@ A named character vector of hex colours.
 Extract one or more colours from the colour-blind-safe Okabe-Ito palette.
 \code{oi_colors()} is an alias. Vendored from the see package.
 }
+\examples{
+okabeito_colors()
+oi_colors("blue", "orange")
+
+}

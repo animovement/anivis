@@ -37,6 +37,10 @@ okabeito_colors_list <- c(
 #'   the original bright yellow (`#F0E442`), for better legibility.
 #'
 #' @return A named character vector of hex colours.
+#' @examples
+#' okabeito_colors()
+#' oi_colors("blue", "orange")
+#'
 #' @export
 okabeito_colors <- function(
   ...,
@@ -107,6 +111,10 @@ okabeito_palettes <- list(
 #' @param order Integer vector (within `1:9`) selecting and reordering colours.
 #'
 #' @return A function that returns `n` hex colours.
+#' @examples
+#' pal <- palette_okabeito()
+#' pal(3)
+#'
 #' @export
 palette_okabeito <- function(palette = "full", reverse = FALSE, order = 1:9) {
   if (!palette %in% names(okabeito_palettes)) {
