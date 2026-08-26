@@ -37,6 +37,14 @@
     unique(c(what, when))
   }
 
+  aniframe_declarations <- function(data) {
+    meta <- aniframe::get_metadata(data)
+    list(
+      variables_what = meta$variables_what,
+      variables_when = meta$variables_when
+    )
+  }
+
   check_na_variable <- function(data, variable) {
     if (is.null(variable) || !length(variable)) {
       cli::cli_abort("{.arg variable} must name at least one column.")
@@ -320,7 +328,13 @@
     out[c(group_cols, "value", "density")]
   }
 
-  new_check_confidence <- function(x, group_cols, groups) {
+  new_check_confidence <- function(
+    x,
+    group_cols,
+    groups,
+    variables_what = character(),
+    variables_when = character()
+  ) {
     class(x) <- c(
       "check_confidence",
       "anivis_check_confidence",
@@ -329,6 +343,8 @@
       "data.frame"
     )
     attr(x, "group_cols") <- group_cols
+    attr(x, "variables_what") <- variables_what
+    attr(x, "variables_when") <- variables_when
     attr(x, "groups") <- groups
     x
   }
@@ -352,7 +368,9 @@
     new_check_confidence(
       grid,
       group_cols = group_cols,
-      groups = distribution_summary(df, group_cols, "confidence")
+      groups = distribution_summary(df, group_cols, "confidence"),
+      variables_what = aniframe_declarations(data)$variables_what,
+      variables_when = aniframe_declarations(data)$variables_when
     )
   }
 
