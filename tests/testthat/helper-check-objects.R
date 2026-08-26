@@ -37,9 +37,12 @@
     unique(c(what, when))
   }
 
-  aniframe_identity_cols <- function(data) {
+  aniframe_declarations <- function(data) {
     meta <- aniframe::get_metadata(data)
-    intersect(meta$variables_what, names(data))
+    list(
+      variables_what = meta$variables_what,
+      variables_when = meta$variables_when
+    )
   }
 
   check_na_variable <- function(data, variable) {
@@ -329,7 +332,8 @@
     x,
     group_cols,
     groups,
-    identity_cols = character()
+    variables_what = character(),
+    variables_when = character()
   ) {
     class(x) <- c(
       "check_confidence",
@@ -339,7 +343,8 @@
       "data.frame"
     )
     attr(x, "group_cols") <- group_cols
-    attr(x, "identity_cols") <- identity_cols
+    attr(x, "variables_what") <- variables_what
+    attr(x, "variables_when") <- variables_when
     attr(x, "groups") <- groups
     x
   }
@@ -364,7 +369,8 @@
       grid,
       group_cols = group_cols,
       groups = distribution_summary(df, group_cols, "confidence"),
-      identity_cols = aniframe_identity_cols(data)
+      variables_what = aniframe_declarations(data)$variables_what,
+      variables_when = aniframe_declarations(data)$variables_when
     )
   }
 

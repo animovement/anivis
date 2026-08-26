@@ -51,11 +51,11 @@ test_that("temporal context never becomes the axis", {
   expect_equal(attr(pd, "axis_var"), "bodypart")
 })
 
-test_that("a check object without identity_cols still works", {
-  # anicheck gained `identity_cols` for this; objects from before it did not
-  # carry roles, and `keypoint` stays the best guess available for them.
+test_that("a check object without the declarations still works", {
+  # anicheck carries `variables_what` for this; objects from before it did
+  # not, and `keypoint` stays the best guess available for them.
   chk <- make_check_confidence(confidence_frame("individual", "keypoint"))
-  attr(chk, "identity_cols") <- NULL
+  attr(chk, "variables_what") <- NULL
 
   expect_equal(attr(as_plot_data(chk), "axis_var"), "keypoint")
 })
