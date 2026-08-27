@@ -7,12 +7,12 @@ with_speed <- function(af) {
 
 make_ts_single <- function() {
   with_speed(
-    aniframe::as_aniframe(data.frame(time = 1:10, x = rnorm(10), y = rnorm(10)))
+    anicore::as_aniframe(data.frame(time = 1:10, x = rnorm(10), y = rnorm(10)))
   )
 }
 
 make_ts_multi_keypoint <- function() {
-  with_speed(aniframe::as_aniframe(data.frame(
+  with_speed(anicore::as_aniframe(data.frame(
     keypoint = rep(c("head", "tail"), each = 10),
     time = rep(1:10, 2),
     x = rnorm(20),
@@ -21,7 +21,7 @@ make_ts_multi_keypoint <- function() {
 }
 
 make_ts_matrix <- function() {
-  with_speed(aniframe::as_aniframe(
+  with_speed(anicore::as_aniframe(
     data.frame(
       individual = rep(c("a", "b"), each = 30),
       trial = rep(rep(c(1L, 2L, 3L), each = 10), 2),
@@ -97,7 +97,7 @@ test_that("plot_timeseries layout = 'facet' uses facet_grid when both vary", {
 
 test_that("plot_timeseries layout = 'facet' facet_wraps a varying when axis", {
   # trial (a `when` condition) varies, the identity does not.
-  af <- with_speed(aniframe::as_aniframe(
+  af <- with_speed(anicore::as_aniframe(
     data.frame(
       trial = rep(c(1L, 2L, 3L), each = 10),
       time = rep(1:10, 3),
@@ -119,21 +119,21 @@ test_that("plot_timeseries layout = 'facet' leaves single-group data unfaceted",
 # --- x-axis time-unit handling -----------------------------------------------
 
 test_that("plot_timeseries drops the x label and uses scale_x_time for time units", {
-  af <- make_ts_single() |> aniframe::set_unit_time("s")
+  af <- make_ts_single() |> anicore::set_unit_time("s")
   p <- plot_timeseries(af, variable = "speed")
   expect_null(p$labels$x)
   expect_equal(p$scales$get_scales("x")$trans$name, "hms")
 })
 
 test_that("plot_timeseries labels frame data 'time (frames)'", {
-  af <- make_ts_single() |> aniframe::set_unit_time("frame")
+  af <- make_ts_single() |> anicore::set_unit_time("frame")
   p <- plot_timeseries(af, variable = "speed")
   expect_equal(p$labels$x, "time (frames)")
   expect_false(identical(p$scales$get_scales("x")$trans$name, "hms"))
 })
 
 test_that("plot_timeseries labels unknown-unit data plain 'time'", {
-  af <- make_ts_single() |> aniframe::set_unit_time("unknown")
+  af <- make_ts_single() |> anicore::set_unit_time("unknown")
   p <- plot_timeseries(af, variable = "speed")
   expect_equal(p$labels$x, "time")
 })

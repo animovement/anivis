@@ -45,5 +45,7 @@ export(theme_animovement)
 export(theme_animovement_dark)
 export(theme_animovement_light)
 export(theme_imputets)
-importFrom(rlang,":=")
-importFrom(rlang,.data)
+importFrom(rlang,
+  ":=",
+  .data
+)

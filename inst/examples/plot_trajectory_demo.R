@@ -10,7 +10,7 @@
 set.seed(42)
 
 library(anivis)
-library(aniframe)
+library(anicore)
 library(ggplot2)
 library(patchwork)
 

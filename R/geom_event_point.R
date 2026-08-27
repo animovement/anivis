@@ -8,7 +8,7 @@
 #' * `"raster"` — a short vertical tick at each event time, the classic
 #'   spike-raster look (more standard for e.g. neuron spike trains).
 #'
-#' When the input has a `type` column (e.g. an [aniframe::anievent()]),
+#' When the input has a `type` column (e.g. an [anicore::anievent()]),
 #' rows with `type != "point"` are dropped — the point half of the
 #' state/point pair complementing [geom_event_state()].
 #'
@@ -42,9 +42,9 @@
 #' @return A ggplot2 layer.
 #' @examples
 #' library(ggplot2)
-#' af <- aniframe::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+#' af <- anicore::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
 #' af$behaviour <- rep(c("walk", "rest"), each = 3)
-#' ev <- aniframe::to_anievent(aniframe::set_variables_event(af, state = "behaviour"))
+#' ev <- anicore::to_anievent(anicore::set_variables_event(af, state = "behaviour"))
 #' ggplot(ev, aes(x = start, y = channel)) +
 #'   geom_event_point()
 #'

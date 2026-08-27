@@ -19,7 +19,7 @@ A patchwork object.
 }
 \description{
 Creates a visualization of state and point events from an
-\code{\link[aniframe:anievent]{aniframe::anievent()}} using \code{\link[=geom_event_state]{geom_event_state()}} and
+\code{\link[anicore:anievent]{anicore::anievent()}} using \code{\link[=geom_event_state]{geom_event_state()}} and
 \code{\link[=geom_event_point]{geom_event_point()}}. Returns a patchwork object that can be combined
 with additional plots. The drawing itself is done by \code{\link[=plot_events]{plot_events()}}.
 }

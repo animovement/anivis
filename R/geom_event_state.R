@@ -3,7 +3,7 @@
 #' A ggplot2 layer that renders state (durative) events as rectangles
 #' spanning each event's `start` -> `stop` on the x axis, with one row
 #' per `label` on the y axis. When the input has a `type` column (e.g.
-#' an [aniframe::anievent()]), rows with `type != "state"` are dropped.
+#' an [anicore::anievent()]), rows with `type != "state"` are dropped.
 #'
 #' The default mapping is only `aes(xmin = start, xmax = stop)` — every
 #' other aesthetic is up to the caller. Common patterns:
@@ -37,9 +37,9 @@
 #' @return A ggplot2 layer.
 #' @examples
 #' library(ggplot2)
-#' af <- aniframe::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+#' af <- anicore::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
 #' af$behaviour <- rep(c("walk", "rest"), each = 3)
-#' ev <- aniframe::to_anievent(aniframe::set_variables_event(af, state = "behaviour"))
+#' ev <- anicore::to_anievent(anicore::set_variables_event(af, state = "behaviour"))
 #' ggplot(ev, aes(xmin = start, xmax = stop, y = channel, fill = label)) +
 #'   geom_event_state()
 #'

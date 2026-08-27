@@ -49,7 +49,7 @@ axis. Two styles are available via \code{style}:
 spike-raster look (more standard for e.g. neuron spike trains).
 }
 
-When the input has a \code{type} column (e.g. an \code{\link[aniframe:anievent]{aniframe::anievent()}}),
+When the input has a \code{type} column (e.g. an \code{\link[anicore:anievent]{anicore::anievent()}}),
 rows with \code{type != "point"} are dropped — the point half of the
 state/point pair complementing \code{\link[=geom_event_state]{geom_event_state()}}.
 

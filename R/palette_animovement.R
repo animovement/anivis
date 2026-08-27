@@ -11,7 +11,7 @@
 #   - "when":   only when has >1 level (drop redundant what from group key)
 #   - "single": neither has >1 level
 aniframe_group_keys <- function(data) {
-  meta <- aniframe::get_metadata(data)
+  meta <- anicore::get_metadata(data)
   what_cols <- intersect(meta$variables_what %||% character(), names(data))
   when_cols <- setdiff(
     intersect(meta$variables_when %||% character(), names(data)),
@@ -101,7 +101,7 @@ darken_colour <- function(col, amount = 0.5) {
 #' @return A named character vector of hex colours.
 #'
 #' @examples
-#' af <- aniframe::example_aniframe(n_obs = 10, n_individuals = 2, n_keypoints = 1)
+#' af <- anicore::example_aniframe(n_obs = 10, n_individuals = 2, n_keypoints = 1)
 #' palette_animovement(af)
 #'
 #' @export

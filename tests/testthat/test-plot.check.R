@@ -5,36 +5,36 @@
 # --- fixtures ----------------------------------------------------------------
 
 af_na_single <- function(unit = NULL) {
-  af <- aniframe::as_aniframe(data.frame(
+  af <- anicore::as_aniframe(data.frame(
     time = 1:20,
     x = c(1:3, NA, NA, 6:10, NA, 12:18, NA, 20),
     y = rnorm(20)
   ))
   if (!is.null(unit)) {
-    af <- aniframe::set_unit_time(af, unit)
+    af <- anicore::set_unit_time(af, unit)
   }
   af
 }
 
 af_na_multi <- function(unit = NULL) {
-  af <- aniframe::as_aniframe(data.frame(
+  af <- anicore::as_aniframe(data.frame(
     keypoint = rep(c("head", "tail"), each = 20),
     time = rep(1:20, 2),
     x = c(c(1:3, NA, NA, 6:20), c(1:10, NA, NA, NA, 14:20)),
     y = rnorm(40)
   ))
   if (!is.null(unit)) {
-    af <- aniframe::set_unit_time(af, unit)
+    af <- anicore::set_unit_time(af, unit)
   }
   af
 }
 
 af_na_none <- function() {
-  aniframe::as_aniframe(data.frame(time = 1:10, x = 1:10, y = 1:10))
+  anicore::as_aniframe(data.frame(time = 1:10, x = 1:10, y = 1:10))
 }
 
 af_conf_single <- function() {
-  af <- aniframe::as_aniframe(data.frame(
+  af <- anicore::as_aniframe(data.frame(
     keypoint = rep(c("head", "tail"), each = 60),
     time = rep(1:60, 2),
     x = rnorm(120),
@@ -45,7 +45,7 @@ af_conf_single <- function() {
 }
 
 af_conf_facet <- function() {
-  af <- aniframe::as_aniframe(data.frame(
+  af <- anicore::as_aniframe(data.frame(
     individual = rep(c("a", "b"), each = 120),
     keypoint = rep(rep(c("head", "tail"), each = 60), 2),
     time = rep(1:60, 4),
@@ -241,7 +241,7 @@ test_that("plot.check_confidence clip = 0 keeps the full density", {
 })
 
 test_that("plot.check_confidence handles a degenerate single-value group", {
-  af <- aniframe::as_aniframe(data.frame(time = 1:5, x = 1:5, y = 1:5))
+  af <- anicore::as_aniframe(data.frame(time = 1:5, x = 1:5, y = 1:5))
   af$confidence <- rep(0.5, 5)
   ck <- make_check_confidence(af)
   expect_true(is.na(attr(as_plot_data(ck), "axis_var")))
@@ -251,7 +251,7 @@ test_that("plot.check_confidence handles a degenerate single-value group", {
 test_that("plot.check_confidence axis falls back to a non-keypoint identity", {
   # An aniframe whose only *varying* what-variable is `individual` (keypoint is
   # just one possible identity, not a requirement): the y axis is `individual`.
-  af <- aniframe::as_aniframe(data.frame(
+  af <- anicore::as_aniframe(data.frame(
     individual = rep(c("rat1", "rat2"), each = 60),
     time = rep(1:60, 2),
     x = rnorm(120),
@@ -275,7 +275,7 @@ test_that("as_plot_data.check_confidence stages positions and an overlay", {
 })
 
 test_that("check_confidence object needs a confidence column", {
-  af <- aniframe::as_aniframe(data.frame(time = 1:5, x = 1:5, y = 1:5))
+  af <- anicore::as_aniframe(data.frame(time = 1:5, x = 1:5, y = 1:5))
   expect_error(make_check_confidence(af), "confidence")
 })
 
