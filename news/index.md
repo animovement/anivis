@@ -2,67 +2,69 @@
 
 ## anivis (development version)
 
-### Bug fixes
+### Added
 
-- The confidence plot now puts the **finest-grained identity** on its
-  axis, whatever that column is called
+- Every exported function now has a runnable example
+  ([\#23](https://github.com/animovement/anivis/issues/23)).
+
+### Fixed
+
+- The confidence plot puts the finest-grained identity on its axis,
+  whatever that column is called
   ([\#21](https://github.com/animovement/anivis/issues/21)). It
-  previously looked for a column literally named `keypoint` and, failing
-  that, fell back to the *coarsest* varying grouping column — the
-  opposite of what the code’s own comment described. On a frame
-  declaring identity as, say, `animal` and `bodypart`, the axis and the
-  facets came out swapped: the plot rendered without error, just
-  transposed. Frames using `keypoint` are unaffected.
+  previously looked for a column named `keypoint` and, failing that,
+  fell back to the *coarsest* varying grouping column — the opposite of
+  what the code’s own comment described. On a frame declaring identity
+  as, say, `animal` and `bodypart`, the axis and the facets came out
+  swapped, rendering without error but transposed. Frames using
+  `keypoint` are unaffected.
 
   The identity columns are read from the `variables_what` declaration
-  that anicheck now carries through to the check object, so the fix
-  holds for any naming. Check objects from an earlier anicheck carry no
-  declaration; for those, `keypoint` remains the best guess available.
+  that anicheck carries through to the check object. Check objects from
+  an earlier anicheck carry no declaration; for those, `keypoint`
+  remains the best guess available.
 
-## anivis 0.2.0
+## anivis 0.2.0 (2026-06-29)
 
 First substantial release of the plotting layer, built on aniframe (\>=
 0.6.0).
 
-### Core plots
+### Added
 
 - [`plot_trajectory()`](https://animovement.dev/anivis/reference/plot_trajectory.md)
-  — x/y paths with an adaptive colour scheme (hue per `what`, shade per
-  `when`), a time legend, gap bridging, and start/end markers.
+  draws x/y paths with an adaptive colour scheme — hue per `what`, shade
+  per `when` — a time legend, gap bridging, and start and end markers.
 - [`plot_timeseries()`](https://animovement.dev/anivis/reference/plot_timeseries.md)
-  — any per-frame numeric variable against time, inline or faceted.
+  plots any per-frame numeric variable against time, inline or faceted.
 - [`plot_events()`](https://animovement.dev/anivis/reference/plot_events.md)
-  /
-  [`plot.anievent()`](https://animovement.dev/anivis/reference/plot.anievent.md)
+  and
+  [`plot.anievent()`](https://animovement.dev/anivis/reference/plot.anievent.md),
   with
   [`geom_event_state()`](https://animovement.dev/anivis/reference/geom_event_state.md)
-  /
-  [`geom_event_point()`](https://animovement.dev/anivis/reference/geom_event_point.md)
-  — state and point events (ethograms / spike rasters) on an hms time
-  axis.
-
-### Diagnostic check plots (easystats-style)
-
-Presentation methods for the `check_*()` objects produced by the
-companion **anicheck** package, dispatched via the `anivis_check_*`
-class and staged by a shared
-[`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)
-generic.
-
-- [`plot.anivis_check_na_timing()`](https://animovement.dev/anivis/reference/plot.anivis_check_na_timing.md)
-  — missing-value distribution over time.
-- [`plot.anivis_check_na_gapsize()`](https://animovement.dev/anivis/reference/plot.anivis_check_na_gapsize.md)
-  — gap-size occurrence / total bars.
-- [`plot.anivis_check_confidence()`](https://animovement.dev/anivis/reference/plot.anivis_check_confidence.md)
-  — per-keypoint tracking confidence as clipped horizontal violins.
-
-### Foundation
-
-- [`theme_animovement()`](https://animovement.dev/anivis/reference/theme_animovement.md)
-  (light/dark) and
+  and
+  [`geom_event_point()`](https://animovement.dev/anivis/reference/geom_event_point.md),
+  draw state and point events — ethograms and spike rasters — on an hms
+  time axis.
+- Presentation methods for the `check_*()` objects produced by anicheck,
+  dispatched via the `anivis_check_*` classes and staged by a shared
+  [`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)
+  generic:
+  [`plot.anivis_check_na_timing()`](https://animovement.dev/anivis/reference/plot.anivis_check_na_timing.md)
+  for the distribution of missing values over time,
+  [`plot.anivis_check_na_gapsize()`](https://animovement.dev/anivis/reference/plot.anivis_check_na_gapsize.md)
+  for gap-size occurrence and totals, and
+  [`plot.anivis_check_confidence()`](https://animovement.dev/anivis/reference/plot.anivis_check_confidence.md)
+  for per-keypoint tracking confidence as clipped horizontal violins.
+- [`theme_animovement()`](https://animovement.dev/anivis/reference/theme_animovement.md),
+  in light and dark, and
   [`theme_imputets()`](https://animovement.dev/anivis/reference/theme_imputets.md)
   for the check plots.
-- Vendored Okabe-Ito and Material colour palettes with their `scale_*`
-  functions, and a
-  [`plots()`](https://animovement.dev/anivis/reference/plots.md)
+- The Okabe-Ito and Material colour palettes with their `scale_*()`
+  functions, and
+  [`plots()`](https://animovement.dev/anivis/reference/plots.md), a
   patchwork wrapper.
+
+## anivis 0.1.0
+
+Package skeleton. No user-facing functions yet — the plotting layer
+arrives in 0.2.0.

@@ -52,41 +52,37 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="anivis-development-version">anivis (development version)<a class="anchor" aria-label="anchor" href="#anivis-development-version"></a></h2>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="added-development-version">Added<a class="anchor" aria-label="anchor" href="#added-development-version"></a></h3>
+<ul><li>Every exported function now has a runnable example (<a href="https://github.com/animovement/anivis/issues/23" class="external-link">#23</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixed-development-version">Fixed<a class="anchor" aria-label="anchor" href="#fixed-development-version"></a></h3>
 <ul><li>
-<p>The confidence plot now puts the <strong>finest-grained identity</strong> on its axis, whatever that column is called (<a href="https://github.com/animovement/anivis/issues/21" class="external-link">#21</a>). It previously looked for a column literally named <code>keypoint</code> and, failing that, fell back to the <em>coarsest</em> varying grouping column — the opposite of what the code’s own comment described. On a frame declaring identity as, say, <code>animal</code> and <code>bodypart</code>, the axis and the facets came out swapped: the plot rendered without error, just transposed. Frames using <code>keypoint</code> are unaffected.</p>
-<p>The identity columns are read from the <code>variables_what</code> declaration that anicheck now carries through to the check object, so the fix holds for any naming. Check objects from an earlier anicheck carry no declaration; for those, <code>keypoint</code> remains the best guess available.</p>
+<p>The confidence plot puts the finest-grained identity on its axis, whatever that column is called (<a href="https://github.com/animovement/anivis/issues/21" class="external-link">#21</a>). It previously looked for a column named <code>keypoint</code> and, failing that, fell back to the <em>coarsest</em> varying grouping column — the opposite of what the code’s own comment described. On a frame declaring identity as, say, <code>animal</code> and <code>bodypart</code>, the axis and the facets came out swapped, rendering without error but transposed. Frames using <code>keypoint</code> are unaffected.</p>
+<p>The identity columns are read from the <code>variables_what</code> declaration that anicheck carries through to the check object. Check objects from an earlier anicheck carry no declaration; for those, <code>keypoint</code> remains the best guess available.</p>
 </li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0" id="anivis-020">anivis 0.2.0<a class="anchor" aria-label="anchor" href="#anivis-020"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="anivis-020-2026-06-29">anivis 0.2.0 (2026-06-29)<a class="anchor" aria-label="anchor" href="#anivis-020-2026-06-29"></a></h2>
 <p>First substantial release of the plotting layer, built on aniframe (&gt;= 0.6.0).</p>
 <div class="section level3">
-<h3 id="core-plots-0-2-0">Core plots<a class="anchor" aria-label="anchor" href="#core-plots-0-2-0"></a></h3>
+<h3 id="added-0-2-0">Added<a class="anchor" aria-label="anchor" href="#added-0-2-0"></a></h3>
 <ul><li>
-<code><a href="../reference/plot_trajectory.html">plot_trajectory()</a></code> — x/y paths with an adaptive colour scheme (hue per <code>what</code>, shade per <code>when</code>), a time legend, gap bridging, and start/end markers.</li>
+<code><a href="../reference/plot_trajectory.html">plot_trajectory()</a></code> draws x/y paths with an adaptive colour scheme — hue per <code>what</code>, shade per <code>when</code> — a time legend, gap bridging, and start and end markers.</li>
 <li>
-<code><a href="../reference/plot_timeseries.html">plot_timeseries()</a></code> — any per-frame numeric variable against time, inline or faceted.</li>
+<code><a href="../reference/plot_timeseries.html">plot_timeseries()</a></code> plots any per-frame numeric variable against time, inline or faceted.</li>
 <li>
-<code><a href="../reference/plot_events.html">plot_events()</a></code> / <code><a href="../reference/plot.anievent.html">plot.anievent()</a></code> with <code><a href="../reference/geom_event_state.html">geom_event_state()</a></code> / <code><a href="../reference/geom_event_point.html">geom_event_point()</a></code> — state and point events (ethograms / spike rasters) on an hms time axis.</li>
+<code><a href="../reference/plot_events.html">plot_events()</a></code> and <code><a href="../reference/plot.anievent.html">plot.anievent()</a></code>, with <code><a href="../reference/geom_event_state.html">geom_event_state()</a></code> and <code><a href="../reference/geom_event_point.html">geom_event_point()</a></code>, draw state and point events — ethograms and spike rasters — on an hms time axis.</li>
+<li>Presentation methods for the <code>check_*()</code> objects produced by anicheck, dispatched via the <code>anivis_check_*</code> classes and staged by a shared <code><a href="../reference/as_plot_data.html">as_plot_data()</a></code> generic: <code><a href="../reference/plot.anivis_check_na_timing.html">plot.anivis_check_na_timing()</a></code> for the distribution of missing values over time, <code><a href="../reference/plot.anivis_check_na_gapsize.html">plot.anivis_check_na_gapsize()</a></code> for gap-size occurrence and totals, and <code><a href="../reference/plot.anivis_check_confidence.html">plot.anivis_check_confidence()</a></code> for per-keypoint tracking confidence as clipped horizontal violins.</li>
+<li>
+<code><a href="../reference/theme_animovement.html">theme_animovement()</a></code>, in light and dark, and <code><a href="../reference/theme_imputets.html">theme_imputets()</a></code> for the check plots.</li>
+<li>The Okabe-Ito and Material colour palettes with their <code>scale_*()</code> functions, and <code><a href="../reference/plots.html">plots()</a></code>, a patchwork wrapper.</li>
 </ul></div>
-<div class="section level3">
-<h3 id="diagnostic-check-plots-easystats-style-0-2-0">Diagnostic check plots (easystats-style)<a class="anchor" aria-label="anchor" href="#diagnostic-check-plots-easystats-style-0-2-0"></a></h3>
-<p>Presentation methods for the <code>check_*()</code> objects produced by the companion <strong>anicheck</strong> package, dispatched via the <code>anivis_check_*</code> class and staged by a shared <code><a href="../reference/as_plot_data.html">as_plot_data()</a></code> generic.</p>
-<ul><li>
-<code><a href="../reference/plot.anivis_check_na_timing.html">plot.anivis_check_na_timing()</a></code> — missing-value distribution over time.</li>
-<li>
-<code><a href="../reference/plot.anivis_check_na_gapsize.html">plot.anivis_check_na_gapsize()</a></code> — gap-size occurrence / total bars.</li>
-<li>
-<code><a href="../reference/plot.anivis_check_confidence.html">plot.anivis_check_confidence()</a></code> — per-keypoint tracking confidence as clipped horizontal violins.</li>
-</ul></div>
-<div class="section level3">
-<h3 id="foundation-0-2-0">Foundation<a class="anchor" aria-label="anchor" href="#foundation-0-2-0"></a></h3>
-<ul><li>
-<code><a href="../reference/theme_animovement.html">theme_animovement()</a></code> (light/dark) and <code><a href="../reference/theme_imputets.html">theme_imputets()</a></code> for the check plots.</li>
-<li>Vendored Okabe-Ito and Material colour palettes with their <code>scale_*</code> functions, and a <code><a href="../reference/plots.html">plots()</a></code> patchwork wrapper.</li>
-</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0" id="anivis-010">anivis 0.1.0<a class="anchor" aria-label="anchor" href="#anivis-010"></a></h2>
+<p>Package skeleton. No user-facing functions yet — the plotting layer arrives in 0.2.0.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
