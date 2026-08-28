@@ -67,7 +67,7 @@ path stays traceable.
 ## Examples
 
 ``` r
-af <- aniframe::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+af <- anicore::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
 plot_trajectory(af)
 
 ```

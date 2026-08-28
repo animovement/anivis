@@ -95,9 +95,9 @@ Two dispatches:
 ## Examples
 
 ``` r
-af <- aniframe::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+af <- anicore::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
 af$behaviour <- rep(c("walk", "rest"), each = 3)
-ev <- aniframe::to_anievent(aniframe::set_variables_event(af, state = "behaviour"))
+ev <- anicore::to_anievent(anicore::set_variables_event(af, state = "behaviour"))
 plot_events(ev)
 
 ```

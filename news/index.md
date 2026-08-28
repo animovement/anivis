@@ -2,6 +2,14 @@
 
 ## anivis (development version)
 
+### Changed
+
+- The core data structures come from `anicore`, which is what the
+  `aniframe` package was renamed to in its 0.8.0
+  (animovement/anicore#84). The `aniframe` class keeps its name; only
+  the package providing it changed, so `anicore` replaces `aniframe` in
+  `Imports` and in every `aniframe::` call.
+
 ### Added
 
 - Every exported function now has a runnable example
