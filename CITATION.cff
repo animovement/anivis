@@ -8,8 +8,8 @@ message: 'To cite package "anivis" in publications use:'
 type: software
 license: MIT
 title: 'anivis: An R package for visualizing movement data and diagnostics.'
-version: 0.2.0
-date-released: 2025-10-21
+version: 0.2.1
+date-released: 2026-08-28
 identifiers:
   - type: doi
     value: 10.5281/zenodo.21030691

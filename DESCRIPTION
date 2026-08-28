@@ -1,7 +1,7 @@
 Package: anivis
 Type: Package
 Title: An R package for visualizing movement data and diagnostics
-Version: 0.2.0.9000
+Version: 0.2.1
 Authors@R: 
     person(
       "Mikkel", 
@@ -25,7 +25,7 @@ Imports:
     cli,
     grDevices,
     stats,
-    anicore (>= 0.6.0)
+    anicore (>= 0.8.0)
 Suggests: 
     ragg,
     knitr,
