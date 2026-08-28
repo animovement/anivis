@@ -1,8 +1,13 @@
 # Changelog
 
-## anivis (development version)
+## anivis 0.2.1 (2026-08-28)
 
 ### Changed
+
+- The minimum `anicore` is 0.8.0, which is the first version published
+  under that name. The constraint read `>= 0.6.0` — a version of
+  `anicore` that never existed, carried over unchanged from `aniframe`
+  when the dependency was renamed.
 
 - The core data structures come from `anicore`, which is what the
   `aniframe` package was renamed to in its 0.8.0
@@ -16,6 +21,9 @@
   ([\#23](https://github.com/animovement/anivis/issues/23)).
 
 ### Fixed
+
+- `AGENTS.md` is kept out of the built package, which `R CMD check`
+  reported as a non-standard top-level file.
 
 - The confidence plot puts the finest-grained identity on its axis,
   whatever that column is called

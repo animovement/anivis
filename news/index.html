@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">anivis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,18 +50,20 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="anivis-development-version">anivis (development version)<a class="anchor" aria-label="anchor" href="#anivis-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.1" id="anivis-021-2026-08-28">anivis 0.2.1 (2026-08-28)<a class="anchor" aria-label="anchor" href="#anivis-021-2026-08-28"></a></h2>
 <div class="section level3">
-<h3 id="changed-development-version">Changed<a class="anchor" aria-label="anchor" href="#changed-development-version"></a></h3>
-<ul><li>The core data structures come from <code>anicore</code>, which is what the <code>aniframe</code> package was renamed to in its 0.8.0 (animovement/anicore#84). The <code>aniframe</code> class keeps its name; only the package providing it changed, so <code>anicore</code> replaces <code>aniframe</code> in <code>Imports</code> and in every <code>aniframe::</code> call.</li>
+<h3 id="changed-0-2-1">Changed<a class="anchor" aria-label="anchor" href="#changed-0-2-1"></a></h3>
+<ul><li><p>The minimum <code>anicore</code> is 0.8.0, which is the first version published under that name. The constraint read <code>&gt;= 0.6.0</code> — a version of <code>anicore</code> that never existed, carried over unchanged from <code>aniframe</code> when the dependency was renamed.</p></li>
+<li><p>The core data structures come from <code>anicore</code>, which is what the <code>aniframe</code> package was renamed to in its 0.8.0 (animovement/anicore#84). The <code>aniframe</code> class keeps its name; only the package providing it changed, so <code>anicore</code> replaces <code>aniframe</code> in <code>Imports</code> and in every <code>aniframe::</code> call.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="added-development-version">Added<a class="anchor" aria-label="anchor" href="#added-development-version"></a></h3>
+<h3 id="added-0-2-1">Added<a class="anchor" aria-label="anchor" href="#added-0-2-1"></a></h3>
 <ul><li>Every exported function now has a runnable example (<a href="https://github.com/animovement/anivis/issues/23" class="external-link">#23</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="fixed-development-version">Fixed<a class="anchor" aria-label="anchor" href="#fixed-development-version"></a></h3>
-<ul><li>
+<h3 id="fixed-0-2-1">Fixed<a class="anchor" aria-label="anchor" href="#fixed-0-2-1"></a></h3>
+<ul><li><p><code>AGENTS.md</code> is kept out of the built package, which <code>R CMD check</code> reported as a non-standard top-level file.</p></li>
+<li>
 <p>The confidence plot puts the finest-grained identity on its axis, whatever that column is called (<a href="https://github.com/animovement/anivis/issues/21" class="external-link">#21</a>). It previously looked for a column named <code>keypoint</code> and, failing that, fell back to the <em>coarsest</em> varying grouping column — the opposite of what the code’s own comment described. On a frame declaring identity as, say, <code>animal</code> and <code>bodypart</code>, the axis and the facets came out swapped, rendering without error but transposed. Frames using <code>keypoint</code> are unaffected.</p>
 <p>The identity columns are read from the <code>variables_what</code> declaration that anicheck carries through to the check object. Check objects from an earlier anicheck carry no declaration; for those, <code>keypoint</code> remains the best guess available.</p>
 </li>
