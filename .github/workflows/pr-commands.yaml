@@ -1,0 +1,15 @@
+# Handles /document and /style comments on pull requests. The workflow lives in
+# animovement/.github so it is maintained in one place; only the trigger is
+# declared here.
+name: pr-commands
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  pr-commands:
+    uses: animovement/.github/.github/workflows/pr-commands.yml@main
+    permissions:
+      contents: write
+    secrets: inherit

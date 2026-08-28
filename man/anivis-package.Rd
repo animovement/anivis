@@ -6,6 +6,8 @@
 \alias{anivis-package}
 \title{anivis: An R package for visualizing movement data and diagnostics}
 \description{
+\if{html}{\figure{logo.svg}{options: style='float: right' alt='logo' width='120'}}
+
 An R package for visualizing movement data and diagnostics.
 }
 \seealso{

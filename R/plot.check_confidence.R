@@ -107,15 +107,29 @@ as_plot_data.check_confidence <- function(x, ..., clip = 0.02) {
   group_cols <- attr(x, "group_cols")
   groups <- attr(x, "groups")
 
-  # The y-axis variable is the grouping column that varies (preferring keypoint
-  # when several do); anything else that varies becomes a facet. With nothing
-  # varying it is a single violin.
+  # The y-axis variable is the finest-grained identity column that varies;
+  # anything else that varies becomes a facet. With nothing varying it is a
+  # single violin.
+  #
+  # `variables_what` is the aniframe declaration, carried through by anicheck
+  # under its own name: identity columns in declaration order, coarse to
+  # fine, so the finest is the last of them. It matters that this is not
+  # simply the last of `group_cols`: that vector is identity followed by
+  # temporal context, so its last entry may be a session or trial (#21).
   varying <- group_cols[vapply(
     group_cols,
     function(col) length(unique(groups[[col]])) > 1L,
     logical(1)
   )]
-  axis_var <- if ("keypoint" %in% varying) {
+  variables_what <- attr(x, "variables_what")
+  varying_identity <- intersect(variables_what, varying)
+
+  axis_var <- if (length(varying_identity)) {
+    varying_identity[[length(varying_identity)]]
+  } else if (is.null(variables_what) && "keypoint" %in% varying) {
+    # Objects from an anicheck that predates this carry no declarations.
+    # `keypoint` is the finest recognised identity, so it stays the best
+    # guess available for them.
     "keypoint"
   } else if (length(varying)) {
     varying[[1]]
