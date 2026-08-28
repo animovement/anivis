@@ -1,6 +1,8 @@
-# anivis (development version)
+# anivis 0.2.1 (2026-08-28)
 
 ## Changed
+
+* The minimum `anicore` is 0.8.0, which is the first version published under that name. The constraint read `>= 0.6.0` — a version of `anicore` that never existed, carried over unchanged from `aniframe` when the dependency was renamed.
 
 * The core data structures come from `anicore`, which is what the `aniframe` package was renamed to in its 0.8.0 (animovement/anicore#84). The `aniframe` class keeps its name; only the package providing it changed, so `anicore` replaces `aniframe` in `Imports` and in every `aniframe::` call.
 
@@ -9,6 +11,8 @@
 * Every exported function now has a runnable example (#23).
 
 ## Fixed
+
+* `AGENTS.md` is kept out of the built package, which `R CMD check` reported as a non-standard top-level file.
 
 * The confidence plot puts the finest-grained identity on its axis, whatever that column is called (#21). It previously looked for a column named `keypoint` and, failing that, fell back to the *coarsest* varying grouping column — the opposite of what the code's own comment described. On a frame declaring identity as, say, `animal` and `bodypart`, the axis and the facets came out swapped, rendering without error but transposed. Frames using `keypoint` are unaffected.
 
