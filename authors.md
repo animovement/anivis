@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/animovement/anivis/blob/v0.2.1/inst/CITATION)
+[`inst/CITATION`](https://github.com/animovement/anivis/blob/main/inst/CITATION)
 
 Roald-Arbøl M (2026). “animovement: An R toolbox for analysing movement
 across space and time.”
@@ -33,6 +33,6 @@ data and diagnostics.”
       author = {Mikkel Roald-Arbøl},
       year = {2026},
       doi = {10.5281/zenodo.21030691},
-      version = {0.2.1},
+      version = {0.2.1.9000},
       url = {https://animovement.dev/anivis/},
     }
