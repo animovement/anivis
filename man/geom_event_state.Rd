@@ -34,7 +34,7 @@ A ggplot2 layer.
 A ggplot2 layer that renders state (durative) events as rectangles
 spanning each event's \code{start} -> \code{stop} on the x axis, with one row
 per \code{label} on the y axis. When the input has a \code{type} column (e.g.
-an \code{\link[aniframe:anievent]{aniframe::anievent()}}), rows with \code{type != "state"} are dropped.
+an \code{\link[anicore:anievent]{anicore::anievent()}}), rows with \code{type != "state"} are dropped.
 }
 \details{
 The default mapping is only \code{aes(xmin = start, xmax = stop)} — every
@@ -60,9 +60,9 @@ under per-panel \code{scales = "free_y"}).
 }
 \examples{
 library(ggplot2)
-af <- aniframe::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+af <- anicore::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
 af$behaviour <- rep(c("walk", "rest"), each = 3)
-ev <- aniframe::to_anievent(aniframe::set_variables_event(af, state = "behaviour"))
+ev <- anicore::to_anievent(anicore::set_variables_event(af, state = "behaviour"))
 ggplot(ev, aes(xmin = start, xmax = stop, y = channel, fill = label)) +
   geom_event_state()
 

@@ -1,7 +1,7 @@
 #' Plot an anievent Object
 #'
 #' Creates a visualization of state and point events from an
-#' [aniframe::anievent()] using [geom_event_state()] and
+#' [anicore::anievent()] using [geom_event_state()] and
 #' [geom_event_point()]. Returns a patchwork object that can be combined
 #' with additional plots. The drawing itself is done by [plot_events()].
 #'

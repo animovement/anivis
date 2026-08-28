@@ -16,7 +16,7 @@ confidence_frame <- function(what1, what2, session = FALSE) {
   }
   names(d)[names(d) == ".a"] <- what1
   names(d)[names(d) == ".b"] <- what2
-  aniframe::as_aniframe(d, variables_what = c(what1, what2))
+  anicore::as_aniframe(d, variables_what = c(what1, what2))
 }
 
 test_that("the axis is the finest identity for recognised names", {

@@ -66,7 +66,7 @@ x axis uses the same time-unit handling as \code{\link[=plot_events]{plot_events
 true time units, raw frames otherwise.
 }
 \examples{
-af <- aniframe::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+af <- anicore::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
 plot_timeseries(af, variable = "x")
 
 }

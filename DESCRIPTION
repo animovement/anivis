@@ -12,7 +12,7 @@ Authors@R:
       )
 Description: An R package for visualizing movement data and diagnostics.
 License: MIT + file LICENSE
-URL: http://animovement.dev/anivis/, https://github.com/animovement/anivis/
+URL: https://animovement.dev/anivis/, https://github.com/animovement/anivis/
 BugReports: https://github.com/animovement/anivis/issues
 Encoding: UTF-8
 LazyData: true
@@ -25,7 +25,7 @@ Imports:
     cli,
     grDevices,
     stats,
-    aniframe (>= 0.6.0)
+    anicore (>= 0.6.0)
 Suggests: 
     ragg,
     knitr,

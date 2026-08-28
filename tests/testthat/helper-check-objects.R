@@ -31,14 +31,14 @@
   }
 
   aniframe_group_cols <- function(data) {
-    meta <- aniframe::get_metadata(data)
+    meta <- anicore::get_metadata(data)
     what <- intersect(meta$variables_what, names(data))
     when <- setdiff(intersect(meta$variables_when, names(data)), "time")
     unique(c(what, when))
   }
 
   aniframe_declarations <- function(data) {
-    meta <- aniframe::get_metadata(data)
+    meta <- anicore::get_metadata(data)
     list(
       variables_what = meta$variables_what,
       variables_when = meta$variables_when
@@ -207,7 +207,7 @@
 
   build_na_timing <- function(data, variable = "x") {
     variable <- check_na_variable(data, variable)
-    meta <- aniframe::get_metadata(data)
+    meta <- anicore::get_metadata(data)
     group_cols <- aniframe_group_cols(data)
 
     df <- as.data.frame(data)

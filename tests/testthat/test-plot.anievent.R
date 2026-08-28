@@ -1,7 +1,7 @@
 # Tests for plot.anievent, plot_events and the underlying geoms.
 
 make_anievent_state_only <- function() {
-  aniframe::anievent(
+  anicore::anievent(
     channel = rep("behaviour", 4),
     label = c("REM", "wake", "REM", "wake"),
     start = c(3, 14, 22, 30),
@@ -10,7 +10,7 @@ make_anievent_state_only <- function() {
 }
 
 make_anievent_point_only <- function() {
-  aniframe::anievent(
+  anicore::anievent(
     channel = rep("call", 3),
     label = c("alarm", "song", "alarm"),
     start = c(5, 12, 22),
@@ -19,7 +19,7 @@ make_anievent_point_only <- function() {
 }
 
 make_anievent_mixed <- function() {
-  aniframe::anievent(
+  anicore::anievent(
     channel = c("behaviour", "behaviour", "call", "call"),
     label = c("REM", "wake", "alarm", "song"),
     start = c(3, 14, 7, 12),
@@ -28,7 +28,7 @@ make_anievent_mixed <- function() {
 }
 
 make_anievent_multi_channel <- function() {
-  aniframe::anievent(
+  anicore::anievent(
     channel = c("behaviour", "behaviour", "call", "call"),
     label = c("REM", "wake", "alarm", "song"),
     start = c(3, 14, 7, 12),
@@ -37,7 +37,7 @@ make_anievent_multi_channel <- function() {
 }
 
 make_anievent_multi_individual <- function() {
-  aniframe::anievent(
+  anicore::anievent(
     individual = c(1L, 1L, 2L, 2L),
     channel = rep("behaviour", 4),
     label = c("REM", "wake", "REM", "wake"),
@@ -47,7 +47,7 @@ make_anievent_multi_individual <- function() {
 }
 
 make_anievent_grid <- function() {
-  aniframe::anievent(
+  anicore::anievent(
     individual = c(1L, 1L, 2L, 2L, 1L, 2L),
     channel = c(
       "behaviour",
@@ -148,7 +148,7 @@ test_that("plot_events.anievent layout = 'inline' rows by channel, no channel fa
 test_that("plot_events drops the x label and applies scale_x_time for true time units", {
   for (unit in c("s", "m", "h", "ms", "us", "ns")) {
     data <- make_anievent_state_only() |>
-      aniframe::set_unit_time(unit)
+      anicore::set_unit_time(unit)
     p <- plot_events(data)
     expect_null(p$labels$x, info = paste("unit =", unit))
     expect_equal(
@@ -161,7 +161,7 @@ test_that("plot_events drops the x label and applies scale_x_time for true time 
 
 test_that("plot_events labels frame data 'time (frames)' and keeps raw values", {
   data <- make_anievent_state_only() |>
-    aniframe::set_unit_time("frame")
+    anicore::set_unit_time("frame")
   p <- plot_events(data)
   expect_equal(p$labels$x, "time (frames)")
   expect_false(identical(p$scales$get_scales("x")$trans$name, "hms"))
@@ -173,7 +173,7 @@ test_that("plot_events labels frame data 'time (frames)' and keeps raw values", 
 
 test_that("plot_events labels unknown / NULL data 'time' and keeps raw values", {
   data <- make_anievent_state_only() |>
-    aniframe::set_unit_time("unknown")
+    anicore::set_unit_time("unknown")
   p <- plot_events(data)
   expect_equal(p$labels$x, "time")
   expect_false(identical(p$scales$get_scales("x")$trans$name, "hms"))
@@ -262,7 +262,7 @@ test_that("reorder_label_if_numeric passes through empty label data", {
 })
 
 test_that("plot_events sorts numeric-string labels numerically on the y axis", {
-  ae <- aniframe::anievent(
+  ae <- anicore::anievent(
     channel = rep("ch", 11),
     label = as.character(c(1:9, 10, 20)),
     start = rep(0, 11),
@@ -274,7 +274,7 @@ test_that("plot_events sorts numeric-string labels numerically on the y axis", {
 })
 
 test_that("plot_events leaves non-numeric labels in their existing order", {
-  ae <- aniframe::anievent(
+  ae <- anicore::anievent(
     channel = rep("ch", 3),
     label = c("alpha", "beta", "gamma"),
     start = c(0, 1, 2),

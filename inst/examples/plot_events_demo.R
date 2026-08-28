@@ -4,7 +4,7 @@
 # patchwork PNG is written to tempdir() for sharing.
 
 library(anivis)
-library(aniframe)
+library(anicore)
 library(ggplot2)
 library(patchwork)
 
