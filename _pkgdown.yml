@@ -7,6 +7,10 @@ home:
 template:
   bootstrap: 5
   package: animovementtemplate
+  bslib:
+    primary: "#C969A1"
+    # The hue itself is too light for body text on white.
+    link_color: "#AB5989"
 
 reference:
 - title: "Plotting"
