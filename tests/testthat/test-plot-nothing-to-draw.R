@@ -9,7 +9,9 @@ base_frame <- function() {
 }
 
 test_that("an aniframe with no rows can be plotted", {
-  empty <- dplyr::filter(base_frame(), FALSE)
+  # Subset rather than filtering to nothing: dplyr is not a dependency of this
+  # package, and `[` keeps the aniframe class and metadata.
+  empty <- base_frame()[0, ]
 
   expect_no_error(plot(empty))
   expect_no_warning(plot(empty))
@@ -18,7 +20,9 @@ test_that("an aniframe with no rows can be plotted", {
 test_that("a keypoint that was never tracked can be plotted", {
   # More likely than an empty frame: every position is NA, so there is no
   # start or end to mark.
-  all_na <- dplyr::mutate(base_frame(), x = NA_real_, y = NA_real_)
+  all_na <- base_frame()
+  all_na$x <- NA_real_
+  all_na$y <- NA_real_
 
   expect_no_error(plot(all_na))
   expect_no_warning(plot(all_na))
