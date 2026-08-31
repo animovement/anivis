@@ -1,7 +1,7 @@
 Package: anivis
 Type: Package
 Title: An R package for visualizing movement data and diagnostics
-Version: 0.2.1.9000
+Version: 0.2.1.9001
 Authors@R: 
     person(
       "Mikkel", 
