@@ -2,6 +2,22 @@
 
 ## anivis (development version)
 
+### Fixed
+
+- [`plot()`](https://rdrr.io/r/graphics/plot.default.html) works on an
+  aniframe with nothing to draw
+  ([\#32](https://github.com/animovement/anivis/issues/32)) — one with
+  no rows, or one whose positions are all `NA`. Both failed with
+  `arguments imply differing number of rows: 0, 2`, preceded by a
+  warning about the `each` argument, neither of which pointed at the
+  frame. The second case is the likelier one: a keypoint the tracker
+  never found has no start or end to mark.
+
+  `trajectory_endpoints()` returned `NULL` when no group had a valid
+  point — `do.call(rbind, list())` — and `nrow(NULL)` then reached
+  `rep(each = )`, which used a `NULL` length and produced two rows
+  against a column of none.
+
 ## anivis 0.2.1 (2026-08-28)
 
 ### Changed

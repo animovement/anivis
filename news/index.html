@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">anivis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,13 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="anivis-development-version">anivis (development version)<a class="anchor" aria-label="anchor" href="#anivis-development-version"></a></h2>
+<div class="section level3">
+<h3 id="fixed-development-version">Fixed<a class="anchor" aria-label="anchor" href="#fixed-development-version"></a></h3>
+<ul><li>
+<p><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> works on an aniframe with nothing to draw (<a href="https://github.com/animovement/anivis/issues/32" class="external-link">#32</a>) — one with no rows, or one whose positions are all <code>NA</code>. Both failed with <code>arguments imply differing number of rows: 0, 2</code>, preceded by a warning about the <code>each</code> argument, neither of which pointed at the frame. The second case is the likelier one: a keypoint the tracker never found has no start or end to mark.</p>
+<p><code>trajectory_endpoints()</code> returned <code>NULL</code> when no group had a valid point — <code>do.call(rbind, list())</code> — and <code>nrow(NULL)</code> then reached <code>rep(each = )</code>, which used a <code>NULL</code> length and produced two rows against a column of none.</p>
+</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="anivis-021-2026-08-28">anivis 0.2.1 (2026-08-28)<a class="anchor" aria-label="anchor" href="#anivis-021-2026-08-28"></a></h2>
