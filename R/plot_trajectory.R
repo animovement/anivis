@@ -261,7 +261,21 @@ trajectory_endpoints <- function(df) {
       stringsAsFactors = FALSE
     )
   })
-  do.call(rbind, rows)
+  out <- do.call(rbind, rows)
+  # No group has two valid points to mark -- an empty frame, or one that is all
+  # NA. do.call(rbind, list()) is NULL, and NULL flows on into rep(each = ) as a
+  # length-2 result against a length-0 column.
+  if (is.null(out)) {
+    out <- data.frame(
+      .group = character(0),
+      x_start = numeric(0),
+      y_start = numeric(0),
+      x_end = numeric(0),
+      y_end = numeric(0),
+      stringsAsFactors = FALSE
+    )
+  }
+  out
 }
 
 # Internal: per-group connector segments spanning missing-data gaps. For each
