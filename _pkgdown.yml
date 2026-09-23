@@ -15,7 +15,7 @@ template:
 reference:
 - title: "Plotting"
   contents:
-  - plot.aniframe
+  - plot.anipoint
   - plot.anievent
   - plot_trajectory
   - plot_timeseries

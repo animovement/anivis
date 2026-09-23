@@ -10,7 +10,7 @@ plot_trajectory(data, ...)
 \method{plot_trajectory}{default}(data, ..., mode = c("light", "dark"), palette = "Dark 3")
 }
 \arguments{
-\item{data}{An aniframe object.}
+\item{data}{An anipoint object.}
 
 \item{...}{Additional arguments (currently unused).}
 
@@ -25,10 +25,10 @@ levels.}
 A ggplot object.
 }
 \description{
-Creates a ggplot of the x-y trajectory from an aniframe. One path is drawn
+Creates a ggplot of the x-y trajectory from an anipoint. One path is drawn
 per trajectory group, where a group is the combination of every
 \code{variables_what} column and every non-time \code{variables_when} column in the
-aniframe's metadata.
+anipoint's metadata.
 }
 \details{
 Colours adapt to the dataset shape:
@@ -49,7 +49,7 @@ a filled triangle at its last point, identified in a start/end legend. Gaps
 from missing data are bridged with a dashed line so the path stays traceable.
 }
 \examples{
-af <- anicore::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+af <- anicore::example_anipoint(n_obs = 20, n_individuals = 2, n_keypoints = 1)
 plot_trajectory(af)
 
 }

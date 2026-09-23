@@ -1,4 +1,4 @@
-# Tests for plot.aniframe, plot_trajectory and palette_animovement.
+# Tests for plot.anipoint, plot_trajectory and palette_animovement.
 
 make_aniframe_single <- function() {
   data.frame(
@@ -6,7 +6,7 @@ make_aniframe_single <- function() {
     x = rnorm(10),
     y = rnorm(10)
   ) |>
-    anicore::as_aniframe()
+    anicore::as_anipoint()
 }
 
 make_aniframe_multi_keypoint <- function() {
@@ -16,7 +16,7 @@ make_aniframe_multi_keypoint <- function() {
     x = rnorm(20),
     y = rnorm(20)
   ) |>
-    anicore::as_aniframe()
+    anicore::as_anipoint()
 }
 
 make_aniframe_multi_trial <- function() {
@@ -26,7 +26,7 @@ make_aniframe_multi_trial <- function() {
     x = rnorm(30),
     y = rnorm(30)
   ) |>
-    anicore::as_aniframe(variables_when = c("trial", "time"))
+    anicore::as_anipoint(variables_when = c("trial", "time"))
 }
 
 make_aniframe_matrix <- function() {
@@ -37,13 +37,13 @@ make_aniframe_matrix <- function() {
     x = rnorm(60),
     y = rnorm(60)
   ) |>
-    anicore::as_aniframe(variables_when = c("trial", "time"))
+    anicore::as_anipoint(variables_when = c("trial", "time"))
 }
 
 
-# --- plot.aniframe / plot_trajectory basics ----------------------------------
+# --- plot.anipoint / plot_trajectory basics ----------------------------------
 
-test_that("plot.aniframe returns a patchwork object", {
+test_that("plot.anipoint returns a patchwork object", {
   p <- plot(make_aniframe_single())
   expect_s3_class(p, "patchwork")
 })
@@ -55,7 +55,7 @@ test_that("plot_trajectory returns a ggplot object", {
 
 test_that("plot_trajectory errors when data is not an aniframe", {
   data <- data.frame(time = 1:10, x = rnorm(10), y = rnorm(10))
-  expect_error(plot_trajectory(data), "must be an aniframe")
+  expect_error(plot_trajectory(data), "must be an anipoint")
 })
 
 test_that("plot_trajectory contains geom_path", {
@@ -74,7 +74,7 @@ test_that("plot_trajectory uses coord_fixed", {
 
 test_that("plot_trajectory honours unit_space in axis labels", {
   data <- make_aniframe_single() |>
-    anicore::set_unit_space("mm")
+    anicore::set_metadata(unit_space = "mm")
   p <- plot_trajectory(data)
   expect_match(p$labels$x, "mm")
   expect_match(p$labels$y, "mm")
@@ -252,7 +252,7 @@ test_that("trajectory_endpoints skips groups whose x/y are all NA", {
     x = c(rnorm(5), rep(NA_real_, 5)),
     y = c(rnorm(5), rep(NA_real_, 5))
   ) |>
-    anicore::as_aniframe()
+    anicore::as_anipoint()
 
   suppressWarnings({
     p <- plot_trajectory(data)
@@ -268,7 +268,7 @@ test_that("plot_trajectory handles a group whose time is a single value", {
   df <- as.data.frame(af)
   # Force the first keypoint's time column to a constant.
   df$time[df$keypoint == unique(df$keypoint)[1]] <- 1
-  af <- anicore::as_aniframe(df)
+  af <- anicore::as_anipoint(df)
 
   expect_s3_class(plot_trajectory(af), "ggplot")
 })
@@ -285,7 +285,7 @@ with_internal_gap <- function(df) {
 }
 
 test_that("plot_trajectory bridges gaps with a dashed segment (single mode)", {
-  af <- anicore::as_aniframe(with_internal_gap(
+  af <- anicore::as_anipoint(with_internal_gap(
     data.frame(time = 1:10, x = as.numeric(1:10), y = as.numeric(1:10))
   ))
   p <- plot_trajectory(af)
@@ -300,7 +300,7 @@ test_that("plot_trajectory bridges gaps in what mode (multi-keypoint)", {
     x = as.numeric(rep(1:10, 2)),
     y = as.numeric(rep(1:10, 2))
   ))
-  p <- plot_trajectory(anicore::as_aniframe(df))
+  p <- plot_trajectory(anicore::as_anipoint(df))
   geoms <- vapply(p$layers, function(l) class(l$geom)[[1]], character(1))
   expect_true("GeomSegment" %in% geoms)
 })
@@ -313,7 +313,7 @@ test_that("plot_trajectory bridges gaps in matrix mode (what x when)", {
     x = as.numeric(rep(1:10, 6)),
     y = as.numeric(rep(1:10, 6))
   ))
-  af <- anicore::as_aniframe(df, variables_when = c("trial", "time"))
+  af <- anicore::as_anipoint(df, variables_when = c("trial", "time"))
   p <- plot_trajectory(af)
   geoms <- vapply(p$layers, function(l) class(l$geom)[[1]], character(1))
   expect_true("GeomSegment" %in% geoms)
@@ -323,7 +323,7 @@ test_that("plot_trajectory bridges gaps in matrix mode (what x when)", {
 # --- true-time-unit colour-bar / legend labels -------------------------------
 
 test_that("plot_trajectory formats the time legend as HH:MM:SS for time units", {
-  af <- make_aniframe_single() |> anicore::set_unit_time("s")
+  af <- make_aniframe_single() |> anicore::set_metadata(unit_time = "s")
   p <- plot_trajectory(af)
   lab_fun <- p$scales$get_scales("colour")$labels
   expect_true(is.function(lab_fun))
@@ -331,7 +331,7 @@ test_that("plot_trajectory formats the time legend as HH:MM:SS for time units", 
 })
 
 test_that("plot_trajectory formats the alpha time legend for time units (what)", {
-  af <- make_aniframe_multi_keypoint() |> anicore::set_unit_time("s")
+  af <- make_aniframe_multi_keypoint() |> anicore::set_metadata(unit_time = "s")
   p <- plot_trajectory(af)
   lab_fun <- p$scales$get_scales("alpha")$labels
   expect_true(is.function(lab_fun))

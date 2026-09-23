@@ -37,9 +37,9 @@
 #' @return A ggplot2 layer.
 #' @examples
 #' library(ggplot2)
-#' af <- anicore::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+#' af <- anicore::example_anipoint(n_obs = 6, n_individuals = 1, n_keypoints = 1)
 #' af$behaviour <- rep(c("walk", "rest"), each = 3)
-#' ev <- anicore::to_anievent(anicore::set_variables_event(af, state = "behaviour"))
+#' ev <- anicore::to_anievent(anicore::set_variables(af, event = list(state = "behaviour")))
 #' ggplot(ev, aes(xmin = start, xmax = stop, y = channel, fill = label)) +
 #'   geom_event_state()
 #'

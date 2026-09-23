@@ -1,9 +1,9 @@
 #' Plot Movement Trajectory
 #'
-#' Creates a ggplot of the x-y trajectory from an aniframe. One path is drawn
+#' Creates a ggplot of the x-y trajectory from an anipoint. One path is drawn
 #' per trajectory group, where a group is the combination of every
 #' `variables_what` column and every non-time `variables_when` column in the
-#' aniframe's metadata.
+#' anipoint's metadata.
 #'
 #' Colours adapt to the dataset shape:
 #'
@@ -21,7 +21,7 @@
 #' a filled triangle at its last point, identified in a start/end legend. Gaps
 #' from missing data are bridged with a dashed line so the path stays traceable.
 #'
-#' @param data An aniframe object.
+#' @param data An anipoint object.
 #' @param ... Additional arguments (currently unused).
 #' @param mode Either `"light"` (default) or `"dark"`; passed to
 #'   [theme_animovement()].
@@ -32,7 +32,7 @@
 #' @return A ggplot object.
 #'
 #' @examples
-#' af <- anicore::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+#' af <- anicore::example_anipoint(n_obs = 20, n_individuals = 2, n_keypoints = 1)
 #' plot_trajectory(af)
 #'
 #' @export
@@ -48,8 +48,8 @@ plot_trajectory.default <- function(
   mode = c("light", "dark"),
   palette = "Dark 3"
 ) {
-  if (!anicore::is_aniframe(data)) {
-    cli::cli_abort("{.arg data} must be an aniframe.")
+  if (!anicore::is_anipoint(data)) {
+    cli::cli_abort("{.arg data} must be an anipoint.")
   }
   mode <- match.arg(mode)
 

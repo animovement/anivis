@@ -23,7 +23,7 @@ single <- data.frame(
   x = cumsum(rnorm(100)),
   y = cumsum(rnorm(100))
 ) |>
-  as_aniframe()
+  as_anipoint()
 
 p1 <- plot_trajectory(single) + ggtitle("1. Single trajectory")
 print(p1)
@@ -38,7 +38,7 @@ multi_kp <- data.frame(
   x = c(cumsum(rnorm(100)), cumsum(rnorm(100)) + 5, cumsum(rnorm(100)) - 5),
   y = c(cumsum(rnorm(100)), cumsum(rnorm(100)) + 5, cumsum(rnorm(100)) - 5)
 ) |>
-  as_aniframe()
+  as_anipoint()
 
 p2 <- plot_trajectory(multi_kp) + ggtitle("2. Multi-keypoint (hue per `what`)")
 print(p2)
@@ -53,7 +53,7 @@ multi_trial <- data.frame(
   x = unlist(lapply(1:4, function(i) cumsum(rnorm(100)) + i * 2)),
   y = unlist(lapply(1:4, function(i) cumsum(rnorm(100)) + i * 2))
 ) |>
-  as_aniframe(variables_when = c("trial", "time"))
+  as_anipoint(variables_when = c("trial", "time"))
 
 p3 <- plot_trajectory(multi_trial) +
   ggtitle("3. Multi-trial (gradient per `when`)")
@@ -84,7 +84,7 @@ matrix_df$y <- ave(
   FUN = cumsum
 )
 
-matrix_af <- as_aniframe(matrix_df, variables_when = c("trial", "time"))
+matrix_af <- as_anipoint(matrix_df, variables_when = c("trial", "time"))
 
 p4 <- plot_trajectory(matrix_af) +
   ggtitle("4. Matrix: 3 individuals (hue) x 4 trials (shade)")
@@ -119,7 +119,7 @@ gappy$x[25:33] <- NA # a stretch of dropped frames
 gappy$y[25:33] <- NA
 gappy$x[60:64] <- NA # a second, shorter gap
 gappy$y[60:64] <- NA
-gappy_af <- as_aniframe(gappy)
+gappy_af <- as_anipoint(gappy)
 
 p7 <- plot_trajectory(gappy_af) +
   ggtitle("7. Gaps bridged with a dashed line")

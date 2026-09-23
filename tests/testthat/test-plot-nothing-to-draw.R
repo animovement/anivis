@@ -5,7 +5,7 @@
 # produced a length-2 column against a length-0 one.
 
 base_frame <- function() {
-  anicore::example_aniframe(n_individuals = 1, n_keypoints = 1, n_obs = 5)
+  anicore::example_anipoint(n_individuals = 1, n_keypoints = 1, n_obs = 5)
 }
 
 test_that("an aniframe with no rows can be plotted", {
