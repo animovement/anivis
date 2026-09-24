@@ -41,9 +41,9 @@
 #' @return A ggplot object.
 #'
 #' @examples
-#' af <- anicore::example_aniframe(n_obs = 6, n_individuals = 1, n_keypoints = 1)
+#' af <- anicore::example_anipoint(n_obs = 6, n_individuals = 1, n_keypoints = 1)
 #' af$behaviour <- rep(c("walk", "rest"), each = 3)
-#' ev <- anicore::to_anievent(anicore::set_variables_event(af, state = "behaviour"))
+#' ev <- anicore::to_anievent(anicore::set_variables(af, event = list(state = "behaviour")))
 #' plot_events(ev)
 #'
 #' @export
@@ -65,7 +65,7 @@ plot_events.anievent <- function(
   mode <- match.arg(mode)
   meta <- anicore::get_metadata(data)
 
-  what_cols <- intersect(meta$variables_what %||% character(), names(data))
+  what_cols <- intersect(anicore::get_variables(data, "what"), names(data))
   multi_what_cols <- what_cols[vapply(
     what_cols,
     function(col) length(unique(data[[col]])) > 1,

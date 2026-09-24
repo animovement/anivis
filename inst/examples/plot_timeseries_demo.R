@@ -34,7 +34,7 @@ single <- data.frame(
   y = cumsum(rnorm(120))
 )
 single$speed <- c(0, sqrt(diff(single$x)^2 + diff(single$y)^2))
-single <- as_aniframe(single)
+single <- as_anipoint(single)
 
 p1 <- plot_timeseries(single, variable = "speed") +
   ggtitle("1. Single trajectory speed")
@@ -50,7 +50,7 @@ multi_kp <- data.frame(
   x = c(cumsum(rnorm(120)), cumsum(rnorm(120)) + 5, cumsum(rnorm(120)) - 5),
   y = c(cumsum(rnorm(120)), cumsum(rnorm(120)) + 5, cumsum(rnorm(120)) - 5)
 )
-multi_kp <- as_aniframe(add_speed(multi_kp, "keypoint"))
+multi_kp <- as_anipoint(add_speed(multi_kp, "keypoint"))
 
 p2 <- plot_timeseries(multi_kp, variable = "speed") +
   ggtitle("2. Multi-keypoint (inline)")
@@ -86,7 +86,7 @@ matrix_df$y <- ave(
   FUN = cumsum
 )
 matrix_df <- add_speed(matrix_df, c("individual", "trial"))
-matrix_af <- as_aniframe(matrix_df, variables_when = c("trial", "time"))
+matrix_af <- as_anipoint(matrix_df, variables_when = c("trial", "time"))
 
 p4 <- plot_timeseries(matrix_af, variable = "speed", layout = "facet") +
   ggtitle("4. Individual x trial (facet_grid)")
@@ -110,7 +110,7 @@ temp_df <- data.frame(
   y = cumsum(rnorm(120)),
   temperature = 37 + cumsum(rnorm(120, 0, 0.05))
 )
-temp_af <- as_aniframe(temp_df)
+temp_af <- as_anipoint(temp_df)
 
 p6 <- plot_timeseries(temp_af, variable = "temperature") +
   ggtitle("6. Any variable (temperature)")

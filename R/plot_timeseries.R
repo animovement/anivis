@@ -40,7 +40,7 @@
 #'   several.
 #'
 #' @examples
-#' af <- anicore::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+#' af <- anicore::example_anipoint(n_obs = 20, n_individuals = 2, n_keypoints = 1)
 #' plot_timeseries(af, variable = "x")
 #'
 #' @export
@@ -58,7 +58,7 @@ plot_timeseries.default <- function(
   mode = c("light", "dark"),
   palette = "Dark 3"
 ) {
-  if (!anicore::is_aniframe(data)) {
+  if (!anicore::is_aniframe(data) || anicore::is_anievent(data)) {
     cli::cli_abort("{.arg data} must be an aniframe.")
   }
   layout <- match.arg(layout)

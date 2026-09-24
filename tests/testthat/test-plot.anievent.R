@@ -148,7 +148,7 @@ test_that("plot_events.anievent layout = 'inline' rows by channel, no channel fa
 test_that("plot_events drops the x label and applies scale_x_time for true time units", {
   for (unit in c("s", "m", "h", "ms", "us", "ns")) {
     data <- make_anievent_state_only() |>
-      anicore::set_unit_time(unit)
+      anicore::set_metadata(unit_time = unit)
     p <- plot_events(data)
     expect_null(p$labels$x, info = paste("unit =", unit))
     expect_equal(
@@ -161,7 +161,7 @@ test_that("plot_events drops the x label and applies scale_x_time for true time 
 
 test_that("plot_events labels frame data 'time (frames)' and keeps raw values", {
   data <- make_anievent_state_only() |>
-    anicore::set_unit_time("frame")
+    anicore::set_metadata(unit_time = "frame")
   p <- plot_events(data)
   expect_equal(p$labels$x, "time (frames)")
   expect_false(identical(p$scales$get_scales("x")$trans$name, "hms"))
@@ -173,7 +173,7 @@ test_that("plot_events labels frame data 'time (frames)' and keeps raw values", 
 
 test_that("plot_events labels unknown / NULL data 'time' and keeps raw values", {
   data <- make_anievent_state_only() |>
-    anicore::set_unit_time("unknown")
+    anicore::set_metadata(unit_time = "unknown")
   p <- plot_events(data)
   expect_equal(p$labels$x, "time")
   expect_false(identical(p$scales$get_scales("x")$trans$name, "hms"))

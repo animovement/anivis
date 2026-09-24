@@ -1,5 +1,9 @@
 # anivis (development version)
 
+## Changed
+
+* Works with anicore's `anipoint` class and rebuilt accessor API (animovement/anicore#154). `plot()` dispatches on `anipoint` rather than `aniframe`, and `plot_trajectory()` requires an `anipoint`.
+
 ## Fixed
 
 * `plot()` works on an aniframe with nothing to draw (#32) — one with no rows, or one whose positions are all `NA`. Both failed with `arguments imply differing number of rows: 0, 2`, preceded by a warning about the `each` argument, neither of which pointed at the frame. The second case is the likelier one: a keypoint the tracker never found has no start or end to mark.
