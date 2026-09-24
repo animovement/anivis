@@ -2,6 +2,15 @@
 
 ## anivis (development version)
 
+### Changed
+
+- Works with anicore’s `anipoint` class and rebuilt accessor API
+  (animovement/anicore#154).
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) dispatches on
+  `anipoint` rather than `aniframe`, and
+  [`plot_trajectory()`](https://animovement.dev/anivis/reference/plot_trajectory.md)
+  requires an `anipoint`.
+
 ### Fixed
 
 - [`plot()`](https://rdrr.io/r/graphics/plot.default.html) works on an

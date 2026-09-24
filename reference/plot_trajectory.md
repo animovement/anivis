@@ -1,9 +1,9 @@
 # Plot Movement Trajectory
 
-Creates a ggplot of the x-y trajectory from an aniframe. One path is
+Creates a ggplot of the x-y trajectory from an anipoint. One path is
 drawn per trajectory group, where a group is the combination of every
 `variables_what` column and every non-time `variables_when` column in
-the aniframe's metadata.
+the anipoint's metadata.
 
 ## Usage
 
@@ -18,7 +18,7 @@ plot_trajectory(data, ..., mode = c("light", "dark"), palette = "Dark 3")
 
 - data:
 
-  An aniframe object.
+  An anipoint object.
 
 - ...:
 
@@ -67,7 +67,7 @@ path stays traceable.
 ## Examples
 
 ``` r
-af <- anicore::example_aniframe(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+af <- anicore::example_anipoint(n_obs = 20, n_individuals = 2, n_keypoints = 1)
 plot_trajectory(af)
 
 ```

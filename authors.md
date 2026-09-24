@@ -33,6 +33,6 @@ data and diagnostics.”
       author = {Mikkel Roald-Arbøl},
       year = {2026},
       doi = {10.5281/zenodo.21030691},
-      version = {0.2.1.9001},
+      version = {0.2.1.9002},
       url = {https://animovement.dev/anivis/},
     }
