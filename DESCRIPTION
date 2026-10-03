@@ -28,6 +28,7 @@ Imports:
     stats,
     anicore (>= 0.8.0.9003)
 Suggests: 
+    anicheck,
     ragg,
     knitr,
     testthat (>= 3.0.0)

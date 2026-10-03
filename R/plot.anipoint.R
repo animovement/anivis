@@ -19,6 +19,10 @@
 #'
 #' @return A patchwork object.
 #'
+#' @examples
+#' af <- anicore::example_anipoint(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+#' plot(af)
+#'
 #' @export
 plot.anipoint <- function(x, ..., mode = c("light", "dark")) {
   mode <- match.arg(mode)

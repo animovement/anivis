@@ -37,6 +37,12 @@ check plots (\code{\link[=theme_imputets]{theme_imputets()}}, horizontal-only gr
 from an intermediate frame of class \code{anivis_check_confidence_data} produced by
 \code{\link[=as_plot_data]{as_plot_data()}} — the staging step that mirrors \code{data_plot()} in \pkg{see}.
 }
+\examples{
+\dontshow{if (requireNamespace("anicheck", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+af <- anicore::example_anipoint(n_obs = 50, n_individuals = 1, n_keypoints = 3)
+plot(anicheck::check_confidence(af))
+\dontshow{\}) # examplesIf}
+}
 \seealso{
 \code{\link[=as_plot_data]{as_plot_data()}}
 }

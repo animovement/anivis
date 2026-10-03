@@ -26,6 +26,10 @@
 #'
 #' @seealso [as_plot_data()]
 #'
+#' @examplesIf requireNamespace("anicheck", quietly = TRUE)
+#' af <- anicore::example_anipoint(n_obs = 50, n_individuals = 1, n_keypoints = 3)
+#' plot(anicheck::check_confidence(af))
+#'
 #' @export
 plot.anivis_check_confidence <- function(
   x,

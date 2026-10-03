@@ -27,6 +27,13 @@
 #'
 #' @seealso [plot.anivis_check_na_timing()]
 #'
+#' @examplesIf requireNamespace("anicheck", quietly = TRUE)
+#' af <- anicore::example_anipoint(n_obs = 50, n_individuals = 1, n_keypoints = 3)
+#' af$x[c(5:8, 20, 31:40)] <- NA
+#'
+#' # The data the plot is drawn from, e.g. to build a custom plot from it
+#' as_plot_data(anicheck::check_na_timing(af))
+#'
 #' @export
 as_plot_data <- function(x, ...) {
   UseMethod("as_plot_data")

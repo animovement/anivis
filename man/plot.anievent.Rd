@@ -23,6 +23,17 @@ Creates a visualization of state and point events from an
 \code{\link[=geom_event_point]{geom_event_point()}}. Returns a patchwork object that can be combined
 with additional plots. The drawing itself is done by \code{\link[=plot_events]{plot_events()}}.
 }
+\examples{
+events <- anicore::anievent(
+  individual = 1L,
+  channel = c("behaviour", "behaviour", "call"),
+  label = c("REM", "wake", "alarm"),
+  start = c(3, 14, 4.5),
+  stop = c(9, 19, 4.5)
+)
+plot(events)
+
+}
 \seealso{
 \code{\link[=plot_events]{plot_events()}}
 }

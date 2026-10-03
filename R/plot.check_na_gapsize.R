@@ -29,6 +29,11 @@
 #'
 #' @seealso [as_plot_data()]
 #'
+#' @examplesIf requireNamespace("anicheck", quietly = TRUE)
+#' af <- anicore::example_anipoint(n_obs = 50, n_individuals = 1, n_keypoints = 3)
+#' af$x[c(5:8, 20, 31:40)] <- NA
+#' plot(anicheck::check_na_gapsize(af))
+#'
 #' @export
 plot.anivis_check_na_gapsize <- function(
   x,
