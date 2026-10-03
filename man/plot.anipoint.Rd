@@ -18,7 +18,14 @@
 A patchwork object.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Creates a visualization of movement data stored in an
 \code{\link[anicore:anipoint]{anicore::anipoint()}}. Returns a patchwork object that can be combined with
 additional plots.
+
+Today the figure is the trajectory alone, drawn by \code{\link[=plot_trajectory]{plot_trajectory()}}. What
+\code{plot()} shows may change without a deprecation cycle, for example to add
+speed and course traces beneath the path. Call \code{\link[=plot_trajectory]{plot_trajectory()}} directly
+when you need exactly that plot.
 }
