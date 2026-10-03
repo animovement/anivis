@@ -39,3 +39,17 @@ A patchwork object.
 ## See also
 
 [`plot_events()`](https://animovement.dev/anivis/reference/plot_events.md)
+
+## Examples
+
+``` r
+events <- anicore::anievent(
+  individual = 1L,
+  channel = c("behaviour", "behaviour", "call"),
+  label = c("REM", "wake", "alarm"),
+  start = c(3, 14, 4.5),
+  stop = c(9, 19, 4.5)
+)
+plot(events)
+
+```

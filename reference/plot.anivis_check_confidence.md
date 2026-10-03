@@ -55,3 +55,10 @@ of class `anivis_check_confidence_data` produced by
 ## See also
 
 [`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)
+
+## Examples
+
+``` r
+af <- anicore::example_anipoint(n_obs = 50, n_individuals = 1, n_keypoints = 3)
+plot(anicheck::check_confidence(af))
+```

@@ -39,3 +39,11 @@ plot(x, ..., mode = c("light", "dark"))
 ## Value
 
 A patchwork object.
+
+## Examples
+
+``` r
+af <- anicore::example_anipoint(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+plot(af)
+
+```

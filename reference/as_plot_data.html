@@ -174,6 +174,64 @@ attribute. Returns a frame classed <code>anivis_check_na_timing_data</code>.</p>
     <div class="dont-index"><p><code><a href="plot.anivis_check_na_timing.html">plot.anivis_check_na_timing()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">af</span> <span class="op">&lt;-</span> <span class="fu">anicore</span><span class="fu">::</span><span class="fu"><a href="https://animovement.dev/anicore/reference/example_anipoint.html" class="external-link">example_anipoint</a></span><span class="op">(</span>n_obs <span class="op">=</span> <span class="fl">50</span>, n_individuals <span class="op">=</span> <span class="fl">1</span>, n_keypoints <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">af</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span><span class="op">:</span><span class="fl">8</span>, <span class="fl">20</span>, <span class="fl">31</span><span class="op">:</span><span class="fl">40</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The data the plot is drawn from, e.g. to build a custom plot from it</span></span></span>
+<span class="r-in"><span><span class="fu">as_plot_data</span><span class="op">(</span><span class="fu">anicheck</span><span class="fu">::</span><span class="fu"><a href="https://animovement.dev/anicheck/reference/check_na_timing.html" class="external-link">check_na_timing</a></span><span class="op">(</span><span class="va">af</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             group  x width  status count size     value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            head  4     7 present     4    7 0.5714286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            head 11     7 present     6    7 0.8571429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            head 18     7 present     6    7 0.8571429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4            head 25     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            head 32     7 present     2    7 0.2857143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6            head 39     7 present     2    7 0.2857143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7            head 46     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8            head 50     1 present     1    1 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9            neck  4     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10           neck 11     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11           neck 18     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12           neck 25     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13           neck 32     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14           neck 39     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15           neck 46     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16           neck 50     1 present     1    1 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 shoulder_right  4     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 shoulder_right 11     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 shoulder_right 18     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 shoulder_right 25     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 shoulder_right 32     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 shoulder_right 39     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 shoulder_right 46     7 present     7    7 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24 shoulder_right 50     1 present     1    1 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25           head  4     7 missing     3    7 0.4285714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26           head 11     7 missing     1    7 0.1428571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27           head 18     7 missing     1    7 0.1428571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28           head 25     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29           head 32     7 missing     5    7 0.7142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30           head 39     7 missing     5    7 0.7142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31           head 46     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32           head 50     1 missing     0    1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33           neck  4     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34           neck 11     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35           neck 18     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36           neck 25     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37           neck 32     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38           neck 39     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39           neck 46     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40           neck 50     1 missing     0    1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41 shoulder_right  4     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42 shoulder_right 11     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43 shoulder_right 18     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44 shoulder_right 25     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45 shoulder_right 32     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46 shoulder_right 39     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47 shoulder_right 46     7 missing     0    7 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48 shoulder_right 50     1 missing     0    1 0.0000000</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

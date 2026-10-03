@@ -119,3 +119,62 @@ frame interval size rides along as an attribute. Returns a frame classed
 ## See also
 
 [`plot.anivis_check_na_timing()`](https://animovement.dev/anivis/reference/plot.anivis_check_na_timing.md)
+
+## Examples
+
+``` r
+af <- anicore::example_anipoint(n_obs = 50, n_individuals = 1, n_keypoints = 3)
+af$x[c(5:8, 20, 31:40)] <- NA
+
+# The data the plot is drawn from, e.g. to build a custom plot from it
+as_plot_data(anicheck::check_na_timing(af))
+#>             group  x width  status count size     value
+#> 1            head  4     7 present     4    7 0.5714286
+#> 2            head 11     7 present     6    7 0.8571429
+#> 3            head 18     7 present     6    7 0.8571429
+#> 4            head 25     7 present     7    7 1.0000000
+#> 5            head 32     7 present     2    7 0.2857143
+#> 6            head 39     7 present     2    7 0.2857143
+#> 7            head 46     7 present     7    7 1.0000000
+#> 8            head 50     1 present     1    1 1.0000000
+#> 9            neck  4     7 present     7    7 1.0000000
+#> 10           neck 11     7 present     7    7 1.0000000
+#> 11           neck 18     7 present     7    7 1.0000000
+#> 12           neck 25     7 present     7    7 1.0000000
+#> 13           neck 32     7 present     7    7 1.0000000
+#> 14           neck 39     7 present     7    7 1.0000000
+#> 15           neck 46     7 present     7    7 1.0000000
+#> 16           neck 50     1 present     1    1 1.0000000
+#> 17 shoulder_right  4     7 present     7    7 1.0000000
+#> 18 shoulder_right 11     7 present     7    7 1.0000000
+#> 19 shoulder_right 18     7 present     7    7 1.0000000
+#> 20 shoulder_right 25     7 present     7    7 1.0000000
+#> 21 shoulder_right 32     7 present     7    7 1.0000000
+#> 22 shoulder_right 39     7 present     7    7 1.0000000
+#> 23 shoulder_right 46     7 present     7    7 1.0000000
+#> 24 shoulder_right 50     1 present     1    1 1.0000000
+#> 25           head  4     7 missing     3    7 0.4285714
+#> 26           head 11     7 missing     1    7 0.1428571
+#> 27           head 18     7 missing     1    7 0.1428571
+#> 28           head 25     7 missing     0    7 0.0000000
+#> 29           head 32     7 missing     5    7 0.7142857
+#> 30           head 39     7 missing     5    7 0.7142857
+#> 31           head 46     7 missing     0    7 0.0000000
+#> 32           head 50     1 missing     0    1 0.0000000
+#> 33           neck  4     7 missing     0    7 0.0000000
+#> 34           neck 11     7 missing     0    7 0.0000000
+#> 35           neck 18     7 missing     0    7 0.0000000
+#> 36           neck 25     7 missing     0    7 0.0000000
+#> 37           neck 32     7 missing     0    7 0.0000000
+#> 38           neck 39     7 missing     0    7 0.0000000
+#> 39           neck 46     7 missing     0    7 0.0000000
+#> 40           neck 50     1 missing     0    1 0.0000000
+#> 41 shoulder_right  4     7 missing     0    7 0.0000000
+#> 42 shoulder_right 11     7 missing     0    7 0.0000000
+#> 43 shoulder_right 18     7 missing     0    7 0.0000000
+#> 44 shoulder_right 25     7 missing     0    7 0.0000000
+#> 45 shoulder_right 32     7 missing     0    7 0.0000000
+#> 46 shoulder_right 39     7 missing     0    7 0.0000000
+#> 47 shoulder_right 46     7 missing     0    7 0.0000000
+#> 48 shoulder_right 50     1 missing     0    1 0.0000000
+```

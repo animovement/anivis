@@ -66,3 +66,11 @@ The plot is built from an intermediate frame of class
 ## See also
 
 [`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)
+
+## Examples
+
+``` r
+af <- anicore::example_anipoint(n_obs = 50, n_individuals = 1, n_keypoints = 3)
+af$x[c(5:8, 20, 31:40)] <- NA
+plot(anicheck::check_na_timing(af))
+```
