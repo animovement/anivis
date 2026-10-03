@@ -1,10 +1,11 @@
 # Plot a Variable as a Time Series
 
-Plots one or more numeric variables from an aniframe against `time`,
-with one line per trajectory group (every `variables_what` column and
-every non-time `variables_when` column in the metadata). Use it for any
-per-frame measure — `speed`, `acceleration`, a confidence score, a
-temperature channel, or any other derived column.
+Plots one or more numeric variables from an aniframe against time, with
+one line per trajectory group (every grouping column of the frame,
+[`anicore::get_keys()`](https://animovement.dev/anicore/reference/get_keys.html):
+its identity columns and its temporal context). Use it for any per-frame
+measure — `speed`, `acceleration`, a confidence score, a temperature
+channel, or any other derived column.
 
 ## Usage
 
@@ -61,6 +62,10 @@ several.
 
 ## Details
 
+Time is read from the frame's index column
+([`anicore::get_index()`](https://animovement.dev/anicore/reference/get_index.html)),
+so it need not be called `time`.
+
 Pass several names to `variable` to draw a panel per variable,
 **vertically stacked** with a shared x axis and a single shared legend
 (via [`plots()`](https://animovement.dev/anivis/reference/plots.md));
@@ -75,7 +80,8 @@ The `layout` argument chooses how groups are arranged, mirroring
 
 - `"facet"`: each group gets its own panel —
   [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html)
-  when both an identity and a (non-time) condition vary, otherwise
+  when both an identity and a temporal context (such as trial) vary,
+  otherwise
   [`facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html)
   with the panels stacked in rows so the shared x axis lines up.
 

@@ -1,8 +1,11 @@
 # Per-group colour palette for an aniframe
 
 Builds a named character vector mapping trajectory group keys to
-colours. The colour scheme adapts to how many `what` and (non-time)
-`when` levels the aniframe has:
+colours. The colour scheme adapts to how many identity (`what`) and
+temporal context (`when`, such as session or trial) levels the
+aniframe's grouping columns
+([`anicore::get_keys()`](https://animovement.dev/anicore/reference/get_keys.html))
+have:
 
 ## Usage
 

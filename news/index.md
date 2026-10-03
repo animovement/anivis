@@ -13,6 +13,28 @@
 
 ### Fixed
 
+- [`plot_trajectory()`](https://animovement.dev/anivis/reference/plot_trajectory.md),
+  [`plot_timeseries()`](https://animovement.dev/anivis/reference/plot_timeseries.md)
+  and [`plot()`](https://rdrr.io/r/graphics/plot.default.html) read the
+  positions and time from the columns the frame declares for them
+  ([\#37](https://github.com/animovement/anivis/issues/37)), so the axes
+  and the index no longer have to be called `x`, `y` and `time`. A frame
+  with renamed axes failed with `` Column `x` not found ``, and one with
+  a renamed index with `argument 2 is not a vector`. The axes are still
+  labelled by role, as `x (mm)`, and frames using the standard names
+  plot exactly as before.
+
+  The x and y axes come from
+  [`anicore::get_axes()`](https://animovement.dev/anicore/reference/get_axes.html),
+  so a three-dimensional frame is drawn in its x-y plane whatever its
+  columns are called. A frame without x and y axes, such as a polar one,
+  now fails saying so, instead of reporting a missing column. Time comes
+  from
+  [`anicore::get_index()`](https://animovement.dev/anicore/reference/get_index.html).
+  Trajectory groups, and the palette that colours them, come from
+  [`anicore::get_keys()`](https://animovement.dev/anicore/reference/get_keys.html),
+  the columns the frame is grouped by.
+
 - [`plot()`](https://rdrr.io/r/graphics/plot.default.html) works on an
   aniframe with nothing to draw
   ([\#32](https://github.com/animovement/anivis/issues/32)) — one with

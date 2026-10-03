@@ -1,9 +1,10 @@
 # Plot Movement Trajectory
 
 Creates a ggplot of the x-y trajectory from an anipoint. One path is
-drawn per trajectory group, where a group is the combination of every
-`variables_what` column and every non-time `variables_when` column in
-the anipoint's metadata.
+drawn per trajectory group, where a group is the combination of the
+frame's grouping columns
+([`anicore::get_keys()`](https://animovement.dev/anicore/reference/get_keys.html)):
+its identity columns and its temporal context, such as session or trial.
 
 ## Usage
 
@@ -41,10 +42,19 @@ A ggplot object.
 
 ## Details
 
+The positions are read from the columns the frame declares for its `x`
+and `y` axes
+([`anicore::get_axes()`](https://animovement.dev/anicore/reference/get_axes.html)),
+and time from its index column
+([`anicore::get_index()`](https://animovement.dev/anicore/reference/get_index.html)),
+so neither has to be named `x`, `y` or `time`. The axes are labelled by
+role. A three-dimensional frame is drawn in its x-y plane. A frame
+without `x` and `y` axes, such as a polar one, is an error.
+
 Colours adapt to the dataset shape:
 
 - **single** trajectory (no grouping): the line is coloured continuously
-  by `time` using the Material gradient scale
+  by time using the Material gradient scale
   ([`scale_colour_material_c()`](https://animovement.dev/anivis/reference/scale_material.md)),
   shown as a `time` colour bar.
 
