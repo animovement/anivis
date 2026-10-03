@@ -63,7 +63,7 @@ plot_events.anievent <- function(
   layout <- match.arg(layout)
   point_style <- match.arg(point_style)
   mode <- match.arg(mode)
-  meta <- anicore::get_metadata(data)
+  unit_time <- anicore::get_metadata(data, "unit_time")
 
   what_cols <- intersect(anicore::get_variables(data, "what"), names(data))
   multi_what_cols <- what_cols[vapply(
@@ -84,7 +84,7 @@ plot_events.anievent <- function(
   p <- events_base_plot(
     state = state_df,
     point = point_df,
-    meta = meta,
+    unit_time = unit_time,
     mode = mode,
     row = row,
     point_style = point_style
@@ -136,13 +136,16 @@ events_base_plot <- function(
   data = NULL,
   state = data,
   point = data,
-  meta = NULL,
+  unit_time = NULL,
   mode,
   row = "label",
   point_style = "point"
 ) {
-  unit <- if (!is.null(meta)) meta$unit_time else NULL
-  unit_chr <- if (!is.null(unit)) as.character(unit) else NA_character_
+  unit_chr <- if (!is.null(unit_time)) {
+    as.character(unit_time)
+  } else {
+    NA_character_
+  }
   factor <- seconds_per_unit(unit_chr)
   use_hms <- !is.na(factor)
 

@@ -59,7 +59,6 @@ plot_trajectory.default <- function(
   }
   mode <- match.arg(mode)
 
-  meta <- anicore::get_metadata(data)
   axes <- trajectory_axes(data)
   index <- anicore::get_index(data)
   keys <- aniframe_group_keys(data)
@@ -71,18 +70,15 @@ plot_trajectory.default <- function(
 
   endpoints <- trajectory_endpoints(plot_df, axes, index)
 
-  unit <- meta$unit_space
+  unit <- anicore::get_metadata(data, "unit_space")
   has_unit <- !is.null(unit) && as.character(unit) != "none"
   x_lab <- if (has_unit) paste0("x (", unit, ")") else "x"
   y_lab <- if (has_unit) paste0("y (", unit, ")") else "y"
 
   # Time legend: format as HH:MM:SS for true time units (as plot_events does),
   # raw numbers otherwise. Three breaks keep the legend compact.
-  t_unit <- if (!is.null(meta$unit_time)) {
-    as.character(meta$unit_time)
-  } else {
-    NA_character_
-  }
+  unit_time <- anicore::get_metadata(data, "unit_time")
+  t_unit <- if (!is.null(unit_time)) as.character(unit_time) else NA_character_
   t_factor <- seconds_per_unit(t_unit)
   time_labels <- if (!is.na(t_factor)) {
     function(b) format(hms::as_hms(round(b * t_factor)))

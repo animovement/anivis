@@ -68,7 +68,6 @@ plot_timeseries.default <- function(
   layout <- match.arg(layout)
   mode <- match.arg(mode)
 
-  meta <- anicore::get_metadata(data)
   variables <- check_timeseries_variables(data, variable)
   index <- anicore::get_index(data)
 
@@ -80,7 +79,7 @@ plot_timeseries.default <- function(
   plot_df <- plot_df[order(plot_df$.group, plot_df[[index]]), , drop = FALSE]
 
   # X axis: convert to hms for true time units so scale_x_time() formats it.
-  unit <- meta$unit_time
+  unit <- anicore::get_metadata(data, "unit_time")
   unit_chr <- if (!is.null(unit)) as.character(unit) else NA_character_
   factor <- seconds_per_unit(unit_chr)
   use_hms <- !is.na(factor)
