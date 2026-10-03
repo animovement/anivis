@@ -1,14 +1,20 @@
 #' Plot Movement Trajectory
 #'
 #' Creates a ggplot of the x-y trajectory from an anipoint. One path is drawn
-#' per trajectory group, where a group is the combination of every
-#' `variables_what` column and every non-time `variables_when` column in the
-#' anipoint's metadata.
+#' per trajectory group, where a group is the combination of the frame's
+#' grouping columns ([anicore::get_keys()]): its identity columns and its
+#' temporal context, such as session or trial.
+#'
+#' The positions are read from the columns the frame declares for its `x` and
+#' `y` axes ([anicore::get_axes()]), and time from its index column
+#' ([anicore::get_index()]), so neither has to be named `x`, `y` or `time`. The
+#' axes are labelled by role. A three-dimensional frame is drawn in its x-y
+#' plane. A frame without `x` and `y` axes, such as a polar one, is an error.
 #'
 #' Colours adapt to the dataset shape:
 #'
 #' * **single** trajectory (no grouping): the line is coloured continuously
-#'   by `time` using the Material gradient scale ([scale_colour_material_c()]),
+#'   by time using the Material gradient scale ([scale_colour_material_c()]),
 #'   shown as a `time` colour bar.
 #' * **what-only** or **when-only** grouping (one varying axis): each line
 #'   gets its own hue from a qualitative palette, with `time` mapped to alpha
@@ -54,14 +60,16 @@ plot_trajectory.default <- function(
   mode <- match.arg(mode)
 
   meta <- anicore::get_metadata(data)
+  axes <- trajectory_axes(data)
+  index <- anicore::get_index(data)
   keys <- aniframe_group_keys(data)
   pal <- palette_animovement(data, palette = palette)
 
   plot_df <- as.data.frame(data)
   plot_df[[".group"]] <- factor(keys$group, levels = names(pal))
-  plot_df <- plot_df[order(plot_df$.group, plot_df$time), , drop = FALSE]
+  plot_df <- plot_df[order(plot_df$.group, plot_df[[index]]), , drop = FALSE]
 
-  endpoints <- trajectory_endpoints(plot_df)
+  endpoints <- trajectory_endpoints(plot_df, axes, index)
 
   unit <- meta$unit_space
   has_unit <- !is.null(unit) && as.character(unit) != "none"
@@ -87,7 +95,7 @@ plot_trajectory.default <- function(
 
   # Dashed connectors across missing-data gaps, and start/end markers reshaped
   # so a single shape scale can label which symbol is which.
-  bridges <- trajectory_gaps(plot_df)
+  bridges <- trajectory_gaps(plot_df, axes, index)
   ends_long <- data.frame(
     .group = rep(endpoints$.group, 2),
     x = c(endpoints$x_start, endpoints$x_end),
@@ -98,7 +106,12 @@ plot_trajectory.default <- function(
     )
   )
 
-  base <- ggplot2::ggplot(plot_df, ggplot2::aes(x = .data$x, y = .data$y))
+  # The column names are injected (`!!`) so the mappings name the declared
+  # columns themselves.
+  base <- ggplot2::ggplot(
+    plot_df,
+    ggplot2::aes(x = .data[[!!axes[["x"]]]], y = .data[[!!axes[["y"]]]])
+  )
 
   if (keys$mode == "single") {
     # Time -> a continuous colour bar, titled "time" in the legend.
@@ -106,7 +119,7 @@ plot_trajectory.default <- function(
       Negate(is.null),
       list(
         ggplot2::geom_path(
-          ggplot2::aes(colour = .data$time, group = .data$.group),
+          ggplot2::aes(colour = .data[[!!index]], group = .data$.group),
           na.rm = TRUE
         ),
         if (!is.null(bridges)) {
@@ -169,7 +182,7 @@ plot_trajectory.default <- function(
         ggplot2::geom_path(
           ggplot2::aes(
             colour = .data$.group,
-            alpha = .data$time,
+            alpha = .data[[!!index]],
             group = .data$.group
           ),
           na.rm = TRUE
@@ -241,23 +254,58 @@ plot_trajectory.default <- function(
     theme_animovement(mode = mode)
 }
 
-# Internal: per-group first/last (x, y) ordered by time.
-trajectory_endpoints <- function(df) {
-  ord <- order(df$.group, df$time)
+# Internal: the columns carrying the x and y axes, as `c(x = , y = )`. A
+# trajectory is drawn in the x-y plane, so a frame without both roles -- polar,
+# one-dimensional, or with undeclared axes -- has nothing to draw it from.
+trajectory_axes <- function(data, call = rlang::caller_env()) {
+  axes <- anicore::get_axes(data)
+  if (!all(c("x", "y") %in% names(axes))) {
+    system <- anicore::get_coordinate_system(data)
+    hint <- if (identical(system, "unknown")) {
+      c(
+        "i" = "Say which column carries each axis with
+               {.code anicore::set_variables(data, where = c(x = , y = ))}."
+      )
+    } else if (system %in% c("polar", "cylindrical", "spherical")) {
+      c(
+        "i" = "Convert it to Cartesian coordinates first, for example with
+               {.fn anispace::map_to_cartesian}."
+      )
+    }
+    cli::cli_abort(
+      c(
+        "{.arg data} must have {.field x} and {.field y} axes to plot a
+         trajectory.",
+        "x" = "Its coordinate system is {.val {system}}.",
+        hint
+      ),
+      call = call
+    )
+  }
+  axes[c("x", "y")]
+}
+
+# Internal: per-group first/last (x, y) ordered by time. `axes` names the x and
+# y columns (`c(x = , y = )`), and `index` the time column.
+trajectory_endpoints <- function(df, axes, index) {
+  ord <- order(df$.group, df[[index]])
   df <- df[ord, , drop = FALSE]
   parts <- split(df, df$.group, drop = TRUE)
   rows <- lapply(parts, function(d) {
-    non_na <- !is.na(d$x) & !is.na(d$y)
+    x <- d[[axes[["x"]]]]
+    y <- d[[axes[["y"]]]]
+    non_na <- !is.na(x) & !is.na(y)
     if (!any(non_na)) {
       return(NULL)
     }
-    d <- d[non_na, , drop = FALSE]
+    x <- x[non_na]
+    y <- y[non_na]
     data.frame(
-      .group = d$.group[1],
-      x_start = d$x[1],
-      y_start = d$y[1],
-      x_end = d$x[nrow(d)],
-      y_end = d$y[nrow(d)],
+      .group = d$.group[non_na][1],
+      x_start = x[1],
+      y_start = y[1],
+      x_end = x[length(x)],
+      y_end = y[length(y)],
       stringsAsFactors = FALSE
     )
   })
@@ -281,12 +329,15 @@ trajectory_endpoints <- function(df) {
 # Internal: per-group connector segments spanning missing-data gaps. For each
 # run of missing (x, y) between two valid points, returns a segment from the
 # last valid point to the next valid one (drawn dashed). Returns NULL when no
-# group has a gap.
-trajectory_gaps <- function(df) {
+# group has a gap. `axes` and `index` are as for trajectory_endpoints(); the
+# segments come back in plain `x`, `y`, `xend`, `yend` and `time` columns.
+trajectory_gaps <- function(df, axes, index) {
   parts <- split(df, df$.group, drop = TRUE)
   rows <- lapply(parts, function(d) {
-    d <- d[order(d$time), , drop = FALSE]
-    valid <- which(!is.na(d$x) & !is.na(d$y))
+    d <- d[order(d[[index]]), , drop = FALSE]
+    x <- d[[axes[["x"]]]]
+    y <- d[[axes[["y"]]]]
+    valid <- which(!is.na(x) & !is.na(y))
     if (length(valid) < 2) {
       return(NULL)
     }
@@ -298,11 +349,11 @@ trajectory_gaps <- function(df) {
     ends <- valid[gap + 1]
     data.frame(
       .group = d$.group[starts],
-      x = d$x[starts],
-      y = d$y[starts],
-      xend = d$x[ends],
-      yend = d$y[ends],
-      time = d$time[starts],
+      x = x[starts],
+      y = y[starts],
+      xend = x[ends],
+      yend = y[ends],
+      time = d[[index]][starts],
       stringsAsFactors = FALSE
     )
   })

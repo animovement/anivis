@@ -35,7 +35,7 @@ test_that("trajectory_endpoints() returns a shaped frame when there is nothing t
     x = numeric(0),
     y = numeric(0)
   )
-  out <- trajectory_endpoints(df)
+  out <- trajectory_endpoints(df, c(x = "x", y = "y"), "time")
 
   expect_s3_class(out, "data.frame")
   expect_identical(nrow(out), 0L)

@@ -20,8 +20,9 @@ A named character vector of hex colours.
 }
 \description{
 Builds a named character vector mapping trajectory group keys to colours.
-The colour scheme adapts to how many \code{what} and (non-time) \code{when} levels
-the aniframe has:
+The colour scheme adapts to how many identity (\code{what}) and temporal context
+(\code{when}, such as session or trial) levels the aniframe's grouping columns
+(\code{\link[anicore:get_keys]{anicore::get_keys()}}) have:
 }
 \details{
 \itemize{
