@@ -4,6 +4,8 @@
 
 * Works with anicore's `anipoint` class and rebuilt accessor API (animovement/anicore#154). `plot()` dispatches on `anipoint` rather than `aniframe`, and `plot_trajectory()` requires an `anipoint`.
 
+* Functions now carry a lifecycle stage (animovement/.github#46), and unlabelled means stable. `plot()` on an anipoint (`plot.anipoint()`) is labelled experimental: it draws the trajectory alone today, and what it shows may change without a deprecation cycle, for example to add speed and course traces beneath the path (#9). Call `plot_trajectory()` directly when you need exactly that plot. Every other function is stable, and changes only through a deprecation cycle.
+
 ## Fixed
 
 * `plot_trajectory()`, `plot_timeseries()` and `plot()` read the positions and time from the columns the frame declares for them (#37), so the axes and the index no longer have to be called `x`, `y` and `time`. A frame with renamed axes failed with ``Column `x` not found``, and one with a renamed index with `argument 2 is not a vector`. The axes are still labelled by role, as `x (mm)`, and frames using the standard names plot exactly as before.

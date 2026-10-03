@@ -1,8 +1,16 @@
 #' Plot an anipoint Object
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' Creates a visualization of movement data stored in an
 #' [anicore::anipoint()]. Returns a patchwork object that can be combined with
 #' additional plots.
+#'
+#' Today the figure is the trajectory alone, drawn by [plot_trajectory()]. What
+#' `plot()` shows may change without a deprecation cycle, for example to add
+#' speed and course traces beneath the path. Call [plot_trajectory()] directly
+#' when you need exactly that plot.
 #'
 #' @param x An anipoint object.
 #' @param ... Additional arguments passed to underlying plot functions.
