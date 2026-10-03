@@ -49,6 +49,13 @@ The plot is built from an intermediate frame of class
 that mirrors \code{data_plot()} in
 \pkg{see}.
 }
+\examples{
+\dontshow{if (requireNamespace("anicheck", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+af <- anicore::example_anipoint(n_obs = 50, n_individuals = 1, n_keypoints = 3)
+af$x[c(5:8, 20, 31:40)] <- NA
+plot(anicheck::check_na_gapsize(af))
+\dontshow{\}) # examplesIf}
+}
 \seealso{
 \code{\link[=as_plot_data]{as_plot_data()}}
 }

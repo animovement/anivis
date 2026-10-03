@@ -46,6 +46,13 @@ present the imputeTS steelblue, with the two named in the coloured subtitle
 from an intermediate frame of class \code{anivis_check_na_timing_data} produced by
 \code{\link[=as_plot_data]{as_plot_data()}} — the staging step that mirrors \code{data_plot()} in \pkg{see}.
 }
+\examples{
+\dontshow{if (requireNamespace("anicheck", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+af <- anicore::example_anipoint(n_obs = 50, n_individuals = 1, n_keypoints = 3)
+af$x[c(5:8, 20, 31:40)] <- NA
+plot(anicheck::check_na_timing(af))
+\dontshow{\}) # examplesIf}
+}
 \seealso{
 \code{\link[=as_plot_data]{as_plot_data()}}
 }

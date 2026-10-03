@@ -14,6 +14,16 @@
 #'
 #' @seealso [plot_events()]
 #'
+#' @examples
+#' events <- anicore::anievent(
+#'   individual = 1L,
+#'   channel = c("behaviour", "behaviour", "call"),
+#'   label = c("REM", "wake", "alarm"),
+#'   start = c(3, 14, 4.5),
+#'   stop = c(9, 19, 4.5)
+#' )
+#' plot(events)
+#'
 #' @export
 plot.anievent <- function(x, ..., mode = c("light", "dark")) {
   mode <- match.arg(mode)

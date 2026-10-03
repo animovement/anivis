@@ -29,3 +29,8 @@ Today the figure is the trajectory alone, drawn by \code{\link[=plot_trajectory]
 speed and course traces beneath the path. Call \code{\link[=plot_trajectory]{plot_trajectory()}} directly
 when you need exactly that plot.
 }
+\examples{
+af <- anicore::example_anipoint(n_obs = 20, n_individuals = 2, n_keypoints = 1)
+plot(af)
+
+}
