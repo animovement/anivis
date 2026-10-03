@@ -67,9 +67,7 @@ A ggplot object.
 ## Examples
 
 ``` r
-if (FALSE) { # requireNamespace("anicheck", quietly = TRUE) && utils::packageVersion("anicheck") >= "0.3.0.9004"
 af <- anicore::example_anipoint(n_obs = 100, n_individuals = 2) |>
   anicore::set_structure(anicore::example_structure())
 plot(anicheck::check_segment_length(af))
-}
 ```
