@@ -6,7 +6,7 @@ An R package for visualizing movement data and diagnostics.
 
 Useful links:
 
-- <http://animovement.dev/anivis/>
+- <https://animovement.dev/anivis/>
 
 - <https://github.com/animovement/anivis/>
 
