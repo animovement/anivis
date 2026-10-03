@@ -13,7 +13,7 @@ An R package for visualizing movement data and diagnostics.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://animovement.dev/anivis/}
+  \item \url{https://animovement.dev/anivis/}
   \item \url{https://github.com/animovement/anivis/}
   \item Report bugs at \url{https://github.com/animovement/anivis/issues}
 }
