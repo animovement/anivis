@@ -372,13 +372,115 @@
     )
   }
 
+  # --- check_segment_length --------------------------------------------------
+  # Vendored from anicheck's check_segment_length() (anicheck 0.3.0.9004),
+  # which anivis cannot yet require. Only the parts the plot reads.
+
+  segment_length_track <- function(d, group_cols, given, tolerance, n, clamp) {
+    d <- d[order(d$time), , drop = FALSE]
+    len <- d$length
+    measured <- !is.na(len)
+    ref <- unname(given[as.character(d$segment[1])])
+    source <- if (is.na(ref)) "median" else "structure"
+    if (is.na(ref)) {
+      ref <- stats::median(len[measured])
+    }
+    usable <- !is.na(ref) && ref > 0
+    relative <- if (usable) len / ref else rep(NA_real_, length(len))
+    off <- !is.na(relative) & abs(len - ref) > tolerance * ref
+    rel <- relative[!is.na(relative)]
+    q <- if (length(rel)) {
+      stats::quantile(rel, c(0, 0.25, 0.5, 0.75, 1), names = FALSE)
+    } else {
+      rep(NA_real_, 5)
+    }
+    v <- pmin(rel, clamp)
+    grid <- if (length(v) >= 2L && diff(range(v)) > 0) {
+      dens <- stats::density(v, from = min(v), to = max(v), n = n)
+      data.frame(value = dens$x, density = dens$y)
+    } else {
+      val <- if (length(v)) v[1] else NA_real_
+      data.frame(value = c(val, val), density = c(0, 1))
+    }
+    groups <- data.frame(
+      reference = ref,
+      reference_source = source,
+      n = sum(measured),
+      n_off = sum(off),
+      share_off = if (usable && any(measured)) mean(off[measured]) else NA,
+      relative_min = q[1],
+      relative_q25 = q[2],
+      relative_median = q[3],
+      relative_q75 = q[4],
+      relative_max = q[5]
+    )
+    for (col in group_cols) {
+      grid[[col]] <- d[[col]][1]
+      groups[[col]] <- d[[col]][1]
+    }
+    list(
+      grid = grid[c(group_cols, "value", "density")],
+      groups = groups[c(group_cols, setdiff(names(groups), group_cols))]
+    )
+  }
+
+  build_segment_length <- function(
+    data,
+    structure = NULL,
+    tolerance = 0.3,
+    n = 256
+  ) {
+    structures <- anicore::get_structure(data)
+    if (is.null(structure)) {
+      structure <- names(Filter(function(s) nrow(s$segments) > 0L, structures))
+    }
+    seg <- anicore::as_anisegment(data, structure = structure)
+    struct <- structures[[structure]]
+    given <- stats::setNames(struct$segments$length, struct$segments$segment)
+    group_cols <- aniframe_group_cols(seg)
+    clamp <- max(2, 1 + 2 * tolerance)
+
+    df <- as.data.frame(seg)
+    tracks <- lapply(
+      split_by_group_cols(df, group_cols),
+      segment_length_track,
+      group_cols = group_cols,
+      given = given,
+      tolerance = tolerance,
+      n = n,
+      clamp = clamp
+    )
+    bind <- function(part) {
+      out <- do.call(rbind, lapply(tracks, `[[`, part))
+      rownames(out) <- NULL
+      out
+    }
+    x <- bind("grid")
+    class(x) <- c(
+      "check_segment_length",
+      "anivis_check_segment_length",
+      "tbl_df",
+      "tbl",
+      "data.frame"
+    )
+    attr(x, "group_cols") <- group_cols
+    attr(x, "variables_what") <- anicore::get_variables(seg, "what")
+    attr(x, "variables_when") <- anicore::get_variables(seg, "when", "keys")
+    attr(x, "groups") <- bind("groups")
+    attr(x, "tolerance") <- tolerance
+    attr(x, "clamp") <- clamp
+    x
+  }
+
   list(
     na_timing = build_na_timing,
     na_gapsize = build_na_gapsize,
-    confidence = build_confidence
+    confidence = build_confidence,
+    segment_length = build_segment_length
   )
 })
 
 make_check_na_timing <- .anivis_check_builders$na_timing
 make_check_na_gapsize <- .anivis_check_builders$na_gapsize
 make_check_confidence <- .anivis_check_builders$confidence
+make_check_segment_length <- .anivis_check_builders$segment_length

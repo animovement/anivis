@@ -27,6 +27,7 @@ reference:
   - plot.anivis_check_na_timing
   - plot.anivis_check_na_gapsize
   - plot.anivis_check_confidence
+  - plot.anivis_check_segment_length
   - as_plot_data
 
 - title: "Geoms"
