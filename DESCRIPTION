@@ -17,6 +17,7 @@ BugReports: https://github.com/animovement/anivis/issues
 Encoding: UTF-8
 LazyData: true
 Imports:
+    lifecycle,
     rlang,
     ggplot2,
     patchwork,
