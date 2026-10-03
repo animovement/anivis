@@ -11,6 +11,19 @@
   [`plot_trajectory()`](https://animovement.dev/anivis/reference/plot_trajectory.md)
   requires an `anipoint`.
 
+- Functions now carry a lifecycle stage (animovement/.github#46), and
+  unlabelled means stable.
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) on an
+  anipoint
+  ([`plot.anipoint()`](https://animovement.dev/anivis/reference/plot.anipoint.md))
+  is labelled experimental: it draws the trajectory alone today, and
+  what it shows may change without a deprecation cycle, for example to
+  add speed and course traces beneath the path
+  ([\#9](https://github.com/animovement/anivis/issues/9)). Call
+  [`plot_trajectory()`](https://animovement.dev/anivis/reference/plot_trajectory.md)
+  directly when you need exactly that plot. Every other function is
+  stable, and changes only through a deprecation cycle.
+
 ### Fixed
 
 - [`plot_trajectory()`](https://animovement.dev/anivis/reference/plot_trajectory.md),

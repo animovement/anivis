@@ -3,7 +3,7 @@
 ## Plotting
 
 - [`plot(`*`<anipoint>`*`)`](https://animovement.dev/anivis/reference/plot.anipoint.md)
-  : Plot an anipoint Object
+  **\[experimental\]** : Plot an anipoint Object
 - [`plot(`*`<anievent>`*`)`](https://animovement.dev/anivis/reference/plot.anievent.md)
   : Plot an anievent Object
 - [`plot_trajectory()`](https://animovement.dev/anivis/reference/plot_trajectory.md)
