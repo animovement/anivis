@@ -6,6 +6,10 @@
 
 ## Fixed
 
+* `plot_trajectory()`, `plot_timeseries()` and `plot()` read the positions and time from the columns the frame declares for them (#37), so the axes and the index no longer have to be called `x`, `y` and `time`. A frame with renamed axes failed with ``Column `x` not found``, and one with a renamed index with `argument 2 is not a vector`. The axes are still labelled by role, as `x (mm)`, and frames using the standard names plot exactly as before.
+
+  The x and y axes come from `anicore::get_axes()`, so a three-dimensional frame is drawn in its x-y plane whatever its columns are called. A frame without x and y axes, such as a polar one, now fails saying so, instead of reporting a missing column. Time comes from `anicore::get_index()`. Trajectory groups, and the palette that colours them, come from `anicore::get_keys()`, the columns the frame is grouped by.
+
 * `plot()` works on an aniframe with nothing to draw (#32) — one with no rows, or one whose positions are all `NA`. Both failed with `arguments imply differing number of rows: 0, 2`, preceded by a warning about the `each` argument, neither of which pointed at the frame. The second case is the likelier one: a keypoint the tracker never found has no start or end to mark.
 
   `trajectory_endpoints()` returned `NULL` when no group had a valid point — `do.call(rbind, list())` — and `nrow(NULL)` then reached `rep(each = )`, which used a `NULL` length and produced two rows against a column of none.

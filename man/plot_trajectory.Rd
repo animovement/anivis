@@ -26,15 +26,21 @@ A ggplot object.
 }
 \description{
 Creates a ggplot of the x-y trajectory from an anipoint. One path is drawn
-per trajectory group, where a group is the combination of every
-\code{variables_what} column and every non-time \code{variables_when} column in the
-anipoint's metadata.
+per trajectory group, where a group is the combination of the frame's
+grouping columns (\code{\link[anicore:get_keys]{anicore::get_keys()}}): its identity columns and its
+temporal context, such as session or trial.
 }
 \details{
+The positions are read from the columns the frame declares for its \code{x} and
+\code{y} axes (\code{\link[anicore:get_axes]{anicore::get_axes()}}), and time from its index column
+(\code{\link[anicore:get_index]{anicore::get_index()}}), so neither has to be named \code{x}, \code{y} or \code{time}. The
+axes are labelled by role. A three-dimensional frame is drawn in its x-y
+plane. A frame without \code{x} and \code{y} axes, such as a polar one, is an error.
+
 Colours adapt to the dataset shape:
 \itemize{
 \item \strong{single} trajectory (no grouping): the line is coloured continuously
-by \code{time} using the Material gradient scale (\code{\link[=scale_colour_material_c]{scale_colour_material_c()}}),
+by time using the Material gradient scale (\code{\link[=scale_colour_material_c]{scale_colour_material_c()}}),
 shown as a \code{time} colour bar.
 \item \strong{what-only} or \strong{when-only} grouping (one varying axis): each line
 gets its own hue from a qualitative palette, with \code{time} mapped to alpha

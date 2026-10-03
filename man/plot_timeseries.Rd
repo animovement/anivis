@@ -39,13 +39,16 @@ A ggplot object for a single variable, or a stacked patchwork for
 several.
 }
 \description{
-Plots one or more numeric variables from an aniframe against \code{time}, with one
-line per trajectory group (every \code{variables_what} column and every non-time
-\code{variables_when} column in the metadata). Use it for any per-frame measure —
-\code{speed}, \code{acceleration}, a confidence score, a temperature channel, or any
-other derived column.
+Plots one or more numeric variables from an aniframe against time, with one
+line per trajectory group (every grouping column of the frame,
+\code{\link[anicore:get_keys]{anicore::get_keys()}}: its identity columns and its temporal context). Use it
+for any per-frame measure — \code{speed}, \code{acceleration}, a confidence score, a
+temperature channel, or any other derived column.
 }
 \details{
+Time is read from the frame's index column (\code{\link[anicore:get_index]{anicore::get_index()}}), so it
+need not be called \code{time}.
+
 Pass several names to \code{variable} to draw a panel per variable, \strong{vertically
 stacked} with a shared x axis and a single shared legend (via \code{\link[=plots]{plots()}});
 stacking makes it easy to compare their shape over time. A single variable
@@ -57,8 +60,9 @@ The \code{layout} argument chooses how groups are arranged, mirroring
 \item \code{"inline"} (default): all groups share one panel as coloured lines, with a
 legend when there is more than one group.
 \item \code{"facet"}: each group gets its own panel — \code{facet_grid()} when both an
-identity and a (non-time) condition vary, otherwise \code{facet_wrap()} with the
-panels stacked in rows so the shared x axis lines up.
+identity and a temporal context (such as trial) vary, otherwise
+\code{facet_wrap()} with the panels stacked in rows so the shared x axis lines
+up.
 }
 
 Colours come from \code{\link[=palette_animovement]{palette_animovement()}}, matching \code{\link[=plot_trajectory]{plot_trajectory()}}. The

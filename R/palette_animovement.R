@@ -1,9 +1,12 @@
 # Metadata-driven per-group palette for aniframes. This is anivis' own palette
-# (not from see): it reads an aniframe's `variables_what` / `variables_when`
-# metadata and assigns one hue per `what` level and, where both axes vary, a
-# light-to-dark shade per `when` level. Used by plot_trajectory().
+# (not from see): it splits an aniframe's grouping columns into identity
+# (`what`) and temporal context (`when`), and assigns one hue per `what` level
+# and, where both axes vary, a light-to-dark shade per `when` level. Used by
+# plot_trajectory() and plot_timeseries().
 
-# Internal: derive per-row group keys from an aniframe's metadata.
+# Internal: derive per-row group keys from an aniframe's grouping columns,
+# anicore::get_keys(), split by role into identity keys and temporal context
+# keys. The index is never a grouping column, so it needs no excluding.
 # Returns a list with the per-row `group`, `what` / `when` keys, the unique
 # levels in order of first appearance, and a `mode` describing the grouping:
 #   - "matrix": both what and when have >1 level
@@ -11,11 +14,12 @@
 #   - "when":   only when has >1 level (drop redundant what from group key)
 #   - "single": neither has >1 level
 aniframe_group_keys <- function(data) {
-  what_cols <- intersect(anicore::get_variables(data, "what"), names(data))
-  when_cols <- intersect(
-    anicore::get_variables(data, "when", "keys"),
-    names(data)
+  group_cols <- intersect(anicore::get_keys(data), names(data))
+  what_cols <- intersect(
+    group_cols,
+    anicore::get_variables(data, "what", "keys")
   )
+  when_cols <- setdiff(group_cols, what_cols)
 
   paste_cols <- function(cols) {
     if (!length(cols)) {
@@ -77,8 +81,9 @@ darken_colour <- function(col, amount = 0.5) {
 #' Per-group colour palette for an aniframe
 #'
 #' Builds a named character vector mapping trajectory group keys to colours.
-#' The colour scheme adapts to how many `what` and (non-time) `when` levels
-#' the aniframe has:
+#' The colour scheme adapts to how many identity (`what`) and temporal context
+#' (`when`, such as session or trial) levels the aniframe's grouping columns
+#' ([anicore::get_keys()]) have:
 #'
 #' * **single** (one of each, or none): a single hue.
 #' * **what**  (multiple `what`, one `when`): one qualitative hue per `what`
