@@ -2,6 +2,18 @@
 
 ## anivis (development version)
 
+### Added
+
+- [`plot()`](https://rdrr.io/r/graphics/plot.default.html) draws a
+  `check_segment_length()` result from anicheck
+  (animovement/anicheck#39): a horizontal violin per segment of its
+  length relative to its reference, with the median and inter-quartile
+  range, a line at the reference and dashed lines at the check’s
+  tolerance either side, and a panel per individual. Unstable segments
+  are the wide violins, or those reaching past the dashed lines.
+  [`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)
+  gives the data it is drawn from. It is experimental, like the check.
+
 ### Changed
 
 - Works with anicore’s `anipoint` class and rebuilt accessor API

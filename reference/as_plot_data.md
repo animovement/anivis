@@ -31,6 +31,9 @@ as_plot_data(
 
 # S3 method for class 'check_na_timing'
 as_plot_data(x, ..., measure = c("percent", "count"), n_intervals = NULL)
+
+# S3 method for class 'check_segment_length'
+as_plot_data(x, ..., clip = 0.02)
 ```
 
 ## Arguments
@@ -115,6 +118,20 @@ per-frame data is needed. `value` is the share (`measure = "percent"`)
 or count (`"count"`), `width` the interval's span in time units, and the
 frame interval size rides along as an attribute. Returns a frame classed
 `anivis_check_na_timing_data`.
+
+`as_plot_data.check_segment_length()` turns the per-track density grid
+of relative lengths into closed violin polygons, as for
+`check_confidence()`: each segment sits at an integer y position, the
+structure's first segment at the top, with its density mirrored either
+side along the relative-length (x) axis and cut below `clip` x its peak.
+`segment` is always the y axis; any other key that varies (an
+individual, a session) collapses into a `group` factor for faceting. A
+track that was never measured has nothing to draw and is left out. The y
+positions, a per-track `overlay` of the median and quartiles (capped at
+the check's `clamp`, like the grid) and the share off, the tolerance and
+the x positions of its `guides`, `clamp` and whether any track exceeded
+it (`clamped`), and `facet` ride along as attributes. Returns a frame
+classed `anivis_check_segment_length_data`.
 
 ## See also
 

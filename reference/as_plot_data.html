@@ -19,7 +19,7 @@ grouping factor, ordered fill levels, the right level ordering, and so on)."><me
 
     <a class="navbar-brand me-2" href="../index.html">anivis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@ grouping factor, ordered fill levels, the right level ordering, and so on)."><me
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Prepare a Check Result for Plotting</h1>
-      <small class="dont-index">Source: <a href="https://github.com/animovement/anivis/blob/main/R/as_plot_data.R" class="external-link"><code>R/as_plot_data.R</code></a>, <a href="https://github.com/animovement/anivis/blob/main/R/plot.check_confidence.R" class="external-link"><code>R/plot.check_confidence.R</code></a>, <a href="https://github.com/animovement/anivis/blob/main/R/plot.check_na_gapsize.R" class="external-link"><code>R/plot.check_na_gapsize.R</code></a>, and 1 more</small>
+      <small class="dont-index">Source: <a href="https://github.com/animovement/anivis/blob/main/R/as_plot_data.R" class="external-link"><code>R/as_plot_data.R</code></a>, <a href="https://github.com/animovement/anivis/blob/main/R/plot.check_confidence.R" class="external-link"><code>R/plot.check_confidence.R</code></a>, <a href="https://github.com/animovement/anivis/blob/main/R/plot.check_na_gapsize.R" class="external-link"><code>R/plot.check_na_gapsize.R</code></a>, and 2 more</small>
       <div class="d-none name"><code>as_plot_data.Rd</code></div>
     </div>
 
@@ -92,7 +92,10 @@ grouping factor, ordered fill levels, the right level ordering, and so on).</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'check_na_timing'</span></span>
-<span><span class="fu">as_plot_data</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"percent"</span>, <span class="st">"count"</span><span class="op">)</span>, n_intervals <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">as_plot_data</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"percent"</span>, <span class="st">"count"</span><span class="op">)</span>, n_intervals <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'check_segment_length'</span></span>
+<span><span class="fu">as_plot_data</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, clip <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -168,6 +171,20 @@ gap's overlap with each interval is counted, so no per-frame data is needed.
 <code>value</code> is the share (<code>measure = "percent"</code>) or count (<code>"count"</code>), <code>width</code> the
 interval's span in time units, and the frame interval size rides along as an
 attribute. Returns a frame classed <code>anivis_check_na_timing_data</code>.</p>
+<p><code>as_plot_data.check_segment_length()</code> turns the per-track density grid of
+relative lengths into closed violin polygons, as for <code>check_confidence()</code>:
+each segment sits at an integer y position, the structure's first segment
+at the top, with
+its density mirrored either side along the relative-length (x) axis and cut
+below <code>clip</code> x its peak. <code>segment</code> is always the y axis; any other key that
+varies (an individual, a session) collapses into a <code>group</code> factor for
+faceting. A track that was never measured has nothing to draw and is left
+out. The y positions, a per-track <code>overlay</code> of the median and quartiles
+(capped at the check's <code>clamp</code>, like the grid) and the share off, the
+tolerance and the x positions of its
+<code>guides</code>, <code>clamp</code> and whether any track exceeded it (<code>clamped</code>), and <code>facet</code>
+ride along as attributes. Returns a frame classed
+<code>anivis_check_segment_length_data</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

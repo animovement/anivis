@@ -23,6 +23,9 @@
   : Plot the Occurrence of Missing-Value Gap Sizes
 - [`plot(`*`<anivis_check_confidence>`*`)`](https://animovement.dev/anivis/reference/plot.anivis_check_confidence.md)
   : Plot the Distribution of Tracking Confidence
+- [`plot(`*`<anivis_check_segment_length>`*`)`](https://animovement.dev/anivis/reference/plot.anivis_check_segment_length.md)
+  **\[experimental\]** : Plot how much segments vary from their usual
+  length
 - [`as_plot_data()`](https://animovement.dev/anivis/reference/as_plot_data.md)
   : Prepare a Check Result for Plotting
 
