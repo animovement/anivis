@@ -179,9 +179,10 @@ check_timeseries_variables <- function(data, variable) {
 }
 
 # Internal: facet by whichever identity (`what`) and condition (`when`) columns
-# actually vary — facet_grid when both do, otherwise facet_wrap. Returns NULL
-# when nothing varies (a single group).
-timeseries_facets <- function(data, keys) {
+# actually vary — facet_grid when both do, otherwise facet_wrap with `ncol`
+# columns (1 by default, stacking the panels; NULL lets ggplot2 choose).
+# Returns NULL when nothing varies (a single group).
+timeseries_facets <- function(data, keys, ncol = 1) {
   varying <- function(cols) {
     cols[vapply(
       cols,
@@ -198,10 +199,11 @@ timeseries_facets <- function(data, keys) {
       cols = ggplot2::vars(!!!rlang::syms(what_v))
     )
   } else if (length(what_v)) {
-    # One axis: stack panels in rows so the shared x axis lines up vertically.
-    ggplot2::facet_wrap(ggplot2::vars(!!!rlang::syms(what_v)), ncol = 1)
+    # One axis: by default, stack panels in rows so the shared x axis lines
+    # up vertically.
+    ggplot2::facet_wrap(ggplot2::vars(!!!rlang::syms(what_v)), ncol = ncol)
   } else if (length(when_v)) {
-    ggplot2::facet_wrap(ggplot2::vars(!!!rlang::syms(when_v)), ncol = 1)
+    ggplot2::facet_wrap(ggplot2::vars(!!!rlang::syms(when_v)), ncol = ncol)
   } else {
     NULL
   }
