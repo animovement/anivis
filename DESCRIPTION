@@ -19,16 +19,17 @@ LazyData: true
 Imports:
     lifecycle,
     rlang,
-    ggplot2,
+    ggplot2 (>= 3.5.0),
     patchwork,
     marquee,
     hms,
     cli,
     grDevices,
     stats,
-    anicore (>= 0.8.0.9003)
+    anicore (>= 0.8.0.9004)
 Suggests: 
     anicheck,
+    animetric,
     ragg,
     knitr,
     testthat (>= 3.0.0)

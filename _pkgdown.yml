@@ -19,6 +19,7 @@ reference:
   - plot.anievent
   - plot_trajectory
   - plot_timeseries
+  - plot_circular
   - plot_events
   - plots
 
