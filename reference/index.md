@@ -10,6 +10,8 @@
   : Plot Movement Trajectory
 - [`plot_timeseries()`](https://animovement.dev/anivis/reference/plot_timeseries.md)
   : Plot a Variable as a Time Series
+- [`plot_circular()`](https://animovement.dev/anivis/reference/plot_circular.md)
+  **\[experimental\]** : Plot the Distribution of an Angle
 - [`plot_events()`](https://animovement.dev/anivis/reference/plot_events.md)
   : Plot State and Point Events
 - [`plots()`](https://animovement.dev/anivis/reference/plots.md) :

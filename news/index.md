@@ -4,6 +4,24 @@
 
 ### Added
 
+- [`plot_circular()`](https://animovement.dev/anivis/reference/plot_circular.md)
+  draws an angular column, such as `course` from animetric or a declared
+  `heading`, as a circular histogram (rose diagram) per trajectory group
+  ([\#38](https://github.com/animovement/anivis/issues/38)). It takes
+  its conventions from the frame: angles are read in the frame’s
+  `unit_angle` and the axis labelled in degrees or radians to match, 0
+  points along +x and angles run counter-clockwise or clockwise as
+  [`anicore::get_angle_direction()`](https://animovement.dev/anicore/reference/get_angle_direction.html)
+  says, and angles in either (-pi, pi\] or \[0, 2\*pi) are wrapped so a
+  distribution straddling pi is not split. Wedges start from an empty
+  inner circle and their area is proportional to their share by default
+  (`inner_radius`, `equal_area`). The bins can be set as a count
+  (`bins`, 36 by default) or a width in the frame’s unit (`binwidth`),
+  angles can be weighted by another column (`weight`, e.g. `"speed"`, so
+  that frames where the animal is nearly still do not dominate), and a
+  thin line from the inner circle to the edge marks each group’s
+  circular mean direction. It is experimental.
+
 - [`plot()`](https://rdrr.io/r/graphics/plot.default.html) draws a
   `check_segment_length()` result from anicheck
   (animovement/anicheck#39): a horizontal violin per segment of its
@@ -15,6 +33,13 @@
   gives the data it is drawn from. It is experimental, like the check.
 
 ### Changed
+
+- The minimum `anicore` is 0.8.0.9004, the first with `angle_to_rad()`,
+  and the minimum `ggplot2` is 3.5.0, the first with
+  [`coord_radial()`](https://ggplot2.tidyverse.org/reference/coord_radial.html).
+  Both are for
+  [`plot_circular()`](https://animovement.dev/anivis/reference/plot_circular.md).
+  `animetric` is suggested, for its examples and tests.
 
 - Works with anicore’s `anipoint` class and rebuilt accessor API
   (animovement/anicore#154).
