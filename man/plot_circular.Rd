@@ -70,7 +70,7 @@ A ggplot object.
 Draws an angular column of an aniframe as a circular histogram, or rose
 diagram: one wedge per bin of directions, its size the share of the group's
 angles that fall in the bin. Use it for any angle the frame stores in its
-angular unit, such as \code{course} from \code{animetric::calculate_kinematics()} or a
+angular unit, such as \code{course} from \code{animetric::add_kinematics()} or a
 2D orientation (\code{heading}) declared with \code{animetric::add_orientation()}.
 
 The plot takes its conventions from the frame rather than assuming them:
@@ -140,7 +140,7 @@ plot_circular(af, variable = "course")
 # Fewer, wider bins, with the groups overlaid
 plot_circular(af, variable = "course", binwidth = pi / 6, layout = "inline")
 
-\dontshow{if (requireNamespace("animetric", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("animetric", version = "0.5.0.9006")) withAutoprint(\{ # examplesIf}
 # Course from animetric, and a heading declared from two keypoints, in a
 # frame storing angles in degrees
 kin <- anicore::example_anipoint(n_obs = 200, n_individuals = 1) |>
@@ -150,7 +150,7 @@ kin <- anicore::example_anipoint(n_obs = 200, n_individuals = 1) |>
     to = "head",
     level = "keypoint"
   ) |>
-  animetric::calculate_kinematics()
+  animetric::add_kinematics()
 
 # Each frame counted by how far it moved
 plot_circular(kin, variable = "course", weight = "speed")

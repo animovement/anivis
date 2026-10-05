@@ -415,7 +415,7 @@ test_that("the mean line is in the theme's text colour, light and dark", {
 # --- with animetric ----------------------------------------------------------
 
 test_that("plot_circular draws course and a declared heading from animetric", {
-  skip_if_not_installed("animetric")
+  skip_if_not_installed("animetric", "0.5.0.9006")
   kin <- anicore::example_anipoint(n_obs = 50, n_individuals = 1) |>
     anicore::convert_unit_angle("deg") |>
     animetric::add_orientation(
@@ -423,7 +423,7 @@ test_that("plot_circular draws course and a declared heading from animetric", {
       to = "head",
       level = "keypoint"
     ) |>
-    animetric::calculate_kinematics()
+    animetric::add_kinematics()
 
   course <- plot_circular(kin, variable = "course", weight = "speed")
   heading <- plot_circular(kin, variable = "heading")
