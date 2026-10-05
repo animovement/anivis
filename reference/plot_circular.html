@@ -3,7 +3,7 @@
 Draws an angular column of an aniframe as a circular histogram, or rose
 diagram: one wedge per bin of directions, its size the share of the group's
 angles that fall in the bin. Use it for any angle the frame stores in its
-angular unit, such as course from animetric::calculate_kinematics() or a
+angular unit, such as course from animetric::add_kinematics() or a
 2D orientation (heading) declared with animetric::add_orientation().
 The plot takes its conventions from the frame rather than assuming them:
 Unit: the column is read in the frame's unit_angle
@@ -61,7 +61,7 @@ colour, with a legend when there is more than one group.
 Draws an angular column of an aniframe as a circular histogram, or rose
 diagram: one wedge per bin of directions, its size the share of the group's
 angles that fall in the bin. Use it for any angle the frame stores in its
-angular unit, such as course from animetric::calculate_kinematics() or a
+angular unit, such as course from animetric::add_kinematics() or a
 2D orientation (heading) declared with animetric::add_orientation().
 The plot takes its conventions from the frame rather than assuming them:
 Unit: the column is read in the frame's unit_angle
@@ -171,7 +171,7 @@ colour, with a legend when there is more than one group.
 <p>Draws an angular column of an aniframe as a circular histogram, or rose
 diagram: one wedge per bin of directions, its size the share of the group's
 angles that fall in the bin. Use it for any angle the frame stores in its
-angular unit, such as <code>course</code> from <code><a href="https://animovement.dev/animetric/reference/calculate_kinematics.html" class="external-link">animetric::calculate_kinematics()</a></code> or a
+angular unit, such as <code>course</code> from <code><a href="https://animovement.dev/animetric/reference/add_kinematics.html" class="external-link">animetric::add_kinematics()</a></code> or a
 2D orientation (<code>heading</code>) declared with <code><a href="https://animovement.dev/animetric/reference/add_orientation.html" class="external-link">animetric::add_orientation()</a></code>.</p>
 <p>The plot takes its conventions from the frame rather than assuming them:</p><ul><li><p><strong>Unit:</strong> the column is read in the frame's <code>unit_angle</code>
 (<code><a href="https://animovement.dev/anicore/reference/get_metadata.html" class="external-link">anicore::get_metadata()</a></code>) and binned in radians
@@ -338,7 +338,7 @@ direction. Default <code>TRUE</code>.</p></dd>
 <span class="r-in"><span>    to <span class="op">=</span> <span class="st">"head"</span>,</span></span>
 <span class="r-in"><span>    level <span class="op">=</span> <span class="st">"keypoint"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">animetric</span><span class="fu">::</span><span class="fu"><a href="https://animovement.dev/animetric/reference/calculate_kinematics.html" class="external-link">calculate_kinematics</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">animetric</span><span class="fu">::</span><span class="fu"><a href="https://animovement.dev/animetric/reference/add_kinematics.html" class="external-link">add_kinematics</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Each frame counted by how far it moved</span></span></span>
 <span class="r-in"><span><span class="fu">plot_circular</span><span class="op">(</span><span class="va">kin</span>, variable <span class="op">=</span> <span class="st">"course"</span>, weight <span class="op">=</span> <span class="st">"speed"</span><span class="op">)</span></span></span>

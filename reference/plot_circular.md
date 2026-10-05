@@ -6,7 +6,7 @@ Draws an angular column of an aniframe as a circular histogram, or rose
 diagram: one wedge per bin of directions, its size the share of the
 group's angles that fall in the bin. Use it for any angle the frame
 stores in its angular unit, such as `course` from
-[`animetric::calculate_kinematics()`](https://animovement.dev/animetric/reference/calculate_kinematics.html)
+[`animetric::add_kinematics()`](https://animovement.dev/animetric/reference/add_kinematics.html)
 or a 2D orientation (`heading`) declared with
 [`animetric::add_orientation()`](https://animovement.dev/animetric/reference/add_orientation.html).
 
@@ -199,7 +199,7 @@ kin <- anicore::example_anipoint(n_obs = 200, n_individuals = 1) |>
     to = "head",
     level = "keypoint"
   ) |>
-  animetric::calculate_kinematics()
+  animetric::add_kinematics()
 
 # Each frame counted by how far it moved
 plot_circular(kin, variable = "course", weight = "speed")

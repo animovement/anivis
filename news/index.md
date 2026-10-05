@@ -39,7 +39,8 @@
   [`coord_radial()`](https://ggplot2.tidyverse.org/reference/coord_radial.html).
   Both are for
   [`plot_circular()`](https://animovement.dev/anivis/reference/plot_circular.md).
-  `animetric` is suggested, for its examples and tests.
+  `animetric` 0.5.0.9006 or later, the first with `add_kinematics()`, is
+  suggested for its examples and tests.
 
 - Works with anicore’s `anipoint` class and rebuilt accessor API
   (animovement/anicore#154).
