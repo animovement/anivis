@@ -8,7 +8,7 @@
 
 ## Changed
 
-* The minimum `anicore` is 0.8.0.9004, the first with `angle_to_rad()`, and the minimum `ggplot2` is 3.5.0, the first with `coord_radial()`. Both are for `plot_circular()`. `animetric` is suggested, for its examples and tests.
+* The minimum `anicore` is 0.8.0.9004, the first with `angle_to_rad()`, and the minimum `ggplot2` is 3.5.0, the first with `coord_radial()`. Both are for `plot_circular()`. `animetric` 0.5.0.9006 or later, the first with `add_kinematics()`, is suggested for its examples and tests.
 
 * Works with anicore's `anipoint` class and rebuilt accessor API (animovement/anicore#154). `plot()` dispatches on `anipoint` rather than `aniframe`, and `plot_trajectory()` requires an `anipoint`.
 
