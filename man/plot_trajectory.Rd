@@ -7,7 +7,15 @@
 \usage{
 plot_trajectory(data, ...)
 
-\method{plot_trajectory}{default}(data, ..., mode = c("light", "dark"), palette = "Dark 3")
+\method{plot_trajectory}{default}(
+  data,
+  ...,
+  mode = c("light", "dark"),
+  palette = "Dark 3",
+  arena = NULL,
+  arena_palette = NULL,
+  axes = TRUE
+)
 }
 \arguments{
 \item{data}{An anipoint object.}
@@ -20,6 +28,16 @@ plot_trajectory(data, ...)
 \item{palette}{Name of a qualitative palette accepted by
 \code{\link[grDevices:hcl.colors]{grDevices::hcl.colors()}}; controls the hue family across grouping
 levels.}
+
+\item{arena}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} An arena to draw under the
+paths (default \code{NULL}, none), such as from \code{\link[=arena_ymaze]{arena_ymaze()}}; see
+\code{\link[=geom_arena]{geom_arena()}}.}
+
+\item{arena_palette}{The arena's colours (default \code{NULL}, its own style);
+passed to \code{\link[=geom_arena]{geom_arena()}} as \code{palette}.}
+
+\item{axes}{A logical value (default \code{TRUE}) determining whether the axes
+are drawn.}
 }
 \value{
 A ggplot object.
@@ -53,9 +71,22 @@ shade per \code{when}; time reads from the start/end markers.
 Every trajectory is annotated with a filled circle at its first point and
 a filled triangle at its last point, identified in a start/end legend. Gaps
 from missing data are bridged with a dashed line so the path stays traceable.
+
+An \code{arena}, such as a maze or a pitch, is drawn underneath the paths, and the
+panel grid is dropped. It is converted to the frame's \code{unit_space}, so it
+lines up with data calibrated to real units and centred where the arena is.
 }
 \examples{
 af <- anicore::example_anipoint(n_obs = 20, n_individuals = 2, n_keypoints = 1)
 plot_trajectory(af)
+
+# On an arena: positions in cm, centred on the maze
+ymaze <- data.frame(
+  time = 1:4,
+  x = c(0, 0, 0, 25),
+  y = c(0, 30, 0, -14)
+) |>
+  anicore::as_anipoint(metadata = list(unit_space = "cm"))
+plot_trajectory(ymaze, arena = arena_ymaze(arm_length = 40, arm_width = 8))
 
 }

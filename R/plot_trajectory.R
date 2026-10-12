@@ -27,6 +27,10 @@
 #' a filled triangle at its last point, identified in a start/end legend. Gaps
 #' from missing data are bridged with a dashed line so the path stays traceable.
 #'
+#' An `arena`, such as a maze or a pitch, is drawn underneath the paths, and the
+#' panel grid is dropped. It is converted to the frame's `unit_space`, so it
+#' lines up with data calibrated to real units and centred where the arena is.
+#'
 #' @param data An anipoint object.
 #' @param ... Additional arguments (currently unused).
 #' @param mode Either `"light"` (default) or `"dark"`; passed to
@@ -34,12 +38,28 @@
 #' @param palette Name of a qualitative palette accepted by
 #'   [grDevices::hcl.colors()]; controls the hue family across grouping
 #'   levels.
+#' @param arena `r lifecycle::badge("experimental")` An arena to draw under the
+#'   paths (default `NULL`, none), such as from [arena_ymaze()]; see
+#'   [geom_arena()].
+#' @param arena_palette The arena's colours (default `NULL`, its own style);
+#'   passed to [geom_arena()] as `palette`.
+#' @param axes A logical value (default `TRUE`) determining whether the axes
+#'   are drawn.
 #'
 #' @return A ggplot object.
 #'
 #' @examples
 #' af <- anicore::example_anipoint(n_obs = 20, n_individuals = 2, n_keypoints = 1)
 #' plot_trajectory(af)
+#'
+#' # On an arena: positions in cm, centred on the maze
+#' ymaze <- data.frame(
+#'   time = 1:4,
+#'   x = c(0, 0, 0, 25),
+#'   y = c(0, 30, 0, -14)
+#' ) |>
+#'   anicore::as_anipoint(metadata = list(unit_space = "cm"))
+#' plot_trajectory(ymaze, arena = arena_ymaze(arm_length = 40, arm_width = 8))
 #'
 #' @export
 plot_trajectory <- function(data, ...) {
@@ -52,14 +72,20 @@ plot_trajectory.default <- function(
   data,
   ...,
   mode = c("light", "dark"),
-  palette = "Dark 3"
+  palette = "Dark 3",
+  arena = NULL,
+  arena_palette = NULL,
+  axes = TRUE
 ) {
   if (!anicore::is_anipoint(data)) {
     cli::cli_abort("{.arg data} must be an anipoint.")
   }
   mode <- match.arg(mode)
 
+  # Read before `axes` is reused for the position columns
+  show_axes <- isTRUE(axes)
   axes <- trajectory_axes(data)
+  arena_layers <- trajectory_arena(data, arena, arena_palette, mode)
   index <- anicore::get_index(data)
   keys <- aniframe_group_keys(data)
   pal <- palette_animovement(data, palette = palette)
@@ -215,6 +241,7 @@ plot_trajectory.default <- function(
   }
 
   base +
+    arena_layers +
     path_layers +
     ggplot2::geom_point(
       data = ends_long,
@@ -247,7 +274,42 @@ plot_trajectory.default <- function(
     ) +
     ggplot2::coord_fixed() +
     ggplot2::labs(x = x_lab, y = y_lab, fill = NULL) +
-    theme_animovement(mode = mode)
+    theme_animovement(mode = mode) +
+    list(
+      if (!is.null(arena_layers)) theme_arena(),
+      if (!show_axes) theme_no_axes()
+    )
+}
+
+# Internal: the layers drawing `arena` in the frame's unit, or NULL for none.
+# Data in pixels or without a unit cannot be matched to an arena in real
+# units, so it has to be calibrated, or the arena placed by hand.
+trajectory_arena <- function(
+  data,
+  arena,
+  palette,
+  mode,
+  call = rlang::caller_env()
+) {
+  if (is.null(arena)) {
+    return(NULL)
+  }
+  ensure_is_arena(arena, call = call)
+  unit <- anicore::get_metadata(data, "unit_space")
+  unit <- if (is.null(unit)) NA_character_ else as.character(unit)
+  if (!is.na(unit) && !identical(unit, arena$unit)) {
+    if (unit %in% c("px", "none")) {
+      cli::cli_abort(
+        c(
+          "The data is in {.val {unit}} and the arena in {.val {arena$unit}}.",
+          "i" = "Calibrate the data with {.fn anicore::convert_unit_space}, or place the arena with {.fn arena_transform}."
+        ),
+        call = call
+      )
+    }
+    arena <- arena_transform(arena, unit = unit)
+  }
+  geom_arena(arena, palette = palette, mode = mode)
 }
 
 # Internal: the columns carrying the x and y axes, as `c(x = , y = )`. A
