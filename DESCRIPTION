@@ -6,7 +6,7 @@ Authors@R:
     person(
       "Mikkel", 
       "Roald-Arbøl", 
-      role = c("aut", "cre"), 
+      role = c("aut", "cre", "cph"), 
       email = "animovement.84w1m@passmail.com",
       comment = c(ORCID = "0000-0002-9998-0058")
       )
@@ -14,8 +14,10 @@ Description: An R package for visualizing movement data and diagnostics.
 License: MIT + file LICENSE
 URL: https://animovement.dev/anivis/, https://github.com/animovement/anivis/
 BugReports: https://github.com/animovement/anivis/issues
+Depends:
+    R (>= 4.1.0)
 Encoding: UTF-8
-LazyData: true
+Language: en-GB
 Imports:
     lifecycle,
     rlang,
@@ -30,12 +32,9 @@ Imports:
 Suggests: 
     anicheck,
     animetric (>= 0.5.0.9006),
-    ragg,
-    knitr,
     testthat (>= 3.0.0)
 Additional_repositories: https://animovement.r-universe.dev
-Config/Needs/website: animovement/animovementtemplate
+Config/Needs/website: animovement/animovementtemplate, knitr
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
-VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.0
