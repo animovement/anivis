@@ -31,6 +31,11 @@ ggplot(mtcars, aes(mpg, wt)) +
   theme_imputets()
 
 }
+\references{
+Moritz, S., & Bartz-Beielstein, T. (2017). imputeTS: Time series missing
+value imputation in R. \emph{The R Journal}, 9(1), 207-218.
+\doi{10.32614/RJ-2017-009}.
+}
 \seealso{
 \code{\link[=theme_animovement]{theme_animovement()}}
 }

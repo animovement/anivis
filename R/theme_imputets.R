@@ -15,6 +15,11 @@
 #' @return A ggplot2 theme object.
 #'
 #' @seealso [theme_animovement()]
+#' @references
+#' Moritz, S., & Bartz-Beielstein, T. (2017). imputeTS: Time series missing
+#' value imputation in R. *The R Journal*, 9(1), 207-218.
+#' \doi{10.32614/RJ-2017-009}.
+#'
 #' @examples
 #' library(ggplot2)
 #' ggplot(mtcars, aes(mpg, wt)) +
