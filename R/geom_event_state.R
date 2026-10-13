@@ -53,8 +53,6 @@ geom_event_state <- function(
   show.legend = NA,
   inherit.aes = TRUE
 ) {
-  rlang::check_installed("ggplot2", reason = "for `geom_event_state()`.")
-
   GeomEventState <- ggplot2::ggproto(
     "GeomEventState",
     ggplot2::GeomRect,
