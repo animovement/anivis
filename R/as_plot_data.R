@@ -8,7 +8,7 @@
 #' of the check into the exact aesthetic contract a geom needs (a single
 #' grouping factor, ordered fill levels, the right level ordering, and so on).
 #'
-#' It is the anivis analog of `data_plot()` in the \pkg{see} package. Most users
+#' It is the anivis analogue of `data_plot()` in the \pkg{see} package. Most users
 #' never call it directly — `plot()` calls it for you. Reach for it when you
 #' want the precise rows a plot is built from, to inspect them or to assemble a
 #' custom chart by hand.

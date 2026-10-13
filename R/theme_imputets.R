@@ -2,8 +2,8 @@
 #'
 #' A larger-font variant of [theme_animovement()] tuned for the diagnostic check
 #' plots ([plot.anivis_check_na_timing()], [plot.anivis_check_na_gapsize()],
-#' [plot.anivis_check_confidence()]), styled after the imputeTS package figures they are
-#' adapted from. Compared with [theme_animovement()] it uses a larger base size,
+#' [plot.anivis_check_confidence()]), styled after the imputeTS package figures.
+#' Compared with [theme_animovement()] it uses a larger base size,
 #' places the title directly above the panel (not over the axis), renders the
 #' subtitle as markdown via \pkg{marquee} — so words like NA / non-NA can be
 #' coloured inline with the `.na` / `.nona` classes — and puts the legend at the
