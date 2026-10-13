@@ -192,6 +192,64 @@ test_that("throwing circles and sectors follow the rules", {
   expect_gt(max(long$x), 30)
 })
 
+# The sector lines as rays: where each starts, and its direction in degrees.
+sector_rays <- function(arena) {
+  lines <- arena$shapes[arena$shapes$element == "sector_lines", ]
+  lapply(split(lines, lines$path), function(p) {
+    list(
+      start = c(p$x[1], p$y[1]),
+      angle = atan2(diff(p$y), diff(p$x)) * 180 / pi,
+      # Distance from the origin to the line through the ray
+      offset = abs(p$x[1] * p$y[2] - p$y[1] * p$x[2]) /
+        sqrt(diff(p$x)^2 + diff(p$y)^2)
+    )
+  })
+}
+
+test_that("circle throw sectors follow Rule 32", {
+  for (event in c("shot_put", "discus", "hammer")) {
+    rays <- sector_rays(arena_throw(event))
+    angles <- vapply(rays, function(r) r$angle, numeric(1), USE.NAMES = FALSE)
+    # 34.92 degrees, symmetric about the throwing direction
+    expect_equal(diff(sort(angles)), 34.92, tolerance = 1e-10, info = event)
+    expect_equal(sum(angles), 0, tolerance = 1e-10, info = event)
+    # The lines, extended, pass through the centre of the circle
+    for (r in rays) {
+      expect_lt(r$offset, 1e-9)
+    }
+    # The rule's own check: 12m +/- 0.05m apart at 20m from the centre
+    chord <- 2 * 20 * sin(max(angles) * pi / 180)
+    expect_lt(abs(chord - 12), 0.05)
+  }
+
+  # The 0.75m lines either side lie on the line through the centre at right
+  # angles to the sector
+  shapes <- arena_throw("shot_put")$shapes
+  rim_lines <- shapes[shapes$element == "rim_lines", ]
+  expect_equal(unique(rim_lines$x), 0)
+  lengths <- tapply(rim_lines$y, rim_lines$path, function(y) diff(range(y)))
+  expect_equal(as.vector(lengths), c(0.75, 0.75))
+})
+
+test_that("the javelin sector follows Rule 32", {
+  rays <- sector_rays(arena_throw("javelin"))
+  angles <- vapply(rays, function(r) r$angle, numeric(1), USE.NAMES = FALSE)
+  # Built from the arc and runway lines, so exact; the rules round it
+  expect_equal(
+    diff(sort(angles)),
+    2 * asin(2 / 8) * 180 / pi,
+    tolerance = 1e-10
+  )
+  expect_equal(round(diff(sort(angles)), 2), 28.96)
+  for (r in rays) {
+    # Each line starts where the 8m arc meets a runway line, 4m apart...
+    expect_equal(sqrt(sum(r$start^2)), 8, tolerance = 1e-10)
+    expect_equal(abs(r$start[2]), 2, tolerance = 1e-10)
+    # ...and passes through the centre of the arc
+    expect_lt(r$offset, 1e-9)
+  }
+})
+
 test_that("jumps follow the rules", {
   lj <- arena_jump("long_jump")$shapes
   pit <- lj[lj$element == "pit", ]
