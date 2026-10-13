@@ -35,7 +35,7 @@ A ggplot object.
 }
 \description{
 Renders a \code{check_na_gapsize()} result (from the anicheck package) as a
-horizontal bar chart of how often each gap size occurs — an adaptation of
+horizontal bar chart of how often each gap size occurs — styled after
 \code{ggplot_na_gapsize()} from the imputeTS package (Moritz & Gatscha, GPL-3).
 For every gap length it draws the number of such gaps (indianred) and,
 optionally, the total missing frames they account for (steelblue, the gap size

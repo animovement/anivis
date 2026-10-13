@@ -2,7 +2,7 @@
 #'
 #' Renders a `check_na_timing()` result (from the anicheck package) as a stacked
 #' bar chart of missing (`NA`) versus present values across successive time
-#' intervals — an adaptation of `ggplot_na_distribution2()` from the imputeTS
+#' intervals — styled after `ggplot_na_distribution2()` from the imputeTS
 #' package (Moritz & Gatscha, GPL-3). Each bar is one interval of the recording;
 #' its split shows how much of that stretch was missing, so a run of tall
 #' \dQuote{NA} bars marks a blackout while an even sprinkle marks scattered

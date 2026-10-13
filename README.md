@@ -10,7 +10,7 @@
 [![R-CMD-check](https://github.com/animovement/anivis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/animovement/anivis/actions/workflows/R-CMD-check.yaml)
 [![anivis status
 badge](https://animovement.r-universe.dev/badges/anivis)](https://animovement.r-universe.dev)
-[![codecov](https://codecov.io/gh/animovement/anivis/graph/badge.svg?token=Pf5n3yzLzK)](https://codecov.io/gh/animovement/anivis)
+[![codecov](https://codecov.io/gh/animovement/anivis/graph/badge.svg?token=Pf5n3yzLzK)](https://app.codecov.io/gh/animovement/anivis)
 [![Chat on
 Zulip](https://img.shields.io/badge/chat-Zulip-6492FE?logo=zulip&logoColor=white)](https://animovement.zulipchat.com)
 <!-- badges: end -->

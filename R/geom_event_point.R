@@ -60,7 +60,6 @@ geom_event_point <- function(
   show.legend = NA,
   inherit.aes = TRUE
 ) {
-  rlang::check_installed("ggplot2", reason = "for `geom_event_point()`.")
   style <- match.arg(style)
 
   GeomEventPoint <- if (style == "raster") {
