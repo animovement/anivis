@@ -74,8 +74,8 @@ A data frame classed for the corresponding plot method (for example
 
 ## Details
 
-It is the anivis analog of `data_plot()` in the see package. Most users
-never call it directly —
+It is the anivis analogue of `data_plot()` in the see package. Most
+users never call it directly —
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) calls it for
 you. Reach for it when you want the precise rows a plot is built from,
 to inspect them or to assemble a custom chart by hand.

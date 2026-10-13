@@ -3,7 +3,8 @@
 ## Authors
 
 - **[Mikkel Roald-Arbøl](https://roald-arboel.com)**. Author,
-  maintainer. [](https://orcid.org/0000-0002-9998-0058)
+  maintainer, copyright holder.
+  [](https://orcid.org/0000-0002-9998-0058)
 
 ## Citation
 

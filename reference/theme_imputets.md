@@ -6,8 +6,7 @@ tuned for the diagnostic check plots
 ([`plot.anivis_check_na_timing()`](https://animovement.dev/anivis/reference/plot.anivis_check_na_timing.md),
 [`plot.anivis_check_na_gapsize()`](https://animovement.dev/anivis/reference/plot.anivis_check_na_gapsize.md),
 [`plot.anivis_check_confidence()`](https://animovement.dev/anivis/reference/plot.anivis_check_confidence.md)),
-styled after the imputeTS package figures they are adapted from.
-Compared with
+styled after the imputeTS package figures. Compared with
 [`theme_animovement()`](https://animovement.dev/anivis/reference/theme_animovement.md)
 it uses a larger base size, places the title directly above the panel
 (not over the axis), renders the subtitle as markdown via marquee — so

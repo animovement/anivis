@@ -15,9 +15,9 @@ Useful links:
 ## Author
 
 **Maintainer**: Mikkel Roald-Arbøl <animovement.84w1m@passmail.com>
-([ORCID](https://orcid.org/0000-0002-9998-0058))
+([ORCID](https://orcid.org/0000-0002-9998-0058)) \[copyright holder\]
 
 Authors:
 
 - Mikkel Roald-Arbøl <animovement.84w1m@passmail.com>
-  ([ORCID](https://orcid.org/0000-0002-9998-0058))
+  ([ORCID](https://orcid.org/0000-0002-9998-0058)) \[copyright holder\]
