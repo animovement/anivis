@@ -33,6 +33,12 @@ theme_imputets(mode = c("light", "dark"), base_size = 13)
 
 A ggplot2 theme object.
 
+## References
+
+Moritz, S., & Bartz-Beielstein, T. (2017). imputeTS: Time series missing
+value imputation in R. *The R Journal*, 9(1), 207-218.
+[doi:10.32614/RJ-2017-009](https://doi.org/10.32614/RJ-2017-009) .
+
 ## See also
 
 [`theme_animovement()`](https://animovement.dev/anivis/reference/theme_animovement.md)
