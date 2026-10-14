@@ -266,7 +266,7 @@ test_that("plot.anivis_check_segment_length builds in dark mode", {
 })
 
 test_that("plot draws a check from anicheck itself", {
-  skip_if_not_installed("anicheck")
+  skip_if_not_installed("anicheck", "0.3.0.9004")
   skip_if_not(
     exists("check_segment_length", envir = asNamespace("anicheck")),
     "anicheck has no check_segment_length() yet"
