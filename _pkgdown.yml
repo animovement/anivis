@@ -36,6 +36,18 @@ reference:
   - geom_event_state
   - geom_event_point
 
+- title: "Arenas"
+  desc: >
+    Mazes, open fields and pitches to draw under trajectories.
+  contents:
+  - lab_arenas
+  - sports_arenas
+  - athletics_arenas
+  - geom_arena
+  - as_arena
+  - arena_transform
+  - plot.anivis_arena
+
 - title: "Scales"
   contents:
   - scale_okabeito
