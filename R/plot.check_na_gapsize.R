@@ -29,6 +29,11 @@
 #'
 #' @seealso [as_plot_data()]
 #'
+#' @references
+#' Moritz, S., & Bartz-Beielstein, T. (2017). imputeTS: Time series missing
+#' value imputation in R. *The R Journal*, 9(1), 207-218.
+#' \doi{10.32614/RJ-2017-009}.
+#'
 #' @examplesIf requireNamespace("anicheck", quietly = TRUE)
 #' af <- anicore::example_anipoint(n_obs = 50, n_individuals = 1, n_keypoints = 3)
 #' af$x[c(5:8, 20, 31:40)] <- NA
